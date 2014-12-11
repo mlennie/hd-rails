@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211171313) do
+ActiveRecord::Schema.define(version: 20141211171658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,22 @@ ActiveRecord::Schema.define(version: 20141211171313) do
 
   add_index "favorite_restaurants", ["restaurant_id"], name: "index_favorite_restaurants_on_restaurant_id", using: :btree
   add_index "favorite_restaurants", ["user_id"], name: "index_favorite_restaurants_on_user_id", using: :btree
+
+  create_table "invoices", force: true do |t|
+    t.float    "previous_balance"
+    t.float    "additional_balance"
+    t.integer  "hd_percent"
+    t.datetime "due_date"
+    t.datetime "date_paid"
+    t.string   "confirmation"
+    t.float    "total_amount_paid"
+    t.integer  "restaurant_id"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invoices", ["restaurant_id"], name: "index_invoices_on_restaurant_id", using: :btree
 
   create_table "promotions", force: true do |t|
     t.string   "name"

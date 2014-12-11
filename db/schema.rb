@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211170101) do
+ActiveRecord::Schema.define(version: 20141211171313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,16 @@ ActiveRecord::Schema.define(version: 20141211170101) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "related_transactions", force: true do |t|
+    t.integer  "transaction_id"
+    t.integer  "other_transaction_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "related_transactions", ["other_transaction_id"], name: "index_related_transactions_on_other_transaction_id", using: :btree
+  add_index "related_transactions", ["transaction_id"], name: "index_related_transactions_on_transaction_id", using: :btree
 
   create_table "reservation_errors", force: true do |t|
     t.integer  "reservation_id"
@@ -158,6 +168,25 @@ ActiveRecord::Schema.define(version: 20141211170101) do
 
   add_index "services", ["restaurant_id"], name: "index_services_on_restaurant_id", using: :btree
 
+  create_table "transactions", force: true do |t|
+    t.integer  "kind"
+    t.float    "original_balance"
+    t.float    "amount"
+    t.boolean  "amount_positive"
+    t.float    "final_balance"
+    t.string   "confirmation"
+    t.string   "itemable_type"
+    t.integer  "itemable_id"
+    t.string   "concernable_type"
+    t.integer  "concernable_id"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transactions", ["concernable_id"], name: "index_transactions_on_concernable_id", using: :btree
+  add_index "transactions", ["itemable_id"], name: "index_transactions_on_itemable_id", using: :btree
+
   create_table "user_promotions", force: true do |t|
     t.integer  "user_id"
     t.integer  "reservation_id"
@@ -208,5 +237,16 @@ ActiveRecord::Schema.define(version: 20141211170101) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+
+  create_table "wallets", force: true do |t|
+    t.float    "balance"
+    t.string   "concernable_type"
+    t.integer  "concernable_id"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wallets", ["concernable_id"], name: "index_wallets_on_concernable_id", using: :btree
 
 end

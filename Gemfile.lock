@@ -1,3 +1,21 @@
+GIT
+  remote: git://github.com/activeadmin/activeadmin.git
+  revision: 370879936d635f7e00d909698c7e87b81f54b38a
+  specs:
+    activeadmin (1.0.0.pre)
+      arbre (~> 1.0, >= 1.0.2)
+      bourbon
+      coffee-rails
+      formtastic (~> 3.1)
+      formtastic_i18n
+      inherited_resources (~> 1.4, != 1.5.0)
+      jquery-rails
+      jquery-ui-rails (~> 5.0)
+      kaminari (~> 0.15)
+      rails (>= 3.2, < 4.2)
+      ransack (~> 1.3)
+      sass-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,6 +46,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    arbre (1.0.2)
+      activesupport (>= 3.0.0)
     arel (5.0.1.20140414130214)
     ast (2.0.0)
     astrolabe (1.3.0)
@@ -36,6 +56,9 @@ GEM
     bcrypt (3.1.9)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bourbon (3.2.3)
+      sass (~> 3.2)
+      thor
     builder (3.2.2)
     capybara (2.4.4)
       mime-types (>= 1.16)
@@ -78,14 +101,25 @@ GEM
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     foobar (0.0.1)
+    formtastic (3.1.2)
+      actionpack (>= 3.2.13)
+    formtastic_i18n (0.1.1)
     grit (2.0.0)
       diff-lcs (>= 1.1.2)
       mime-types (>= 1.15)
     haml (4.0.6)
       tilt
+    has_scope (0.6.0.rc)
+      actionpack (>= 3.2, < 5)
+      activesupport (>= 3.2, < 5)
     hike (1.2.3)
     hirb (0.7.2)
     i18n (0.6.11)
+    inherited_resources (1.5.1)
+      actionpack (>= 3.2, < 4.2)
+      has_scope (~> 0.6.0.rc)
+      railties (>= 3.2, < 4.2)
+      responders (~> 1.0)
     jazz_hands (0.5.2)
       awesome_print (~> 1.2)
       coolline (>= 0.4.2)
@@ -101,7 +135,12 @@ GEM
     jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (5.0.3)
+      railties (>= 3.2.16)
     json (1.8.1)
+    kaminari (0.16.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     mail (2.6.3)
@@ -129,6 +168,8 @@ GEM
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
     pg (0.17.1)
+    polyamorous (1.1.0)
+      activerecord (>= 3.0)
     powerpack (0.0.9)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -179,6 +220,12 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.0.0)
     rake (10.4.2)
+    ransack (1.5.1)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.1)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
     rspec-core (3.1.7)
@@ -258,6 +305,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activeadmin!
   capybara (~> 2.4.4)
   coffee-rails (~> 4.0.0)
   database_cleaner (~> 1.3.0)

@@ -49,6 +49,11 @@ end
 gem 'devise', '~> 3.4.1'
 
 #
+#Admin
+#
+gem 'activeadmin', github: 'activeadmin'
+
+#
 #Emailing
 #
 gem 'mailcatcher', group: :development

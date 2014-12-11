@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211162814) do
+ActiveRecord::Schema.define(version: 20141211163737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,34 @@ ActiveRecord::Schema.define(version: 20141211162814) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "reservations", force: true do |t|
+    t.string   "confirmation"
+    t.integer  "nb_people"
+    t.datetime "time"
+    t.integer  "status"
+    t.datetime "viewed_at"
+    t.datetime "cancelled_at"
+    t.datetime "validated_at"
+    t.datetime "absent_at"
+    t.datetime "finalized_at"
+    t.integer  "restaurant_id"
+    t.integer  "user_id"
+    t.integer  "service_id"
+    t.float    "bill_amount"
+    t.float    "user_balance"
+    t.float    "restaurant_balance"
+    t.integer  "discount"
+    t.float    "user_contribution"
+    t.string   "booking_name"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reservations", ["restaurant_id"], name: "index_reservations_on_restaurant_id", using: :btree
+  add_index "reservations", ["service_id"], name: "index_reservations_on_service_id", using: :btree
+  add_index "reservations", ["user_id"], name: "index_reservations_on_user_id", using: :btree
 
   create_table "restaurant_cuisines", force: true do |t|
     t.integer  "restaurant_id"

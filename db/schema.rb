@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211134816) do
+ActiveRecord::Schema.define(version: 20141211161036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,27 @@ ActiveRecord::Schema.define(version: 20141211134816) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "restaurants", force: true do |t|
+    t.string   "name"
+    t.string   "phone"
+    t.string   "street"
+    t.string   "district"
+    t.string   "city"
+    t.string   "country"
+    t.string   "zipcode"
+    t.string   "geocoded_address"
+    t.integer  "lat"
+    t.integer  "lng"
+    t.integer  "user_id"
+    t.boolean  "archived"
+    t.integer  "wallet_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
+  add_index "restaurants", ["wallet_id"], name: "index_restaurants_on_wallet_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "name"

@@ -44,6 +44,11 @@ group :test, :development do
 end
 
 #
+#Security
+#
+gem 'devise', '~> 3.4.1'
+
+#
 #Emailing
 #
 gem 'mailcatcher', group: :development

@@ -5,4 +5,8 @@ class User < ActiveRecord::Base
 
   has_many :user_roles
   has_many :roles, through: :user_roles
+
+  def is_superadmin?
+    roles.include? Role.superadmin
+  end
 end

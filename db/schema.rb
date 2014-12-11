@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211172003) do
+ActiveRecord::Schema.define(version: 20141211172803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,12 +262,33 @@ ActiveRecord::Schema.define(version: 20141211172003) do
     t.datetime "locked_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "last_name"
+    t.string   "first_name"
+    t.integer  "referrer_id"
+    t.boolean  "referrer_paid"
+    t.string   "phone"
+    t.date     "birth_date"
+    t.string   "gender"
+    t.integer  "wallet_id"
+    t.string   "street"
+    t.string   "district"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "zipcode"
+    t.string   "geocoded_address"
+    t.integer  "lat"
+    t.integer  "lng"
+    t.boolean  "archived"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["gender"], name: "index_users_on_gender", using: :btree
+  add_index "users", ["referrer_id"], name: "index_users_on_referrer_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["wallet_id"], name: "index_users_on_wallet_id", using: :btree
 
   create_table "wallets", force: true do |t|
     t.float    "balance"

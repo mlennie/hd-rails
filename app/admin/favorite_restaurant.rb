@@ -1,4 +1,4 @@
-#ActiveAdmin.register UserPromotion do
+ActiveAdmin.register FavoriteRestaurant do
 
 
   # See permitted parameters documentation:
@@ -15,4 +15,4 @@
   # end
 
 
-#end
+end

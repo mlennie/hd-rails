@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211164157) do
+ActiveRecord::Schema.define(version: 20141211165328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,21 @@ ActiveRecord::Schema.define(version: 20141211164157) do
 
   create_table "cuisines", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "promotions", force: true do |t|
+    t.string   "name"
+    t.string   "code"
+    t.text     "description"
+    t.float    "amount"
+    t.integer  "percent"
+    t.boolean  "new_user_only"
+    t.datetime "expiry_date"
+    t.integer  "usage_limit"
+    t.integer  "times_used"
+    t.boolean  "archived"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -131,6 +146,20 @@ ActiveRecord::Schema.define(version: 20141211164157) do
   end
 
   add_index "services", ["restaurant_id"], name: "index_services_on_restaurant_id", using: :btree
+
+  create_table "user_promotions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "reservation_id"
+    t.integer  "promotion_id"
+    t.integer  "usage_case"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_promotions", ["promotion_id"], name: "index_user_promotions_on_promotion_id", using: :btree
+  add_index "user_promotions", ["reservation_id"], name: "index_user_promotions_on_reservation_id", using: :btree
+  add_index "user_promotions", ["user_id"], name: "index_user_promotions_on_user_id", using: :btree
 
   create_table "user_roles", force: true do |t|
     t.integer  "user_id"

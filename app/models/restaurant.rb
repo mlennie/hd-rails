@@ -1,4 +1,5 @@
 class Restaurant < ActiveRecord::Base
+  include Archiving
 
   has_many :services
   has_many :reservations

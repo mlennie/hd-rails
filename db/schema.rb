@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211173754) do
+ActiveRecord::Schema.define(version: 20141212164431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "wallet_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "emails"
   end
 
   add_index "restaurants", ["archived"], name: "index_restaurants_on_archived", using: :btree

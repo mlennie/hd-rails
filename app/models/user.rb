@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Archiving
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
@@ -20,11 +21,11 @@ class User < ActiveRecord::Base
     roles.include? Role.superadmin
   end
 
-  def self.get_unarchived
-    User.where(archived: false)
-  end
-
-  def archive
-    self.update(archived: true)
+  def to_s
+    unless self.last_name.blank? || self.first_name.blank?
+      last_name + ' ' + first_name + ': ' + email
+    else
+      email
+    end
   end
 end

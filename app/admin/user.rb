@@ -5,7 +5,7 @@ ActiveAdmin.register User do
 
   controller do
     def scoped_collection
-      User.where(archived: false)
+      User.get_unarchived
     end
 
     def update
@@ -18,7 +18,7 @@ ActiveAdmin.register User do
 
     def destroy
       user = User.find(params[:id])
-      user.update(archived: true)
+      user.archive
       flash[:success] = "You have successfully archived this resource"
       redirect_to admin_users_path
     end
@@ -68,7 +68,7 @@ ActiveAdmin.register User do
   filter :created_at
 
   form do |f|
-    f.inputs "Admin Details" do
+    f.inputs "User Details" do
       f.input :email
       f.input :password
       f.input :password_confirmation
@@ -81,7 +81,7 @@ ActiveAdmin.register User do
       f.input :district
       f.input :city
       f.input :state
-      f.input :country
+      f.input :country, default: "France"
       f.input :zipcode
     end
     f.actions

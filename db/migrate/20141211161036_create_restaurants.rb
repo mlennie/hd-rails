@@ -12,12 +12,13 @@ class CreateRestaurants < ActiveRecord::Migration
       t.integer :lat
       t.integer :lng
       t.integer :user_id
-      t.boolean :archived
+      t.boolean :archived, default: false
       t.integer :wallet_id
 
       t.timestamps
     end
     add_index :restaurants, :user_id
     add_index :restaurants, :wallet_id
+    add_index :restaurants, :archived
   end
 end

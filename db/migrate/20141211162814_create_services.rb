@@ -9,10 +9,11 @@ class CreateServices < ActiveRecord::Migration
       t.integer :nb_15
       t.integer :nb_20
       t.integer :nb_25
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end
     add_index :services, :restaurant_id
+    add_index :services, :archived
   end
 end

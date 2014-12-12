@@ -9,10 +9,11 @@ class CreateInvoices < ActiveRecord::Migration
       t.string :confirmation
       t.float :total_amount_paid
       t.integer :restaurant_id
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end
     add_index :invoices, :restaurant_id
+    add_index :invoices, :archived
   end
 end

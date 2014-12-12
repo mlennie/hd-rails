@@ -4,12 +4,23 @@ ActiveAdmin.register User do
                 :district, :city, :state, :country, :zipcode
 
   controller do
+    def scoped_collection
+      User.where(archived: false)
+    end
+
     def update
       if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
         params[:user].delete("password")
         params[:user].delete("password_confirmation")
       end
       super
+    end
+
+    def destroy
+      user = User.find(params[:id])
+      user.update(archived: true)
+      flash[:success] = "You have successfully archived this resource"
+      redirect_to admin_users_path
     end
   end
 

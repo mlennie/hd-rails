@@ -19,12 +19,13 @@ class CreateReservations < ActiveRecord::Migration
       t.integer :discount
       t.float :user_contribution
       t.string :booking_name
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end
     add_index :reservations, :restaurant_id
     add_index :reservations, :user_id
     add_index :reservations, :service_id
+    add_index :reservations, :archived
   end
 end

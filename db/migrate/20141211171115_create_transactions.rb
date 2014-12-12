@@ -11,11 +11,12 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer :itemable_id
       t.string :concernable_type
       t.integer :concernable_id
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end
     add_index :transactions, :itemable_id
     add_index :transactions, :concernable_id
+    add_index :transactions, :archived
   end
 end

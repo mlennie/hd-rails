@@ -3,8 +3,10 @@ class CreateRoles < ActiveRecord::Migration
     create_table :roles do |t|
       t.string :name
       t.string :description
+      t.boolean :archived, default: false
 
       t.timestamps
     end
+    add_index :roles, :archived
   end
 end

@@ -20,6 +20,7 @@ class AddTraitsToUsers < ActiveRecord::Migration
     add_column :users, :geocoded_address, :string
     add_column :users, :lat, :integer
     add_column :users, :lng, :integer
-    add_column :users, :archived, :boolean
+    add_column :users, :archived, :boolean, default: false
+    add_index :users, :archived
   end
 end

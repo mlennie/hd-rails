@@ -19,4 +19,12 @@ class User < ActiveRecord::Base
   def is_superadmin?
     roles.include? Role.superadmin
   end
+
+  def self.get_unarchived
+    User.where(archived: false)
+  end
+
+  def archive
+    self.update(archived: true)
+  end
 end

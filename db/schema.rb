@@ -33,18 +33,22 @@ ActiveRecord::Schema.define(version: 20141211173754) do
 
   create_table "cuisines", force: true do |t|
     t.string   "name"
+    t.boolean  "archived",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "cuisines", ["archived"], name: "index_cuisines_on_archived", using: :btree
 
   create_table "favorite_restaurants", force: true do |t|
     t.integer  "user_id"
     t.integer  "restaurant_id"
-    t.boolean  "archived"
+    t.boolean  "archived",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "favorite_restaurants", ["archived"], name: "index_favorite_restaurants_on_archived", using: :btree
   add_index "favorite_restaurants", ["restaurant_id"], name: "index_favorite_restaurants_on_restaurant_id", using: :btree
   add_index "favorite_restaurants", ["user_id"], name: "index_favorite_restaurants_on_user_id", using: :btree
 
@@ -57,11 +61,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.string   "confirmation"
     t.float    "total_amount_paid"
     t.integer  "restaurant_id"
-    t.boolean  "archived"
+    t.boolean  "archived",           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "invoices", ["archived"], name: "index_invoices_on_archived", using: :btree
   add_index "invoices", ["restaurant_id"], name: "index_invoices_on_restaurant_id", using: :btree
 
   create_table "promotions", force: true do |t|
@@ -74,10 +79,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.datetime "expiry_date"
     t.integer  "usage_limit"
     t.integer  "times_used"
-    t.boolean  "archived"
+    t.boolean  "archived",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "promotions", ["archived"], name: "index_promotions_on_archived", using: :btree
 
   create_table "ratings", force: true do |t|
     t.integer  "user_id"
@@ -85,11 +92,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "reservation_id"
     t.integer  "number"
     t.text     "comment"
-    t.boolean  "archived"
+    t.boolean  "archived",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "ratings", ["archived"], name: "index_ratings_on_archived", using: :btree
   add_index "ratings", ["reservation_id"], name: "index_ratings_on_reservation_id", using: :btree
   add_index "ratings", ["restaurant_id"], name: "index_ratings_on_restaurant_id", using: :btree
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
@@ -97,10 +105,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
   create_table "related_transactions", force: true do |t|
     t.integer  "transaction_id"
     t.integer  "other_transaction_id"
+    t.boolean  "archived",             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "related_transactions", ["archived"], name: "index_related_transactions_on_archived", using: :btree
   add_index "related_transactions", ["other_transaction_id"], name: "index_related_transactions_on_other_transaction_id", using: :btree
   add_index "related_transactions", ["transaction_id"], name: "index_related_transactions_on_transaction_id", using: :btree
 
@@ -109,11 +119,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "user_id"
     t.integer  "kind"
     t.text     "description"
-    t.boolean  "archived"
+    t.boolean  "archived",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "reservation_errors", ["archived"], name: "index_reservation_errors_on_archived", using: :btree
   add_index "reservation_errors", ["reservation_id"], name: "index_reservation_errors_on_reservation_id", using: :btree
   add_index "reservation_errors", ["user_id"], name: "index_reservation_errors_on_user_id", using: :btree
 
@@ -136,11 +147,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "discount"
     t.float    "user_contribution"
     t.string   "booking_name"
-    t.boolean  "archived"
+    t.boolean  "archived",           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "reservations", ["archived"], name: "index_reservations_on_archived", using: :btree
   add_index "reservations", ["restaurant_id"], name: "index_reservations_on_restaurant_id", using: :btree
   add_index "reservations", ["service_id"], name: "index_reservations_on_service_id", using: :btree
   add_index "reservations", ["user_id"], name: "index_reservations_on_user_id", using: :btree
@@ -148,10 +160,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
   create_table "restaurant_cuisines", force: true do |t|
     t.integer  "restaurant_id"
     t.integer  "cuisine_id"
+    t.boolean  "archived",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "restaurant_cuisines", ["archived"], name: "index_restaurant_cuisines_on_archived", using: :btree
   add_index "restaurant_cuisines", ["cuisine_id"], name: "index_restaurant_cuisines_on_cuisine_id", using: :btree
   add_index "restaurant_cuisines", ["restaurant_id"], name: "index_restaurant_cuisines_on_restaurant_id", using: :btree
 
@@ -167,21 +181,25 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "lat"
     t.integer  "lng"
     t.integer  "user_id"
-    t.boolean  "archived"
+    t.boolean  "archived",         default: false
     t.integer  "wallet_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "restaurants", ["archived"], name: "index_restaurants_on_archived", using: :btree
   add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
   add_index "restaurants", ["wallet_id"], name: "index_restaurants_on_wallet_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "name"
     t.string   "description"
+    t.boolean  "archived",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "roles", ["archived"], name: "index_roles_on_archived", using: :btree
 
   create_table "services", force: true do |t|
     t.integer  "availabilities"
@@ -192,11 +210,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "nb_15"
     t.integer  "nb_20"
     t.integer  "nb_25"
-    t.boolean  "archived"
+    t.boolean  "archived",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "services", ["archived"], name: "index_services_on_archived", using: :btree
   add_index "services", ["restaurant_id"], name: "index_services_on_restaurant_id", using: :btree
 
   create_table "transactions", force: true do |t|
@@ -210,11 +229,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "itemable_id"
     t.string   "concernable_type"
     t.integer  "concernable_id"
-    t.boolean  "archived"
+    t.boolean  "archived",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "transactions", ["archived"], name: "index_transactions_on_archived", using: :btree
   add_index "transactions", ["concernable_id"], name: "index_transactions_on_concernable_id", using: :btree
   add_index "transactions", ["itemable_id"], name: "index_transactions_on_itemable_id", using: :btree
 
@@ -223,11 +243,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.integer  "reservation_id"
     t.integer  "promotion_id"
     t.integer  "usage_case"
-    t.boolean  "archived"
+    t.boolean  "archived",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "user_promotions", ["archived"], name: "index_user_promotions_on_archived", using: :btree
   add_index "user_promotions", ["promotion_id"], name: "index_user_promotions_on_promotion_id", using: :btree
   add_index "user_promotions", ["reservation_id"], name: "index_user_promotions_on_reservation_id", using: :btree
   add_index "user_promotions", ["user_id"], name: "index_user_promotions_on_user_id", using: :btree
@@ -235,20 +256,22 @@ ActiveRecord::Schema.define(version: 20141211173754) do
   create_table "user_roles", force: true do |t|
     t.integer  "user_id"
     t.integer  "role_id"
+    t.boolean  "archived",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "user_roles", ["archived"], name: "index_user_roles_on_archived", using: :btree
   add_index "user_roles", ["role_id"], name: "index_user_roles_on_role_id", using: :btree
   add_index "user_roles", ["user_id"], name: "index_user_roles_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -257,7 +280,7 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",        default: 0,  null: false
+    t.integer  "failed_attempts",        default: 0,     null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "created_at"
@@ -279,9 +302,10 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.string   "geocoded_address"
     t.integer  "lat"
     t.integer  "lng"
-    t.boolean  "archived"
+    t.boolean  "archived",               default: false
   end
 
+  add_index "users", ["archived"], name: "index_users_on_archived", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["gender"], name: "index_users_on_gender", using: :btree
@@ -294,11 +318,12 @@ ActiveRecord::Schema.define(version: 20141211173754) do
     t.float    "balance"
     t.string   "concernable_type"
     t.integer  "concernable_id"
-    t.boolean  "archived"
+    t.boolean  "archived",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "wallets", ["archived"], name: "index_wallets_on_archived", using: :btree
   add_index "wallets", ["concernable_id"], name: "index_wallets_on_concernable_id", using: :btree
 
 end

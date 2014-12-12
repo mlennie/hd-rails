@@ -10,9 +10,10 @@ class CreatePromotions < ActiveRecord::Migration
       t.datetime :expiry_date
       t.integer :usage_limit
       t.integer :times_used
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end
+    add_index :promotions, :archived
   end
 end

@@ -3,6 +3,16 @@ ActiveAdmin.register User do
                 :first_name, :phone, :birth_date, :gender, :wallet_id, :street,
                 :district, :city, :state, :country, :zipcode
 
+  controller do
+    def update
+      if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+        params[:user].delete("password")
+        params[:user].delete("password_confirmation")
+      end
+      super
+    end
+  end
+
   index do
     selectable_column
     id_column
@@ -49,6 +59,8 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs "Admin Details" do
       f.input :email
+      f.input :password
+      f.input :password_confirmation
       f.input :last_name
       f.input :first_name
       f.input :phone

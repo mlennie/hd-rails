@@ -7,9 +7,10 @@ gem 'rails', '4.1.8'
 gem 'pg'
 
 #
-#styles
+#styling
 #
 gem 'sass-rails', '~> 4.0.3'
+gem 'country_select', github: 'stefanpenner/country_select'
 
 #
 #Javascript

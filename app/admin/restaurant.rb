@@ -19,7 +19,7 @@ ActiveAdmin.register Restaurant do
     selectable_column
     id_column
     column :name
-    column :emails
+    column :emails, rescue: nil
     column :phone
     column :street
     column :district
@@ -33,7 +33,7 @@ ActiveAdmin.register Restaurant do
  end
 
   filter :name
-  filter :emails
+  filter :emails, rescue: nil
   filter :phone
   filter :street
   filter :district
@@ -46,7 +46,7 @@ ActiveAdmin.register Restaurant do
   form do |f|
     f.inputs "Restaurant Details" do
       f.input :name
-      f.input :emails
+      f.input :emails, rescue: nil
       f.input :phone
       f.input :street
       f.input :district

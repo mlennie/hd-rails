@@ -47,6 +47,7 @@ end
 #Security
 #
 gem 'devise', '~> 3.4.1'
+gem 'cancancan', '~> 1.9.2'
 
 #
 #Admin

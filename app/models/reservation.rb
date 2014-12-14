@@ -1,4 +1,5 @@
 class Reservation < ActiveRecord::Base
+  include Archiving
 
   belongs_to :user
   belongs_to :restaurant

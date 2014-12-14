@@ -72,7 +72,8 @@ ActiveAdmin.register Reservation do
       f.input :confirmation
       f.input :nb_people
       f.input :time
-      f.input :status
+      f.input :status, :as => :select, :collection => ['not_viewed', 'viewed',
+              'cancelled', 'validated', 'finished']
       f.input :viewed_at
       f.input :cancelled_at
       f.input :validated_at

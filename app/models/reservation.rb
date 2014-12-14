@@ -1,5 +1,8 @@
 class Reservation < ActiveRecord::Base
+
   include Archiving
+
+  enum status: [ :not_viewed, :viewed, :cancelled, :validated, :finished ]
 
   belongs_to :user
   belongs_to :restaurant

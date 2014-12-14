@@ -27,9 +27,9 @@ ActiveAdmin.register User do
   index do
     selectable_column
     id_column
-    column :email
     column :last_name
     column :first_name
+    column :email
     column :phone
     column :birth_date
     column :gender
@@ -69,6 +69,8 @@ ActiveAdmin.register User do
 
   form do |f|
     f.inputs "User Details" do
+      f.input :last_name
+      f.input :first_name
       f.input :email
       f.input :password
       f.input :password_confirmation

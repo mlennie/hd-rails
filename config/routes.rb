@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :users, ActiveAdmin::Devise.config
+  devise_for :users, controllers: { sessions: 'sessions' }
   ActiveAdmin.routes(self)
   root 'admin/dashboard#index'
+  namespace :api do
+    get :csrf, to: 'csrf#index'
+  end
 end

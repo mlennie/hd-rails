@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141214134723) do
+ActiveRecord::Schema.define(version: 20141214135257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,7 +171,6 @@ ActiveRecord::Schema.define(version: 20141214134723) do
 
   create_table "restaurants", force: true do |t|
     t.string   "name"
-    t.string   "phone"
     t.string   "street"
     t.string   "district"
     t.string   "city"
@@ -200,6 +199,16 @@ ActiveRecord::Schema.define(version: 20141214134723) do
     t.boolean  "want_10_or_more_people"
     t.boolean  "client_more_business"
     t.boolean  "client_more_tourists"
+    t.string   "owner_name"
+    t.string   "responsable_name"
+    t.string   "communications_name"
+    t.string   "server_one_name"
+    t.string   "server_two_name"
+    t.string   "restaurant_phone"
+    t.string   "responsable_phone"
+    t.string   "principle_email"
+    t.string   "second_email"
+    t.string   "other_restaurants"
   end
 
   add_index "restaurants", ["archived"], name: "index_restaurants_on_archived", using: :btree

@@ -91,7 +91,7 @@ ActiveAdmin.register Restaurant do
   filter :has_computer_in_restaurant
   filter :cuts_midi_sevice_in_2
   filter :cuts_soir_service_in_2
-  filter :service_midi_start
+  filter :service_midi_start, rescue: nil
   filter :service_midi_end
   filter :service_soir_start
   filter :service_soir_end

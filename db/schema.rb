@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141214135257) do
+ActiveRecord::Schema.define(version: 20141214142804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,10 +122,12 @@ ActiveRecord::Schema.define(version: 20141214135257) do
     t.boolean  "archived",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "restaurant_id"
   end
 
   add_index "reservation_errors", ["archived"], name: "index_reservation_errors_on_archived", using: :btree
   add_index "reservation_errors", ["reservation_id"], name: "index_reservation_errors_on_reservation_id", using: :btree
+  add_index "reservation_errors", ["restaurant_id"], name: "index_reservation_errors_on_restaurant_id", using: :btree
   add_index "reservation_errors", ["user_id"], name: "index_reservation_errors_on_user_id", using: :btree
 
   create_table "reservations", force: true do |t|

@@ -15,12 +15,19 @@ ActiveAdmin.register Restaurant do
     end
   end
 
+  sidebar "Services and Reservations", only: [:show, :edit] do
+    ul do
+      li link_to "Services",    admin_restaurant_services_path(restaurant)
+      li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
+      li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
+    end
+  end
+
   index do
     selectable_column
     id_column
     column :name
     column :emails, rescue: nil
-    column :phone
     column :street
     column :district
     column :city
@@ -34,7 +41,6 @@ ActiveAdmin.register Restaurant do
 
   filter :name
   filter :emails, rescue: nil
-  filter :phone
   filter :street
   filter :district
   filter :city
@@ -47,7 +53,6 @@ ActiveAdmin.register Restaurant do
     f.inputs "Restaurant Details" do
       f.input :name
       f.input :emails, rescue: nil
-      f.input :phone
       f.input :street
       f.input :district
       f.input :city

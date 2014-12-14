@@ -3,6 +3,7 @@ class Restaurant < ActiveRecord::Base
 
   has_many :services
   has_many :reservations
+  has_many :reservation_errors
   has_many :restaurant_cuisines
   has_many :cuisines, through: :restaurant_cuisines
   has_many :ratings

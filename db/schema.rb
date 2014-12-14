@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141212164431) do
+ActiveRecord::Schema.define(version: 20141214134723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,11 +181,25 @@ ActiveRecord::Schema.define(version: 20141212164431) do
     t.integer  "lat"
     t.integer  "lng"
     t.integer  "user_id"
-    t.boolean  "archived",         default: false
+    t.boolean  "archived",                        default: false
     t.integer  "wallet_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "emails"
+    t.boolean  "wants_sms_per_reservation"
+    t.boolean  "wants_phonecall_per_reservation"
+    t.boolean  "has_computer_in_restaurant"
+    t.boolean  "cuts_midi_sevice_in_2"
+    t.boolean  "cuts_soir_service_in_2"
+    t.time     "service_midi_start"
+    t.time     "service_midi_end"
+    t.time     "service_soir_start"
+    t.time     "service_soir_end"
+    t.string   "day_with_less_people"
+    t.string   "day_with_most_people"
+    t.boolean  "want_10_or_more_people"
+    t.boolean  "client_more_business"
+    t.boolean  "client_more_tourists"
   end
 
   add_index "restaurants", ["archived"], name: "index_restaurants_on_archived", using: :btree

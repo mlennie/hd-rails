@@ -5,61 +5,28 @@ ActiveAdmin.register Service do
 
   controller do
     def scoped_collection
-      Restaurant.get_unarchived
+      Service.get_unarchived
     end
 
     def destroy
-      r = Restaurant.find(params[:id])
+      r = Service.find(params[:id])
       r.archive
       flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_restaurants_path
-    end
-  end
-
-  sidebar "Services and Reservations", only: [:show, :edit] do
-    ul do
-      li link_to "Services",    admin_restaurant_services_path(restaurant)
-      li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
-      li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
+      redirect_to admin_services_path
     end
   end
 
   index do
     selectable_column
     id_column
-    column :name
-    column :owner_name
-    column :responsable_name
-    column :communications_name
-    column :server_one_name
-    column :server_two_name
-    column :restaurant_phone
-    column :responsable_phone
-    column :principle_email
-    column :second_email
-    column :street
-    column :district
-    column :city
-    column :country
-    column :zipcode
-    column :user_id
-    column :wallet_id
-    column :created_at
-    column :wants_sms_per_reservation
-    column :wants_phonecall_per_reservation
-    column :has_computer_in_restaurant
-    column :cuts_midi_sevice_in_2
-    column :cuts_soir_service_in_2
-    column :service_midi_start
-    column :service_midi_end
-    column :service_soir_start
-    column :service_soir_end
-    column :day_with_less_people
-    column :day_with_most_people
-    column :want_10_or_more_people
-    column :client_more_business
-    column :client_more_tourists
-    column :other_restaurants
+    column :availabilities
+    column :start_time
+    column :last_booking_time
+    column :restaurant_id
+    column :nb_10
+    column :nb_15
+    column :nb_20
+    column :nb_25
     actions
  end
 

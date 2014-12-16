@@ -23,6 +23,7 @@ gem 'coffee-rails', '~> 4.0.0'
 #API
 #
 gem 'active_model_serializers', '~> 0.9.2'
+gem "rack-cors", require: "rack/cors"
 
 #
 #Development

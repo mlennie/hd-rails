@@ -207,6 +207,7 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     rack (1.5.2)
+    rack-cors (0.2.9)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
@@ -335,6 +336,7 @@ DEPENDENCIES
   newrelic_rpm (~> 3.9.8.273)
   pg
   pry-debugger (~> 0.2.3)
+  rack-cors
   rails (= 4.1.8)
   rails_12factor (~> 0.0.3)
   rspec-rails (~> 3.1.0)

@@ -18,9 +18,9 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     if user.confirmation_token == params[:token] && user.confirmed_at.blank?
       user.update(confirmed_at: Time.now)
-      redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_success' 
+      redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_success' 
     else
-      redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_fail' 
+      redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail' 
     end
   end
 end

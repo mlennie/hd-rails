@@ -6,5 +6,5 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :show]
 
-  get '/confirm', to: 'users#confirm', as: 'confirm'
+  get 'confirm', to: 'users#confirm', as: 'confirm'
 end

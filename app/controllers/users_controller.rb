@@ -16,11 +16,11 @@ class UsersController < ApplicationController
 
   def confirm
     user = User.find(params[:id])
-    if user.confirmation_token == params[:token]
+    if user.confirmation_token == params[:token] && user.confirmed_at.blank?
       user.update(confirmed_at: Time.now)
-      redirect_to 'http://localhost:4200/confirm/success' 
+      redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_success' 
     else
-      redirect_to 'http://localhost:4200/confirm/fail' 
+      redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_fail' 
     end
   end
 end

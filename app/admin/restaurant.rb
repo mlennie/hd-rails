@@ -25,6 +25,7 @@ ActiveAdmin.register Restaurant do
     ul do
       li link_to "Services",    admin_restaurant_services_path(restaurant)
       li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
+      li link_to "Invoices", admin_restaurant_invoices_path(restaurant)
       li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
     end
   end

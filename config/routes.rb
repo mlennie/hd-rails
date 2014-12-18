@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'admin/dashboard#index'
 
-  resources :users, only: :create
+  resources :users, only: [:create, :show]
+
+  get '/confirm', to: 'users#confirm', as: 'confirm'
 end

@@ -5,7 +5,7 @@ class CreateContactEmails < ActiveRecord::Migration
       t.integer :user_id
       t.string :email
       t.text :content
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end

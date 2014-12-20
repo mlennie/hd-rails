@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217180813) do
+ActiveRecord::Schema.define(version: 20141220105506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,18 @@ ActiveRecord::Schema.define(version: 20141217180813) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "contact_emails", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.string   "email"
+    t.text     "content"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contact_emails", ["user_id"], name: "index_contact_emails_on_user_id", using: :btree
 
   create_table "cuisines", force: true do |t|
     t.string   "name"
@@ -86,6 +98,15 @@ ActiveRecord::Schema.define(version: 20141217180813) do
 
   add_index "invoices", ["archived"], name: "index_invoices_on_archived", using: :btree
   add_index "invoices", ["restaurant_id"], name: "index_invoices_on_restaurant_id", using: :btree
+
+  create_table "pre_subscribers", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.boolean  "archived"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "promotions", force: true do |t|
     t.string   "name"

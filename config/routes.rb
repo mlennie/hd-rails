@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   root 'admin/dashboard#index'
 
   resources :users, only: [:create, :show]
+  resources :contact_emails, only: [:create]
+  resources :pre_subscribers, only: [:create]
 
   get 'confirm', to: 'users#confirm', as: 'confirm'
 end

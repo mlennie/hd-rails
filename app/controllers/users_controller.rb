@@ -23,10 +23,10 @@ class UsersController < ApplicationController
       redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail' 
     end
   end
+  private
+  
+    def user_params
+      params.require(:user).permit(:email, :password, :password_confirmation,
+                                   :first_name, :last_name)
+    end
 end
-
-private
-  def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation,
-                                 :first_name, :last_name)
-  end

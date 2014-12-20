@@ -8,6 +8,6 @@ class ContactEmail < ActiveRecord::Base
 		def send_received_emails
 			#send user email of acknowledgment
 			#send email to admin
-			puts sent emails!
+			puts 'sent emails!'
 		end
 end

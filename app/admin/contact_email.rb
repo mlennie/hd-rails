@@ -10,7 +10,7 @@ ActiveAdmin.register ContactEmail do
       r = ContactEmail.find(params[:id])
       r.archive
       flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_pre_subscribers_path 
+      redirect_to admin_contact_emails_path 
     end
   end
 

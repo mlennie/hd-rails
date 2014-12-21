@@ -59,6 +59,7 @@ gem 'cancancan', '~> 1.9.2'
 #Admin
 #
 gem 'activeadmin', github: 'activeadmin'
+gem 'documentation', '~> 1.0.7'
 
 #
 #Emailing

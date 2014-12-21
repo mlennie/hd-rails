@@ -71,6 +71,21 @@ ActiveRecord::Schema.define(version: 20141220105506) do
 
   add_index "cuisines", ["archived"], name: "index_cuisines_on_archived", using: :btree
 
+  create_table "documentation_pages", force: true do |t|
+    t.string   "title"
+    t.string   "permalink"
+    t.text     "content"
+    t.text     "compiled_content"
+    t.integer  "parent_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "documentation_screenshots", force: true do |t|
+    t.string "alt_text"
+  end
+
   create_table "favorite_restaurants", force: true do |t|
     t.integer  "user_id"
     t.integer  "restaurant_id"
@@ -99,6 +114,19 @@ ActiveRecord::Schema.define(version: 20141220105506) do
 
   add_index "invoices", ["archived"], name: "index_invoices_on_archived", using: :btree
   add_index "invoices", ["restaurant_id"], name: "index_invoices_on_restaurant_id", using: :btree
+
+  create_table "nifty_attachments", force: true do |t|
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.string   "token"
+    t.string   "digest"
+    t.string   "role"
+    t.string   "file_name"
+    t.string   "file_type"
+    t.binary   "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "pre_subscribers", force: true do |t|
     t.string   "first_name"

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Documentation::Engine => "/docs"
   devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users, controllers: { sessions: 'sessions' }
   ActiveAdmin.routes(self)

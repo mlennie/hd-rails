@@ -15,4 +15,12 @@ User.create(
 
 puts 'created user'
 
+10.times do |i|
+	Restaurant.create(
+		name: "Blue Nile #{i}"
+	)
+end
+
+puts 'created restaurants'
+
 

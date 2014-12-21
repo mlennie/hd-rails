@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :show]
   resources :contact_emails, only: [:create]
   resources :pre_subscribers, only: [:create]
+  resources :restaurants, only: [:index]
 
   get 'confirm', to: 'users#confirm', as: 'confirm'
 end

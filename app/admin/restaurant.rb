@@ -6,7 +6,7 @@ ActiveAdmin.register Restaurant do
                 :service_midi_start, :service_midi_end, :service_soir_start,
                 :service_soir_end, :day_with_most_people,
                 :want_10_or_more_people, :client_more_business,
-                :client_more_tourists, :other_restaurants
+                :client_more_tourists, :other_restaurants, :cuisine
 
   controller do
     def scoped_collection
@@ -34,6 +34,7 @@ ActiveAdmin.register Restaurant do
     selectable_column
     id_column
     column :name
+    column :cuisine
     column :owner_name
     column :responsable_name
     column :communications_name
@@ -70,6 +71,7 @@ ActiveAdmin.register Restaurant do
  end
 
   filter :name
+  filter :cuisine
   filter :owner_name
   filter :responsable_name
   filter :communications_name
@@ -106,6 +108,7 @@ ActiveAdmin.register Restaurant do
   form do |f|
     f.inputs "Restaurant Details" do
       f.input :name
+      f.input :cuisine
       f.input :owner_name
       f.input :responsable_name
       f.input :communications_name

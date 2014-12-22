@@ -34,7 +34,8 @@ ActiveAdmin.register Restaurant do
     selectable_column
     id_column
     column :name
-    column :cuisine
+    column :description
+    column :img_url
     column :owner_name
     column :responsable_name
     column :communications_name
@@ -71,6 +72,8 @@ ActiveAdmin.register Restaurant do
  end
 
   filter :name
+  filter :img_url
+  filter :description
   filter :cuisine
   filter :owner_name
   filter :responsable_name
@@ -108,6 +111,8 @@ ActiveAdmin.register Restaurant do
   form do |f|
     f.inputs "Restaurant Details" do
       f.input :name
+      f.input :img_url
+      f.input :description
       f.input :cuisine
       f.input :owner_name
       f.input :responsable_name

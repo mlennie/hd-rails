@@ -1,8 +1,6 @@
 class Restaurant < ActiveRecord::Base
   include Archiving
 
-  enum cuisine: [ :italian, :french, :spanish, :world ]
-
   has_many :services
   has_many :reservations
   has_many :reservation_errors

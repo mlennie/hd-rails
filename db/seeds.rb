@@ -1,4 +1,4 @@
-AdminUser.create!(
+AdminUser.create(
   email: 'admin@happydining.fr', 
   password: 'happydine421', 
   password_confirmation: 'happydine421'
@@ -17,7 +17,7 @@ puts 'created user'
 
 Restaurant.create(
 	name: "Blue Nile",
-  img_url: "http://www.minervas.net/images/jqg_13539536932.jpg",
+  img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
   description: "Best food ever!! soooo good"
 )
 

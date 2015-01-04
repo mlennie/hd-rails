@@ -6,7 +6,11 @@ ActiveAdmin.register Restaurant do
                 :service_midi_start, :service_midi_end, :service_soir_start,
                 :service_soir_end, :day_with_most_people,
                 :want_10_or_more_people, :client_more_business,
-                :client_more_tourists, :other_restaurants, :cuisine
+                :client_more_tourists, :other_restaurants, :cuisine, 
+                :description, :img_url, :owner_name, :responsable_name, 
+                :communications_name, :server_one_name, :server_two_name, 
+                :restaurant_phone, :responsable_phone, :principle_email, 
+                :second_email
 
   controller do
     def scoped_collection

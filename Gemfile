@@ -69,7 +69,7 @@ gem 'mailcatcher', group: :development
 #
 #Deployment
 #
-group :production do
+group :production, :staging do
   gem 'rails_12factor', '~> 0.0.3'
   gem 'newrelic_rpm', '~> 3.9.8.273'
 end

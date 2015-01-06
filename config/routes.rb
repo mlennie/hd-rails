@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'admin/dashboard#index'
 
-  resources :users, only: [:create, :show]
+  resources :users, only: [:create, :show, :update]
   resources :contact_emails, only: [:create]
   resources :pre_subscribers, only: [:create]
   resources :restaurants, only: [:index]

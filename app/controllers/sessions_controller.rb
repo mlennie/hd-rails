@@ -7,7 +7,8 @@ class SessionsController < Devise::SessionsController
         sign_in(resource_name, resource)
         data = {
           user_token: self.resource.authentication_token,
-          user_email: self.resource.email
+          user_email: self.resource.email,
+          user_id: self.resource.id
         }
         render json: data, status: 201
       end

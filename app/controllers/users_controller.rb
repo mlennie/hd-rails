@@ -44,6 +44,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def change_password
+    user = User.find(params[:user_id])
+    reset_password_token = params[:reset_password_token]
+    redirect_to "http://localhost:4200/users/edit-password?token=#{reset_password_token}"
+  end
+
   private
   
     def user_params

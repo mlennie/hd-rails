@@ -36,7 +36,8 @@ class UsersController < ApplicationController
   def password_email
     email = params[:email]
     if User.find_by(email: email).present? 
-      #send password reset email
+      user = User.find_by(email: email)
+      UserMailer.password_reset(user).deliver
       head 200
     else
       head 422

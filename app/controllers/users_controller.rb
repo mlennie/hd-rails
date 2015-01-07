@@ -49,7 +49,7 @@ class UsersController < ApplicationController
 
   def resend_confirmation
     email = params[:email]
-    if user = User.find_by(email: email) && user.confirmed_at.blank?
+    if (user = User.find_by(email: email)) && user.confirmed_at.blank?
       Devise::Mailer.confirmation_instructions(user, user.confirmation_token).deliver
       head 204
     else

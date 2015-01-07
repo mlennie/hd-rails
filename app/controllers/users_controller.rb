@@ -27,9 +27,21 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     if user.confirmation_token == params[:token] && user.confirmed_at.blank?
       user.update(confirmed_at: Time.now)
-      redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_success' 
+      if Rails.env.production?
+        redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_success'
+      elsif Rails.env.staging?
+        redirect_to 'http://hdemberstag.herokuapp.com/login/confirmation_success'
+      elsif Rails.env.development?
+        redirect_to 'http://localhost:4200/login/confirmation_success'
+      end
     else
-      redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail' 
+      if Rails.env.production?
+        redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail'
+      elsif Rails.env.staging?
+        redirect_to 'http://hdemberstag.herokuapp.com/login/confirmation_fail'
+      elsif Rails.env.development?
+        redirect_to 'http://localhost:4200/login/confirmation_fail'
+      end
     end
   end
 
@@ -47,11 +59,26 @@ class UsersController < ApplicationController
   def edit_password
     user = User.find(params[:user_id])
     reset_password_token = params[:reset_password_token]
-    redirect_to "http://localhost:4200/users/edit-password?token=#{reset_password_token}"
+    if Rails.env.production?
+      redirect_to "http://hd-ember.herokuapp.com/users/edit-password?token=#{reset_password_token}"
+    elsif Rails.env.staging?
+      redirect_to "http://hdemberstag.herokuapp.com/users/edit-password?token=#{reset_password_token}"
+    elsif Rails.env.development?
+      redirect_to "http://localhost:4200/users/edit-password?token=#{reset_password_token}"
+    end
   end
 
   def update_password
-    
+    token = params[:password_reset_token]
+    password = params[:password]
+    password_confirmation = params[:password_confirmation]
+    if (user = User.find_by(authentication_token: token)) && 
+      password === password_confirmation
+      user.update(password: password)
+      head 204
+    else
+      head 422
+    end
   end
 
   private

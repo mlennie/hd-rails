@@ -27,6 +27,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     if user.confirmation_token == params[:token] && user.confirmed_at.blank?
       user.update(confirmed_at: Time.now)
+      #can't get environment variables to work here ???
       if Rails.env.production?
         redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_success'
       elsif Rails.env.staging?
@@ -35,6 +36,7 @@ class UsersController < ApplicationController
         redirect_to 'http://localhost:4200/login/confirmation_success'
       end
     else
+      #can't get environment variables to work here ???
       if Rails.env.production?
         redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail'
       elsif Rails.env.staging?
@@ -45,6 +47,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_confirmation
+    email = params[:email]
+    if user = User.find_by(email: email) && user.confirmed_at.blank?
+      Devise::Mailer.confirmation_instructions(user, user.confirmation_token).deliver
+      head 204
+    else
+      head 422
+    end
+  end
+
+  #send password reset email
   def password_email
     email = params[:email]
     if User.find_by(email: email).present? 
@@ -60,6 +73,7 @@ class UsersController < ApplicationController
   def edit_password
     user = User.find(params[:user_id])
     reset_password_token = params[:password_reset_token]
+    #can't get environment variables to work here ???
     if Rails.env.production?
       redirect_to "http://hd-ember.herokuapp.com/users/edit-password?token=#{reset_password_token}"
     elsif Rails.env.staging?

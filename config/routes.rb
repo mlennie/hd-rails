@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   resources :pre_subscribers, only: [:create]
   resources :restaurants, only: [:index]
 
+  get 'resend_confirmation', to: 'users#resend_confirmation', 
+                             as: 'resend_confirmation'
   get 'confirm', to: 'users#confirm', as: 'confirm'
   get 'password_email', to: 'users#password_email', as: 'password_email'
   get 'edit_password', to: 'users#edit_password', as: 'edit_password'

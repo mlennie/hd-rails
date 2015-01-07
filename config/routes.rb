@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   resources :restaurants, only: [:index]
 
   get 'confirm', to: 'users#confirm', as: 'confirm'
+  get 'password_email', to: 'users#password_email', as: 'password_email'
 end

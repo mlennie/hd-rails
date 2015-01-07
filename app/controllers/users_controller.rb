@@ -32,6 +32,17 @@ class UsersController < ApplicationController
       redirect_to 'http://hd-ember.herokuapp.com/login/confirmation_fail' 
     end
   end
+
+  def password_email
+    email = params[:email]
+    if User.find_by(email: email).present? 
+      #send password reset email
+      head 200
+    else
+      head 422
+    end
+  end
+
   private
   
     def user_params

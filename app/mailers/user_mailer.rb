@@ -4,7 +4,7 @@ class UserMailer < ActionMailer::Base
 
   def password_reset user
     @user = user
-    @token = user.authentication_token
+    @token = user.reset_password_token
     mail to: @user.email, subject: "Happy Dining Password Reset"
   end
 end

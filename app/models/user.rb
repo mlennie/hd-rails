@@ -37,12 +37,25 @@ class User < ActiveRecord::Base
     end
   end
 
+  def update_reset_password_token
+    token = generate_reset_password_token
+    self.update(reset_password_token: token)
+    self.update(reset_password_sent_at: Time.now)
+  end 
+
   private
 
     def generate_authentication_token
       loop do
         token = Devise.friendly_token
         break token unless User.where(authentication_token: token).first
+      end
+    end
+
+    def generate_reset_password_token
+      loop do
+        token = Devise.friendly_token
+        break token unless User.where(reset_password_token: token).first
       end
     end
 end

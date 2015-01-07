@@ -49,6 +49,7 @@ class UsersController < ApplicationController
     email = params[:email]
     if User.find_by(email: email).present? 
       user = User.find_by(email: email)
+      user.update_reset_password_token
       UserMailer.password_reset(user).deliver
       head 200
     else
@@ -58,7 +59,7 @@ class UsersController < ApplicationController
 
   def edit_password
     user = User.find(params[:user_id])
-    reset_password_token = params[:reset_password_token]
+    reset_password_token = params[:password_reset_token]
     if Rails.env.production?
       redirect_to "http://hd-ember.herokuapp.com/users/edit-password?token=#{reset_password_token}"
     elsif Rails.env.staging?
@@ -72,9 +73,10 @@ class UsersController < ApplicationController
     token = params[:password_reset_token]
     password = params[:password]
     password_confirmation = params[:password_confirmation]
-    if (user = User.find_by(authentication_token: token)) && 
-      password === password_confirmation
+    if (user = User.find_by(reset_password_token: token)) && 
+      password === password_confirmation && user.reset_password_sent_at > 1.week.ago
       user.update(password: password)
+      user.update(reset_password_token: nil)
       head 204
     else
       head 422

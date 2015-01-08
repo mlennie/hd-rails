@@ -29,6 +29,12 @@ ActiveAdmin.register User do
     id_column
     column :last_name
     column :first_name
+    column :balance do |user|
+      unless user.wallet.present?
+        Wallet.create_for_user user
+      end
+      user.wallet.balance.nil? ? 0 : user.wallet.balance 
+    end
     column :email
     column :phone
     column :birth_date

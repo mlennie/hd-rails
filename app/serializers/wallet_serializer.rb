@@ -1,14 +1,16 @@
 class WalletSerializer < ActiveModel::Serializer
-  attributes :id, :balance, :concernable_type, :concernable_id
+  attributes :id, :balance #, :concernable_type, :concernable_id
 
   embed :ids, :include => true
-  
-  def attributes
+
+=begin
+ 	def attributes
     data = super
     data[:concernable] = {id: data[:concernable_id], type: data[:concernable_type]}
     data.delete(:concernable_type)
     data.delete(:concernable_id)
     data
   end
+=end
 
 end

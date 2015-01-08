@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   include Archiving
 
   before_save :ensure_authentication_token
+  after_save :create_new_wallet
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
@@ -12,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :reservations
   has_many :ratings
   has_many :favorite_restaurants
-  has_many :wallets
+  has_one :wallet, as: :concernable
   has_many :transactions
   has_many :reservation_errors
   has_many :user_promotions
@@ -42,6 +43,10 @@ class User < ActiveRecord::Base
     self.update(reset_password_token: token)
     self.update(reset_password_sent_at: Time.now)
   end 
+
+  def create_new_wallet
+    Wallet.create_for_user self
+  end
 
   private
 

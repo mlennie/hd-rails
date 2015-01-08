@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
 
   def show 
-    user = User.find(params[:id])
+    user = User.includes(:wallet).find(params[:id])
+    unless user.wallet.present?
+      Wallet.create_for_user user
+      user = User.includes(:wallet).find(params[:id])
+    end
     render json: user, status: 200
   end
 

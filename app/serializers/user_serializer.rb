@@ -3,5 +3,7 @@ class UserSerializer < ActiveModel::Serializer
 
   has_one :wallet
 
-  embed :ids, :include => true
+  embed :id, :include => true
+
+
 end

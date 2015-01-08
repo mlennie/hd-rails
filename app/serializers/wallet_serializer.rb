@@ -1,7 +1,7 @@
 class WalletSerializer < ActiveModel::Serializer
   attributes :id, :balance #, :concernable_type, :concernable_id
 
-  embed :ids, :include => true
+  embed :id, :include => true
 
 =begin
  	def attributes

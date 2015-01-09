@@ -1,8 +1,6 @@
 class WalletSerializer < ActiveModel::Serializer
   attributes :id, :balance #, :concernable_type, :concernable_id
 
-  embed :id, :include => true
-
 =begin
  	def attributes
     data = super

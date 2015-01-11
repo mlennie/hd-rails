@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     user = User.includes(:wallet).find(params[:id])
     unless user.wallet.present?
       Wallet.create_for_user user
-      user = User.includes(:wallet, :roles).find(params[:id])
+      user = User.includes(:wallet, :roles, :restaurant).find(params[:id])
     end
     render json: user, status: 200
   end

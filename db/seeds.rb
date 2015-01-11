@@ -62,4 +62,26 @@ Restaurant.create(
 
 puts 'created restaurants'
 
+Role.create(
+  name: 'owner',
+  description: 'restaurant owner'
+)
+
+puts 'created restaurant owner role'
+
+Restaurant.all.each do |r|
+  u = Role.first.users.create(
+    first_name: "Owner",
+    last_name: r.name.gsub(/\s+/, ""),
+    :email => "owner@#{r.name.gsub(/\s+/, "")}.com",
+    :password => "123456",
+    :password_confirmation => "123456",
+    :confirmed_at => Time.now, 
+    :confirmation_token => "1234567890#{r.id}"
+  )
+  r.update(user_id: u.id)
+end
+
+puts 'created owners for restaurants'
+
 

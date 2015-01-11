@@ -79,11 +79,11 @@ class UsersController < ApplicationController
     reset_password_token = params[:password_reset_token]
     #can't get environment variables to work here ???
     if Rails.env.production?
-      redirect_to "http://hd-ember.herokuapp.com/users/edit-password?token=#{reset_password_token}"
+      redirect_to "http://hd-ember.herokuapp.com/edit-password?token=#{reset_password_token}"
     elsif Rails.env.staging?
-      redirect_to "http://hdemberstag.herokuapp.com/users/edit-password?token=#{reset_password_token}"
+      redirect_to "http://hdemberstag.herokuapp.com/edit-password?token=#{reset_password_token}"
     elsif Rails.env.development?
-      redirect_to "http://localhost:4200/users/edit-password?token=#{reset_password_token}"
+      redirect_to "http://localhost:4200/edit-password?token=#{reset_password_token}"
     end
   end
 

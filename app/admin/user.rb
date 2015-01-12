@@ -24,6 +24,12 @@ ActiveAdmin.register User do
     end
   end
 
+  sidebar "Services and Reservations", only: [:show] do
+    ul do
+      li link_to 'New Reservation', new_admin_user_reservation_path(user)
+    end
+  end
+
   index do
     selectable_column
     id_column

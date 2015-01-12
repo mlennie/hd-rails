@@ -6,10 +6,16 @@ ActiveAdmin.register Reservation do
                 :user_contribution, :booking_name
 
   belongs_to :restaurant, optional: true
+  belongs_to :user, optional: true
 
   controller do
     def scoped_collection
       Reservation.get_unarchived
+    end
+
+    def create
+      params[:reservation][:user_id] = params[:user_id]
+      super
     end
 
     def destroy
@@ -68,7 +74,13 @@ ActiveAdmin.register Reservation do
   filter :updated_at
 
   form do |f|
-    f.inputs "Service Details" do
+    if params[:user_id].present?
+      user = User.find(params[:user_id])
+      for_user = user.first_name + ' ' + user.last_name
+    else
+      for_user = ""
+    end
+    f.inputs "New reservation #{for_user}" do
       f.input :confirmation
       f.input :nb_people
       f.input :time
@@ -80,7 +92,9 @@ ActiveAdmin.register Reservation do
       f.input :absent_at
       f.input :finalized_at
       f.input :restaurant_id
-      f.input :user_id
+      unless params[:user_id].present?
+        f.input :user
+      end
       f.input :service_id
       f.input :bill_amount
       f.input :restaurant_balance

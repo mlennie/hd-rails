@@ -52,6 +52,6 @@ class Transaction < ActiveRecord::Base
     end
 
     #update user wallet balance
-    wallet.update(balance: final_balance)
+    concernable.wallet.update(balance: final_balance)
   end
 end

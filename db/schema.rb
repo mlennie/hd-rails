@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113133811) do
+ActiveRecord::Schema.define(version: 20150113151301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 20150113133811) do
     t.float    "bill_amount"
     t.float    "user_balance"
     t.float    "restaurant_balance"
-    t.integer  "discount"
+    t.float    "discount"
     t.float    "user_contribution"
     t.string   "booking_name"
     t.boolean  "archived",           default: false

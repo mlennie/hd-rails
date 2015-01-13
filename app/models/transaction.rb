@@ -37,21 +37,25 @@ class Transaction < ActiveRecord::Base
 
     #set whether transaction is positive or not and update final balance
     if discount > 0 # if discount used
-      transaction.amount_positive = (concernable.class = User) ? true : false
-      if concernable.class = User
+      transaction.amount_positive = (concernable.class.name == 'User') ? true : false
+      if concernable.class.name == 'User'
       	transaction.final_balance = original_balance + amount * discount
       else
       	transaction.final_balance = original_balance - amount * discount
       end
     else # if user used their euros
-      transaction.amount_positive = (concernable.class = User) ? false : true
-      if concernable.class = User
+      transaction.amount_positive = (concernable.class.name == 'User') ? false : true
+      if concernable.class.name == 'User'
       	transaction.final_balance = original_balance - user_contribution
       else
       	transaction.final_balance = original_balance + user_contribution
+      end
     end
 
     #update user wallet balance
-    concernable.wallet.update(balance: final_balance)
+    concernable.wallet.update(balance: transaction.final_balance)
+
+    #save transaction
+    transaction.save!
   end
 end

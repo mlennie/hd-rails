@@ -65,7 +65,9 @@ ActiveAdmin.register Reservation do
     column :bill_amount
     column :user_balance
     column :restaurant_balance
-    column :discount
+    column(:discount) do |reservation|
+      (reservation.discount * 100).round.to_s + '%' rescue nil
+    end
     column :user_contribution
     column :booking_name
     column :created_at
@@ -88,7 +90,9 @@ ActiveAdmin.register Reservation do
   filter :bill_amount
   filter :user_balance
   filter :restaurant_balance
-  filter :discount
+  filter :discount, :as => :select, 
+          :collection => [['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
+          ['25%', 0.25], ['30%', 0.30]]
   filter :user_contribution
   filter :booking_name
   filter :created_at
@@ -117,7 +121,9 @@ ActiveAdmin.register Reservation do
       end
       f.input :service_id
       f.input :bill_amount
-      f.input :discount
+      f.input :discount, :as => :select, 
+              :collection => [['0%',0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
+              ['25%', 0.25], ['30%', 0.30]]
       f.input :user_contribution
       f.input :booking_name
     end

@@ -46,7 +46,13 @@ ActiveAdmin.register User do
     column :phone
     column :birth_date
     column :gender
-    column :wallet_id
+    column 'Balance' do |user|
+      if user.try(:wallet).try(:balance)
+        user.wallet.balance.to_s + '€'
+      else
+        '0€'
+      end
+    end
     column :street
     column :district
     column :city

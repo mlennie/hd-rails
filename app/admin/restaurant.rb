@@ -28,7 +28,7 @@ ActiveAdmin.register Restaurant do
   sidebar "Services and Reservations", only: [:show, :edit] do
     ul do
       li link_to "Services",    admin_restaurant_services_path(restaurant)
-      li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
+      #li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
       li link_to "Invoices", admin_restaurant_invoices_path(restaurant)
       li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
     end
@@ -54,7 +54,13 @@ ActiveAdmin.register Restaurant do
     column :city
     column :country
     column :zipcode
-    column :user_id
+    column 'Balance' do |restaurant|
+      if restaurant.try(:wallet).try(:balance)
+        restaurant.wallet.balance.to_s + '€'
+      else
+        '0€'
+      end
+    end
     column :wallet_id
     column :created_at
     column :wants_sms_per_reservation

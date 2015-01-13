@@ -11,7 +11,7 @@ class Reservation < ActiveRecord::Base
   has_many :reservation_errors
   has_many :user_promotions
   has_many :promotions, through: :user_promotions
-  has_many :transactions
+  has_many :transactions, as: :itemable
 
   before_save :add_confirmation
 
@@ -19,14 +19,6 @@ class Reservation < ActiveRecord::Base
 
   validates_presence_of :nb_people, :time, :restaurant_id, :user_id, 
                         :discount, :booking_name
-
-  def to_s
-    unless name.blank? 
-      name
-    else
-      email
-    end
-  end
 
   def add_confirmation
     confirmation = generate_confirmation

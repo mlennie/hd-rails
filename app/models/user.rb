@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   has_many :ratings
   has_many :favorite_restaurants
   has_one :wallet, as: :concernable
-  has_many :transactions
+  has_many :transactions, as: :concernable
   has_many :reservation_errors
   has_many :user_promotions
   has_many :promotions, through: :user_promotions
@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end 
 
   def create_new_wallet
-    Wallet.create_for_user self
+    Wallet.create_for_concernable self
   end
 
   private

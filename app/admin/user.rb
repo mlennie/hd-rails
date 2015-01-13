@@ -27,6 +27,7 @@ ActiveAdmin.register User do
   sidebar "Services and Reservations", only: [:show] do
     ul do
       li link_to 'New Reservation', new_admin_user_reservation_path(user)
+      li link_to 'View Reservations', admin_user_reservations_path(user)
     end
   end
 

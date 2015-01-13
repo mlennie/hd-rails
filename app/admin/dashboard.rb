@@ -5,7 +5,7 @@ ActiveAdmin.register_page "Dashboard" do
   content do
     panel 'Reservations' do
 
-      table_for Reservation.all.order('id DESC').each do |reservation|
+      table_for Reservation.get_unarchived.order('id DESC').each do |reservation|
         column(:id) do |reservation| 
           link_to reservation.id, admin_reservation_path(reservation) 
         end

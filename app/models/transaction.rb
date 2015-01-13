@@ -1,4 +1,6 @@
 class Transaction < ActiveRecord::Base
+  include Archiving
+  
   belongs_to :concernable, polymorphic: true
   belongs_to :itemable, polymorphic: true
   belongs_to :wallet

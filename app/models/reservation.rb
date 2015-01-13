@@ -38,7 +38,7 @@ class Reservation < ActiveRecord::Base
       Transaction.create_transaction(
         amount, discount, user_contribution, self, restaurant
       )
-      self.update(status: 'finished')
+      self.update(status: 'validated')
       self.update(bill_amount: amount)
     end
   end

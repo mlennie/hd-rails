@@ -25,6 +25,19 @@ class Reservation < ActiveRecord::Base
     self.confirmation = confirmation
   end
 
+  def create_transactions params
+    #add transaction so that both transaction updates need to be successful
+    #or else everything does a rollback
+    ActiveRecord::Base.transaction do 
+      self.restaurant.create_reservation_transaction(
+        params[:bill_amount] discount user_contribution self
+      )
+      self.user.create_reservation_transaction(
+        params[:bill_amount] discount user_contribution self
+      )
+    end
+  end
+
   private
 
   def generate_confirmation

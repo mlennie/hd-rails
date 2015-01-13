@@ -19,6 +19,23 @@ ActiveAdmin.register Reservation do
       super
     end
 
+    def update
+      #add transactions only if bill amount has changed and no 
+      # transactions exist already and either discount or user_contribution 
+      #is more than 0
+      if transactions.empty? && params[:bill_amount].present? 
+        && discount > 0 || user_contribution > 0
+        if self.create_transactions params
+          flash[:succes] = "reservation and balances updates"
+          redirect_to admin_reservation_path(self)
+        else
+          flash[:warning] = 'reservation and balances could not be udpated'
+          redirect_to edit_admin_reservation_path(self)
+      else
+        super
+      end
+    end
+
     def destroy
       r = Reservation.find(params[:id])
       r.archive

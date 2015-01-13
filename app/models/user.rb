@@ -44,6 +44,43 @@ class User < ActiveRecord::Base
     self.update(reset_password_sent_at: Time.now)
   end 
 
+  def create_reservation_transaction amount discount user_contribution reservation
+    #build new transaction and add user to it
+    transaction = self.transactions.build
+
+    #add reservation to transaction
+    transaction.itemable = reservation
+
+    #set transaction kind
+    transaction.kind = "reservation"
+
+    #add wallet if restaurant doesn't have one already
+    unless wallet.present?
+      Wallet.create_for_concernable self
+    end
+    #make balance 0 incase its nil
+    if wallet.balance.blank?
+      wallet.update(balance: 0) 
+    end
+    #set transaction original balance
+    original_balance = transaction.original_balance = wallet.balance
+
+    #set transaction amount
+    transaction.amount = amount
+
+    #set whether transaction is positive or not and update final balance
+    if discount > 0 # if discount used
+      transaction.amount_positive = true
+      transaction.final_balance = original_balance + amount * discount
+    else # if user used their euros
+      transaction.amount_positive = false
+      transaction.final_balance = original_balance - user_contribution
+    end
+
+    #update user wallet balance
+    wallet.update(balance: final_balance)
+  end
+
   def create_new_wallet
     Wallet.create_for_concernable self
   end

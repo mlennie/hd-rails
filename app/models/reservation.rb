@@ -29,11 +29,13 @@ class Reservation < ActiveRecord::Base
     #add transaction so that both transaction updates need to be successful
     #or else everything does a rollback
     ActiveRecord::Base.transaction do 
-      self.restaurant.create_reservation_transaction(
-        params[:bill_amount] discount user_contribution self
+      #make transaction for user
+      Transaction.create_transaction(
+        params[:bill_amount], discount, user_contribution, self, user
       )
-      self.user.create_reservation_transaction(
-        params[:bill_amount] discount user_contribution self
+      #make transaction for restaurant
+      Transaction.create_transaction(
+        params[:bill_amount], discount, user_contribution, self, restaurant
       )
     end
   end

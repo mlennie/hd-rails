@@ -22,7 +22,7 @@ class Restaurant < ActiveRecord::Base
     end
   end
 
-  def create_reservation_transaction amount discount user_contribution reservation
+  def create_reservation_transaction amount, discount, user_contribution, reservation
     #build new transaction and add restaurant to it
     transaction = self.transactions.build
 
@@ -32,14 +32,14 @@ class Restaurant < ActiveRecord::Base
     #set transaction kind
     transaction.kind = "reservation"
 
+    #set transaction discount and user contribution
+    transaction.discount = discount
+    transaction.user_contribution = user_contribution
+
     #add wallet if restaurant doesn't have one already
-    unless wallet.present?
-      Wallet.create_for_concernable self
-    end
+    self.create_new_wallet unless wallet.present?
     #make balance 0 incase its nil
-    if wallet.balance.blank?
-      wallet.update(balance: 0) 
-    end
+    wallet.update(balance: 0) if wallet.balance.blank?
     #set transaction original balance
     original_balance = transaction.original_balance = wallet.balance
 

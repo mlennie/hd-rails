@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
     self.update(reset_password_sent_at: Time.now)
   end 
 
-  def create_reservation_transaction amount discount user_contribution reservation
+  def create_reservation_transaction amount, discount, user_contribution, reservation
     #build new transaction and add user to it
     transaction = self.transactions.build
 
@@ -54,14 +54,14 @@ class User < ActiveRecord::Base
     #set transaction kind
     transaction.kind = "reservation"
 
-    #add wallet if restaurant doesn't have one already
-    unless wallet.present?
-      Wallet.create_for_concernable self
-    end
+    #set transaction discount and user contribution
+    transaction.discount = discount
+    transaction.user_contribution = user_contribution
+
+    #add wallet if user doesn't have one already
+    self.create_new_wallet unless wallet.present?
     #make balance 0 incase its nil
-    if wallet.balance.blank?
-      wallet.update(balance: 0) 
-    end
+    wallet.update(balance: 0) if wallet.balance.blank?
     #set transaction original balance
     original_balance = transaction.original_balance = wallet.balance
 

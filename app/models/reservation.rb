@@ -43,6 +43,35 @@ class Reservation < ActiveRecord::Base
     end
   end
 
+  def transactions_should_be_created? amount_param, discount_param, user_contribution_param
+    #add transactions only if bill amount has changed and no 
+    # transactions exist already and either discount or user_contribution 
+    #is more than 0
+    transactions.get_unarchived.empty? && 
+    amount_param.present? && 
+    discount > 0 || user_contribution > 0
+  end
+
+  def transactions_should_be_reset? amount_param, discount_param, user_contribution_param
+
+    #make sure bill amount is set
+    amount_param.present? &&
+
+    discount > 0 || user_contribution > 0
+
+    #check if reservation has any unarchived transactions
+    transactions.get_unarchived.any? &&
+    
+    #check to see if bill amounts differ 
+    amount_param != bill_amount ||
+
+    #check to see if discounts differ
+    discount_param != discount ||
+
+    #check to see if user_contributions differ
+    user_contribution_param != user_contribution
+  end
+
   private
 
   def generate_confirmation

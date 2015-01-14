@@ -20,20 +20,22 @@ ActiveAdmin.register Reservation do
     end
 
     def update
-      #add transactions only if bill amount has changed and no 
-      # transactions exist already and either discount or user_contribution 
-      #is more than 0
+
+      #get params
+      amount_param = params[:reservation][:bill_amount].to_f
+      discount_param = params[:reservation][:discount].to_f
+      user_contribution_param = params[:reservation][:user_contribution].to_f
+
       reservation = Reservation.find(params[:id])
-      if reservation.restaurant.transactions.empty? && 
-        params[:reservation][:bill_amount].present? && 
-        reservation.discount > 0 || reservation.user_contribution > 0
-        if reservation.create_transactions params[:reservation][:bill_amount].to_f
+      if reservation.transactions_should_be_created? amount_param
+        if reservation.create_transactions amount_param
           flash[:success] = "reservation and balances updated"
           redirect_to admin_reservation_path(reservation)
         else
           flash[:warning] = 'reservation and balances could not be udpated'
           redirect_to edit_admin_reservation_path(reservation)
         end
+      elsif reservation.transactions_should_be_reset? params
       else
         super
       end

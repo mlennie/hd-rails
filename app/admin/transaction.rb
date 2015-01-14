@@ -9,9 +9,9 @@ ActiveAdmin.register Transaction do
         loggable_id = params[:id]
         type = loggable_type.constantize
         parent = type.find(loggable_id)
-        transactions = parent.transactions.get_unarchived
+        transactions = parent.transactions.all
       else
-        Transaction.get_unarchived
+        Transaction.all
       end
     end
 

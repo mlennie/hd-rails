@@ -54,31 +54,6 @@ class Transaction < ActiveRecord::Base
       end
     end
 
-    #when updating a reservation bill amount, discount or user contribution
-    #after a reservations' transactions have already been made
-    #call this before creating new transactions to reset changes from 
-    #already created reservation transactions
-    def self.archive_transactions_and_reset_wallet reservation
-      #loop through all transactions that belong to this reservation 
-      #that are not archived
-      reservation.transactions.get_unarchived.each do |transaction|
-        #get diff in balance change
-        diff = transaction.final_balance - transaction.original_balance
-
-        #get concernable (user or restaurant) information
-        concernable = transaction.concernable
-        wallet = concernable.wallet
-        balance = wallet.balance 
-
-        #reset concernable balance 
-        new_balance = wallet.balance - diff
-        concernable.update(balance: new_balance)
-
-        #archive transaction
-        transaction.update(archived: true)
-      end
-    end
-
     #update user wallet balance
     concernable.wallet.update(balance: transaction.final_balance)
 

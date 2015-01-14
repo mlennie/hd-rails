@@ -46,6 +46,42 @@ class Reservation < ActiveRecord::Base
     end
   end
 
+  def update_transactions_and_wallets params
+    ActiveRecord::Base.transaction do 
+      archive_transactions_and_reset_wallet
+      create_transactions_and_update_reservation params
+    end
+  end
+
+  #when updating a reservation bill amount, discount or user contribution
+  #after a reservations' transactions have already been made
+  #call this before creating new transactions to reset changes from 
+  #already created reservation transactions
+  def archive_transactions_and_reset_wallet
+    #add transaction so that both transaction updates need to be successful
+    #or else everything does a rollback
+    ActiveRecord::Base.transaction do
+      #loop through all transactions that belong to this reservation 
+      #that are not archived
+      transactions.get_unarchived.each do |transaction|
+        #get diff in balance change
+        diff = transaction.final_balance - transaction.original_balance
+
+        #get concernable (user or restaurant) information
+        concernable = transaction.concernable
+        wallet = concernable.wallet
+        balance = wallet.balance 
+
+        #reset concernable balance 
+        new_balance = wallet.balance - diff
+        wallet.update(balance: new_balance)
+
+        #archive transaction
+        transaction.update(archived: true)
+      end
+    end
+  end
+
   def transactions_should_be_created? params
     #get params
     (amount_param = params[:reservation][:bill_amount].to_f) &&
@@ -62,9 +98,9 @@ class Reservation < ActiveRecord::Base
 
   def transactions_should_be_reset? params
     #get params
-    amount_param = params[:reservation][:bill_amount].to_f &&
-    discount_param = params[:reservation][:discount].to_f &&
-    user_contribution_param = params[:reservation][:user_contribution].to_f &&
+    (amount_param = params[:reservation][:bill_amount].to_f) &&
+    (discount_param = params[:reservation][:discount].to_f) &&
+    (user_contribution_param = params[:reservation][:user_contribution].to_f) &&
 
     #make sure bill amount is set
     amount_param.present? &&

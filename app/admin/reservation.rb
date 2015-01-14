@@ -25,10 +25,16 @@ ActiveAdmin.register Reservation do
         if reservation.create_transactions_and_update_reservation params
           super
         else
-          flash[:warning] = 'reservation and balances could not be udpated'
+          flash[:warning] = 'reservation and balances could not be updated'
           redirect_to edit_admin_reservation_path(reservation)
         end
       elsif reservation.transactions_should_be_reset? params
+        if reservation.update_transactions_and_wallets params
+          super
+        else
+          flash[:warning] = 'reservation and balances could not be updated'
+          redirect_to edit_admin_reservation_path(reservation)
+        end
       else
         super
       end

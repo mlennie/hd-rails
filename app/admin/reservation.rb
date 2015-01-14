@@ -20,15 +20,9 @@ ActiveAdmin.register Reservation do
     end
 
     def update
-
-      #get params
-      amount_param = params[:reservation][:bill_amount].to_f
-      discount_param = params[:reservation][:discount].to_f
-      user_contribution_param = params[:reservation][:user_contribution].to_f
-
       reservation = Reservation.find(params[:id])
-      if reservation.transactions_should_be_created? amount_param
-        if reservation.create_transactions amount_param
+      if reservation.transactions_should_be_created? params
+        if reservation.create_transactions_and_update_reservation params
           flash[:success] = "reservation and balances updated"
           redirect_to admin_reservation_path(reservation)
         else

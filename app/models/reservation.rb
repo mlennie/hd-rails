@@ -25,7 +25,10 @@ class Reservation < ActiveRecord::Base
     self.confirmation = confirmation
   end
 
-  def create_transactions amount
+  def create_transactions_and_update_reservation params
+    amount_param = params[:reservation][:bill_amount].to_f
+    discount_param = params[:reservation][:discount].to_f
+    user_contribution_param = params[:reservation][:user_contribution].to_f
     #add transaction so that both transaction updates need to be successful
     #or else everything does a rollback
     ActiveRecord::Base.transaction do 
@@ -38,26 +41,38 @@ class Reservation < ActiveRecord::Base
       Transaction.create_transaction(
         amount, discount, user_contribution, self, restaurant
       )
+      
+      #update reseration
+      self.update(params[:reservation])
       self.update(status: 'validated')
-      self.update(bill_amount: amount)
     end
   end
 
-  def transactions_should_be_created? amount_param, discount_param, user_contribution_param
+  def transactions_should_be_created? params
+    #get params
+    amount_param = params[:reservation][:bill_amount].to_f &&
+    discount_param = params[:reservation][:discount].to_f &&
+    user_contribution_param = params[:reservation][:user_contribution].to_f &&
+
     #add transactions only if bill amount has changed and no 
     # transactions exist already and either discount or user_contribution 
     #is more than 0
     transactions.get_unarchived.empty? && 
     amount_param.present? && 
-    discount > 0 || user_contribution > 0
+    discount_param > 0 || user_contribution_param > 0
   end
 
-  def transactions_should_be_reset? amount_param, discount_param, user_contribution_param
+  def transactions_should_be_reset? params
+    #get params
+    amount_param = params[:reservation][:bill_amount].to_f &&
+    discount_param = params[:reservation][:discount].to_f &&
+    user_contribution_param = params[:reservation][:user_contribution].to_f &&
 
     #make sure bill amount is set
     amount_param.present? &&
 
-    discount > 0 || user_contribution > 0
+    #make sure either discount or user_contribution is set
+    discount_param > 0 || user_contribution_param > 0 &&
 
     #check if reservation has any unarchived transactions
     transactions.get_unarchived.any? &&

@@ -83,17 +83,18 @@ class Reservation < ActiveRecord::Base
   end
 
   def transactions_should_be_created? params
+    #add transactions only if bill amount has changed and no 
+    # transactions exist already and either discount or user_contribution 
+    #is more than 0
+    transactions.get_unarchived.empty? && 
+
     #get params
     (amount_param = params[:reservation][:bill_amount].to_f) &&
     (discount_param = params[:reservation][:discount].to_f) &&
     (user_contribution_param = params[:reservation][:user_contribution].to_f) &&
     
-    #add transactions only if bill amount has changed and no 
-    # transactions exist already and either discount or user_contribution 
-    #is more than 0
-    transactions.get_unarchived.empty? && 
     amount_param.present? && 
-    discount_param > 0 || user_contribution_param > 0
+    (discount_param > 0 || user_contribution_param > 0)
   end
 
   def transactions_should_be_reset? params

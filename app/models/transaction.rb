@@ -36,7 +36,6 @@ class Transaction < ActiveRecord::Base
 
     #set transaction amount
     transaction.amount = amount
-
     #set whether transaction is positive or not and update final balance
     if discount > 0 # if discount used
       transaction.amount_positive = (concernable.class.name == 'User') ? true : false

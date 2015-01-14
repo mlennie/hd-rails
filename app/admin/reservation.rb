@@ -123,7 +123,7 @@ ActiveAdmin.register Reservation do
       f.input :service_id
       f.input :bill_amount
       f.input :discount, :as => :select, 
-              :collection => [['0%',0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
+              :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
               ['25%', 0.25], ['30%', 0.30]]
       f.input :user_contribution
       f.input :booking_name

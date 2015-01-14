@@ -1,7 +1,7 @@
 ActiveAdmin.register Reservation do
   permit_params :confirmation, :nb_people, :time, :status, :viewed_at,
                 :cancelled_at, :validated_at, :absent_at, :finalized_at,
-                :restaurant_id, :user_id, :service_id, :bill_amount,
+                :restaurant_id, :restaurant, :user_id, :service_id, :bill_amount,
                 :user_balance, :restaurant_balance, :discount,
                 :user_contribution, :booking_name, :time_date, :time_time_hour,
                 :time_time_minute
@@ -23,8 +23,7 @@ ActiveAdmin.register Reservation do
       reservation = Reservation.find(params[:id])
       if reservation.transactions_should_be_created? params
         if reservation.create_transactions_and_update_reservation params
-          flash[:success] = "reservation and balances updated"
-          redirect_to admin_reservation_path(reservation)
+          super
         else
           flash[:warning] = 'reservation and balances could not be udpated'
           redirect_to edit_admin_reservation_path(reservation)

@@ -33,27 +33,25 @@ class Reservation < ActiveRecord::Base
     #or else everything does a rollback
     ActiveRecord::Base.transaction do 
       #make transaction for user
-      puts "amount:" + amount.to_s
       Transaction.create_transaction(
-        amount, discount, user_contribution, self, user
+        amount_param, discount_param, user_contribution_param, self, user
       )
       #make transaction for restaurant
       Transaction.create_transaction(
-        amount, discount, user_contribution, self, restaurant
+        amount_param, discount_param, user_contribution_param, self, restaurant
       )
-      
+
       #update reseration
-      self.update(params[:reservation])
       self.update(status: 'validated')
     end
   end
 
   def transactions_should_be_created? params
     #get params
-    amount_param = params[:reservation][:bill_amount].to_f &&
-    discount_param = params[:reservation][:discount].to_f &&
-    user_contribution_param = params[:reservation][:user_contribution].to_f &&
-
+    (amount_param = params[:reservation][:bill_amount].to_f) &&
+    (discount_param = params[:reservation][:discount].to_f) &&
+    (user_contribution_param = params[:reservation][:user_contribution].to_f) &&
+    
     #add transactions only if bill amount has changed and no 
     # transactions exist already and either discount or user_contribution 
     #is more than 0

@@ -15,5 +15,5 @@ Rails.application.routes.draw do
   get 'confirm', to: 'users#confirm', as: 'confirm'
   get 'password_email', to: 'users#password_email', as: 'password_email'
   get 'edit_password', to: 'users#edit_password', as: 'edit_password'
-  put 'update_password', to: 'users#update_password', as: 'update_password'
+  post 'update_password', to: 'users#update_password', as: 'update_password'
 end

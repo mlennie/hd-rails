@@ -92,6 +92,7 @@ class UsersController < ApplicationController
     password = params[:password]
     password_confirmation = params[:password_confirmation]
     if (user = User.find_by(reset_password_token: token)) && 
+      password.length >= 4 &&
       password === password_confirmation && user.reset_password_sent_at > 1.week.ago
       user.update(password: password)
       user.update(reset_password_token: nil)

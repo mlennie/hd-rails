@@ -16,10 +16,11 @@ ActiveAdmin.register Transaction do
     end
 
     def destroy
-      r = Transaction.find(params[:id])
-      r.archive
-      flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_transactions_path
+      #do nothing for now
+    end
+
+    def update
+      #do nothing for now
     end
   end
 end

@@ -109,25 +109,29 @@ ActiveAdmin.register Reservation do
     f.inputs "New reservation #{for_user}" do
       f.input :nb_people
       f.input :time, :as => :just_datetime_picker
-      f.input :status, :as => :select, :collection => ['not_viewed', 'viewed',
-              'cancelled', 'validated', 'finished']
-      f.input :viewed_at
-      f.input :cancelled_at
-      f.input :validated_at
-      f.input :absent_at
-      f.input :finalized_at
-      f.input :restaurant, required: true
-      unless params[:user_id].present?
-        f.input :user
+      if f.object.new_record?
+        f.input :restaurant, required: true
+        unless params[:user_id].present?
+          f.input :user
+        end
       end
-      f.input :service_id
-      f.input :bill_amount
+      #f.input :service_id
       f.input :discount, :as => :select, 
               :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
               ['25%', 0.25], ['30%', 0.30]]
       f.input :user_contribution
       f.input :booking_name
+      if !f.object.new_record?
+        f.input :bill_amount
+        f.input :status, :as => :select, :collection => ['not_viewed', 'viewed',
+              'cancelled', 'validated', 'finished']
+        f.input :viewed_at
+        f.input :cancelled_at
+        f.input :validated_at
+        f.input :absent_at
+        f.input :finalized_at
+      end
     end
     f.actions
- end
+  end
 end

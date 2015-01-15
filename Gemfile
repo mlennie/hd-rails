@@ -72,7 +72,7 @@ gem 'sanitize_email', '~> 1.1.4'
 #
 #Deployment
 #
-group :production, :staging do
+group :production, :staging, :development_remote do
   gem 'rails_12factor', '~> 0.0.3'
   gem 'newrelic_rpm', '~> 3.9.8.273'
 end

@@ -27,6 +27,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_confirmation
+    email = params[:email]
+    if (user = User.find_by(email: email)) && user.confirmed_at.blank?
+      Devise::Mailer.confirmation_instructions(user, user.confirmation_token).deliver
+      head 204
+    else
+      head 422
+    end
+  end
+
   def confirm
     user = User.find(params[:id])
     if user.confirmation_token == params[:token] && user.confirmed_at.blank?
@@ -48,16 +58,6 @@ class UsersController < ApplicationController
       elsif Rails.env.development?
         redirect_to 'http://localhost:4200/login/confirmation_fail'
       end
-    end
-  end
-
-  def resend_confirmation
-    email = params[:email]
-    if (user = User.find_by(email: email)) && user.confirmed_at.blank?
-      Devise::Mailer.confirmation_instructions(user, user.confirmation_token).deliver
-      head 204
-    else
-      head 422
     end
   end
 

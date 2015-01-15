@@ -15,6 +15,10 @@ ActiveAdmin.register Transaction do
       end
     end
 
+    def create
+      #do nothing for now
+    end
+
     def destroy
       #do nothing for now
     end

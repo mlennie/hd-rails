@@ -41,10 +41,7 @@ ActiveAdmin.register Reservation do
     end
 
     def destroy
-      r = Reservation.find(params[:id])
-      r.archive
-      flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_reservations_path
+      #do nothing for now
     end
   end
 

@@ -14,6 +14,7 @@ class Reservation < ActiveRecord::Base
   has_many :transactions, as: :itemable
 
   before_save :add_confirmation
+  after_save :send_new_reservation_emails
 
   just_define_datetime_picker :time
 
@@ -123,6 +124,15 @@ class Reservation < ActiveRecord::Base
 
     #check to see if user_contributions differ
     user_contribution_param != user_contribution
+  end
+
+  def send_new_reservation_emails
+    #send new reservation email to user
+    UserMailer.new_reservation.deliver self
+    #send new reservation email to restaurant
+    RestaurantMailer.new_reservation.deliver self
+    #send new reservation email to admin
+    AdminMailer.new_reservation.deliver self
   end
 
   private

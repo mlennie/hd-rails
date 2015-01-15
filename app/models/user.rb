@@ -24,6 +24,12 @@ class User < ActiveRecord::Base
     roles.include? Role.superadmin
   end
 
+  def self.exists_and_has_names? params
+    params[:user_id].present? &&
+    find(params[:user_id]).first_name.present? &&
+    find(params[:user_id]).last_name.present?
+  end
+
   def to_s
     unless self.last_name.blank? || self.first_name.blank?
       last_name + ' ' + first_name + ': ' + email

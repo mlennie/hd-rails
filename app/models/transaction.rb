@@ -57,6 +57,9 @@ class Transaction < ActiveRecord::Base
     concernable.wallet.update(balance: transaction.final_balance)
 
     #save transaction
-    transaction.save!
+    transaction.save
+    
+    #return the transaction id  
+    return transaction.id
   end
 end

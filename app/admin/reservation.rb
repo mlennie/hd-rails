@@ -97,11 +97,11 @@ ActiveAdmin.register Reservation do
   filter :updated_at
 
   form do |f|
-    if params[:user_id].present?
+    if User.exists_and_has_names? params
       user = User.find(params[:user_id])
       for_user = user.first_name + ' ' + user.last_name
     else
-      for_user = ""
+      for_user = "for user with no name yet"
     end
     f.inputs "New reservation #{for_user}" do
       f.input :nb_people

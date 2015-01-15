@@ -33,14 +33,17 @@ class Reservation < ActiveRecord::Base
     #or else everything does a rollback
     ActiveRecord::Base.transaction do 
       #make transaction for user
-      Transaction.create_transaction(
+      t1_id = Transaction.create_transaction(
         amount_param, discount_param, user_contribution_param, self, user
       )
       #make transaction for restaurant
-      Transaction.create_transaction(
+      t2_id = Transaction.create_transaction(
         amount_param, discount_param, user_contribution_param, self, restaurant
       )
-
+      RelatedTransaction.create(
+        transaction_id: t1_id,
+        other_transaction_id: t2_id
+      )
       #update reseration
       self.update(status: 'validated')
     end

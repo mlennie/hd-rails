@@ -67,6 +67,7 @@ gem 'just-datetime-picker', '~> 0.0.6'
 #Emailing
 #
 gem 'mailcatcher', group: :development
+gem 'sanitize_email', '~> 1.1.4'
 
 #
 #Deployment

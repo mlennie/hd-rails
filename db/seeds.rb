@@ -24,7 +24,8 @@ unless Restaurant.all.any?
     description: "Best food ever!! soooo good",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street'
+    street: '123 main street',
+    principle_email: "fake@restaurant.com"
   )
 
   Restaurant.create(
@@ -33,7 +34,8 @@ unless Restaurant.all.any?
     description: "Fancy fancy fancy oh and did we say fancy",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street'
+    street: '123 main street',
+    principle_email: "fake@restaurant.com"
   )
 
   Restaurant.create(
@@ -42,7 +44,8 @@ unless Restaurant.all.any?
     description: "The Lobster is to die for",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street'
+    street: '123 main street',
+    principle_email: "fake@restaurant.com"
   )
 
   Restaurant.create(
@@ -51,7 +54,8 @@ unless Restaurant.all.any?
     description: "Classy Brasserie sur Saint Germain",
     zipcode: '75008',
     city: 'Paris', 
-    street: '123 main street'
+    street: '123 main street',
+    principle_email: "fake@restaurant.com"
   )
 
   Restaurant.create(
@@ -60,7 +64,8 @@ unless Restaurant.all.any?
     description: "Sarkozy ate here. Enough said.",
     zipcode: '75008',
     city: 'Paris', 
-    street: '123 main street'
+    street: '123 main street',
+    principle_email: "fake@restaurant.com"
   )
 
   puts 'created restaurants'

@@ -14,6 +14,8 @@ class Restaurant < ActiveRecord::Base
 
   after_save :create_new_wallet
 
+  validates_presence_of :name, :principle_email
+
   def to_s
     unless name.blank? 
       name
@@ -24,5 +26,9 @@ class Restaurant < ActiveRecord::Base
 
   def create_new_wallet
     Wallet.create_for_concernable self
+  end
+
+  def full_address
+    street + ', ' + city + ', ' + zipcode
   end
 end

@@ -128,11 +128,11 @@ class Reservation < ActiveRecord::Base
 
   def send_new_reservation_emails
     #send new reservation email to user
-    UserMailer.new_reservation.deliver self
+    UserMailer.new_reservation(self).deliver 
     #send new reservation email to restaurant
-    RestaurantMailer.new_reservation.deliver self
+    RestaurantMailer.new_reservation(self).deliver 
     #send new reservation email to admin
-    AdminMailer.new_reservation.deliver self
+    AdminMailer.new_reservation(self).deliver
   end
 
   private

@@ -28,10 +28,9 @@ ActiveAdmin.register Restaurant do
     def update
       r = Restaurant.find(params[:id])
       unless params[:restaurant][:cuisine_ids].empty?
+        r.cuisines.destroy_all
         params[:restaurant][:cuisine_ids].each do |c_id| 
-          unless r.cuisines.include? Cuisine.find(c_id.to_i)
-            r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
-          end
+          r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
         end
       end
       super

@@ -29,7 +29,9 @@ ActiveAdmin.register Restaurant do
       r = Restaurant.find(params[:id])
       unless params[:restaurant][:cuisine_ids].empty?
         params[:restaurant][:cuisine_ids].each do |c_id| 
-          r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
+          unless r.cuisines.include? Cuisine.find(c_id.to_i)
+            r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
+          end
         end
       end
       super

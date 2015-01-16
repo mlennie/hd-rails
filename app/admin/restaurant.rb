@@ -10,11 +10,29 @@ ActiveAdmin.register Restaurant do
                 :description, :img_url, :owner_name, :responsable_name, 
                 :communications_name, :server_one_name, :server_two_name, 
                 :restaurant_phone, :responsable_phone, :principle_email, 
-                :second_email
+                :second_email, :cuisine_ids
 
   controller do
     def scoped_collection
       Restaurant.get_unarchived
+    end
+
+    before_create do |r|
+      unless params[:restaurant][:cuisine_ids].empty?
+        params[:restaurant][:cuisine_ids].each do |c_id| 
+          r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
+        end
+      end
+    end
+
+    def update
+      r = Restaurant.find(params[:id])
+      unless params[:restaurant][:cuisine_ids].empty?
+        params[:restaurant][:cuisine_ids].each do |c_id| 
+          r.cuisines << Cuisine.find(c_id.to_i) if Cuisine.exists?(c_id.to_i)
+        end
+      end
+      super
     end
 
     def destroy
@@ -39,6 +57,12 @@ ActiveAdmin.register Restaurant do
     selectable_column
     id_column
     column :name
+    column 'Cuisines' do |r|
+      cuisines = r.cuisines.map do |c|
+        c.name
+      end
+      cuisines.join(', ')
+    end
     column :description
     column :img_url
     column :owner_name
@@ -62,7 +86,6 @@ ActiveAdmin.register Restaurant do
         '0€'
       end
     end
-    column :wallet_id
     column :created_at
     column :wants_sms_per_reservation
     column :wants_phonecall_per_reservation
@@ -80,12 +103,64 @@ ActiveAdmin.register Restaurant do
     column :client_more_tourists
     column :other_restaurants
     actions
+  end
+
+  show do
+    attributes_table do
+      row :id
+      row :name
+      row 'Cuisines' do |r|
+        cuisines = r.cuisines.map do |c|
+          c.name
+        end
+        cuisines.join(', ')
+      end
+      row :description
+      row :img_url
+      row :owner_name
+      row :responsable_name
+      row :communications_name
+      row :server_one_name
+      row :server_two_name
+      row :restaurant_phone
+      row :responsable_phone
+      row :principle_email
+      row :second_email
+      row :street
+      row :district
+      row :city
+      row :country
+      row :zipcode
+      row 'Balance' do |restaurant|
+        if restaurant.try(:wallet).try(:balance)
+          restaurant.wallet.balance.to_s + '€'
+        else
+          '0€'
+        end
+      end
+      row :created_at
+      row :wants_sms_per_reservation
+      row :wants_phonecall_per_reservation
+      row :has_computer_in_restaurant
+      row :cuts_midi_sevice_in_2
+      row :cuts_soir_service_in_2
+      row :service_midi_start
+      row :service_midi_end
+      row :service_soir_start
+      row :service_soir_end
+      row :day_with_less_people
+      row :day_with_most_people
+      row :want_10_or_more_people
+      row :client_more_business
+      row :client_more_tourists
+      row :other_restaurants
+    end
  end
 
   filter :name
   filter :img_url
   filter :description
-  filter :cuisine
+  filter :cuisines
   filter :owner_name
   filter :responsable_name
   filter :communications_name
@@ -124,7 +199,7 @@ ActiveAdmin.register Restaurant do
       f.input :name
       f.input :img_url
       f.input :description
-      f.input :cuisine
+      f.input :cuisines, as: :select, collection: Cuisine.get_unarchived, multiple: true
       f.input :owner_name
       f.input :responsable_name
       f.input :communications_name

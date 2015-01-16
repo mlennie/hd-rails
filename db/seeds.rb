@@ -1,4 +1,4 @@
-unless AdminUser.all.any? || User.all.any?
+unless AdminUser.any? || User.any?
   AdminUser.create(
     email: 'admin@happydining.fr', 
     password: 'happydine421', 
@@ -17,8 +17,22 @@ unless AdminUser.all.any? || User.all.any?
   puts 'created user'
 end
 
-unless Restaurant.all.any?
-  Restaurant.create(
+unless Restaurant.any?
+
+  #
+  #cuisines
+  #
+  italian = Cuisine.create(name: 'Italian')
+  french = Cuisine.create(name: 'French')
+  chinese = Cuisine.create(name: 'Chinese')
+  budget = Cuisine.create(name: 'budget')
+  classy = Cuisine.create(name: 'Classy')
+  world = Cuisine.create(name: 'World')
+  indian = Cuisine.create(name: 'Indian')
+  seafood = Cuisine.create(name: 'Seafood')
+
+
+  r1 = Restaurant.create(
   	name: "Blue Nile",
     img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
     description: "Best food ever!! soooo good",
@@ -28,7 +42,10 @@ unless Restaurant.all.any?
     principle_email: "fake@restaurant.com"
   )
 
-  Restaurant.create(
+  r1.cuisines << seafood 
+  r1.cuisines << classy
+
+  r2 = Restaurant.create(
     name: "Shang hi noon",
     img_url: "http://www.huahintoday.com/wp-content/uploads/2013/04/InAzia-Restaurant-II.jpg",
     description: "Fancy fancy fancy oh and did we say fancy",
@@ -38,7 +55,10 @@ unless Restaurant.all.any?
     principle_email: "fake@restaurant.com"
   )
 
-  Restaurant.create(
+  r2.cuisines << chinese 
+  r2.cuisines << budget 
+
+  r3 = Restaurant.create(
     name: "Haute couture",
     img_url: "http://www.a-onehotel.com/pattaya/pattaya_images/300ppi/50MARITIME%20RESTAURANT.JPG",
     description: "The Lobster is to die for",
@@ -48,7 +68,10 @@ unless Restaurant.all.any?
     principle_email: "fake@restaurant.com"
   )
 
-  Restaurant.create(
+  r3.cuisines << french
+  r3.cuisines << classy
+
+  r4 = Restaurant.create(
     name: "Brasserie Lip",
     img_url: "http://www.paris-bistro.com/culture/ecrivain/pics_ecrivain/prix_lipp.jpg",
     description: "Classy Brasserie sur Saint Germain",
@@ -58,7 +81,10 @@ unless Restaurant.all.any?
     principle_email: "fake@restaurant.com"
   )
 
-  Restaurant.create(
+  r4.cuisines << french
+  r4.cuisines << budget
+
+  r5 = Restaurant.create(
     name: "Fouquet",
     img_url: "http://www.lucienbarriere.com/localized/image/photoelement/pj/500x240-ho-hbf-fouquet's-salle1_opt318838617194458100.jpg",
     description: "Sarkozy ate here. Enough said.",
@@ -67,6 +93,9 @@ unless Restaurant.all.any?
     street: '123 main street',
     principle_email: "fake@restaurant.com"
   )
+
+  r5.cuisines << french
+  r5.cuisines << classy
 
   puts 'created restaurants'
 

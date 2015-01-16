@@ -25,7 +25,7 @@ unless Restaurant.any?
   italian = Cuisine.create(name: 'Italian')
   french = Cuisine.create(name: 'French')
   chinese = Cuisine.create(name: 'Chinese')
-  budget = Cuisine.create(name: 'budget')
+  budget = Cuisine.create(name: 'Budget')
   classy = Cuisine.create(name: 'Classy')
   world = Cuisine.create(name: 'World')
   indian = Cuisine.create(name: 'Indian')

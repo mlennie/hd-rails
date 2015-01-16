@@ -43,20 +43,20 @@ class UsersController < ApplicationController
       user.update(confirmed_at: Time.now)
       #can't get environment variables to work here ???
       if Rails.env.production?
-        redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_success'
+        redirect_to 'https://hd-ember.herokuapp.com/login?confirmation_success=true'
       elsif Rails.env.staging?
-        redirect_to 'https://hdemberstag.herokuapp.com/login/confirmation_success'
+        redirect_to 'https://hdemberstag.herokuapp.com/login?confirmation_success=true'
       elsif Rails.env.development?
-        redirect_to 'http://localhost:4200/login/confirmation_success'
+        redirect_to 'http://localhost:4200/login?confirmation_success=true'
       end
     else
       #can't get environment variables to work here ???
       if Rails.env.production?
-        redirect_to 'https://hd-ember.herokuapp.com/login/confirmation_fail'
+        redirect_to 'https://hd-ember.herokuapp.com/login?confirmation_fail=true'
       elsif Rails.env.staging?
-        redirect_to 'https://hdemberstag.herokuapp.com/login/confirmation_fail'
+        redirect_to 'https://hdemberstag.herokuapp.com/login?confirmation_fail=true'
       elsif Rails.env.development?
-        redirect_to 'http://localhost:4200/login/confirmation_fail'
+        redirect_to 'http://localhost:4200/login?confirmation_fail=true'
       end
     end
   end

@@ -175,7 +175,7 @@ unless Restaurant.any?
     r.services.create(five_to_ten_tomorrow_service)
   end
 
-  puts 'created owners for restaurants'
+  puts 'created owners and services for restaurants'
 end
 
 

@@ -31,7 +31,43 @@ unless Restaurant.any?
   indian = Cuisine.create(name: 'Indian')
   seafood = Cuisine.create(name: 'Seafood')
 
+  #
+  #Services
+  #
 
+  #1 to 3 current day service
+  one_to_three_today_service = {
+    availabilities: 99,
+    start_time: Time.now.midnight + 13.hours,
+    last_booking_time: Time.now.midnight + 15.hours,
+    nb_10: 99
+  }
+
+  #5 to 10 current day service
+  five_to_ten_today_service = {
+    availabilities: 99,
+    start_time: Time.now.midnight + 17.hours,
+    last_booking_time: Time.now.midnight + 22.hours,
+    nb_10: 99
+  }
+
+  #1 to 3 tomorrow service
+  one_to_three_tomorrow_service = {
+    availabilities: 99,
+    start_time: Time.now.midnight + 13.hours,
+    last_booking_time: Time.now.midnight + 15.hours,
+    nb_10: 99
+  }
+
+  #5 to 10 tomorrow service
+  five_to_ten_tomorrow_service = {
+    availabilities: 99,
+    start_time: Time.now.midnight + 1.day + 17.hours,
+    last_booking_time: Time.now.midnight + 1.day + 22.hours,
+    nb_10: 99
+  }
+
+  #add restaurant
   r1 = Restaurant.create(
   	name: "Blue Nile",
     img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
@@ -42,8 +78,13 @@ unless Restaurant.any?
     principle_email: "fake@restaurant.com"
   )
 
+  #add cuisines
   r1.cuisines << seafood 
   r1.cuisines << classy
+
+  #add services
+  r1.services.create(one_to_three_today_service)
+  r1.services.create(five_to_ten_today_service)
 
   r2 = Restaurant.create(
     name: "Shang hi noon",
@@ -55,6 +96,7 @@ unless Restaurant.any?
     principle_email: "fake@restaurant.com"
   )
 
+  #add cuisines
   r2.cuisines << chinese 
   r2.cuisines << budget 
 
@@ -68,6 +110,7 @@ unless Restaurant.any?
     principle_email: "fake@restaurant.com"
   )
 
+  #add cuisines
   r3.cuisines << french
   r3.cuisines << classy
 
@@ -81,6 +124,7 @@ unless Restaurant.any?
     principle_email: "fake@restaurant.com"
   )
 
+  #add cuisines
   r4.cuisines << french
   r4.cuisines << budget
 
@@ -94,8 +138,10 @@ unless Restaurant.any?
     principle_email: "fake@restaurant.com"
   )
 
+  #add cuisines
   r5.cuisines << french
   r5.cuisines << classy
+  
 
   puts 'created restaurants'
 
@@ -107,6 +153,8 @@ unless Restaurant.any?
   puts 'created restaurant owner role'
 
   Restaurant.all.each do |r|
+
+    #add users for restaurants
     u = Role.first.users.create(
       first_name: "Owner",
       last_name: r.name.gsub(/\s+/, ""),
@@ -117,6 +165,14 @@ unless Restaurant.any?
       :confirmation_token => "1234567890#{r.id}"
     )
     r.update(user_id: u.id)
+
+    #add default services to restaurants
+    #add for today
+    r.services.create(one_to_three_today_service)
+    r.services.create(five_to_ten_today_service)
+    #add for tomorrow
+    r.services.create(one_to_three_tomorrow_service)
+    r.services.create(five_to_ten_tomorrow_service)
   end
 
   puts 'created owners for restaurants'

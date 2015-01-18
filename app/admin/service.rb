@@ -1,12 +1,20 @@
 ActiveAdmin.register Service do
   permit_params :availabilities, :start_time, :last_booking_time,
-                :restaurant_id, :nb_10, :nb_15, :nb_20, :nb_25
+                :restaurant_id, :nb_10, :nb_15, :nb_20, :nb_25,
+                :start_time_date, :start_time_time_hour, :start_time_time_minute,
+                :last_booking_time_date, :last_booking_time_time_hour, 
+                :last_booking_time_time_minute
 
   belongs_to :restaurant
 
   controller do
     def scoped_collection
       Service.get_unarchived
+    end
+
+    def create
+      params[:service][:restaurant_id] = params[:restaurant_id]
+      super
     end
 
     def destroy
@@ -43,9 +51,8 @@ ActiveAdmin.register Service do
   form do |f|
     f.inputs "Service Details" do
       f.input :availabilities
-      f.input :start_time
-      f.input :last_booking_time
-      f.input :restaurant_id, as: :select, collection: Restaurant.get_unarchived
+      f.input :start_time, :as => :just_datetime_picker
+      f.input :last_booking_time, :as => :just_datetime_picker
       f.input :nb_10
       f.input :nb_15
       f.input :nb_20

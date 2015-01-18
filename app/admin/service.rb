@@ -9,7 +9,7 @@ ActiveAdmin.register Service do
 
   controller do
     def scoped_collection
-      Service.get_unarchived
+      Service.get_unarchived.where(restaurant_id: params[:restaurant_id])
     end
 
     def create

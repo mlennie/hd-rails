@@ -32,6 +32,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.check_wallet_and_include_associations params
+    #create wallet for user if user doesn't have one already
+    #and then find use and include wallet, roles and restaurants
+    user = find(params[:id])
+    Wallet.create_for_user user unless user.wallet.present?
+    includes(:wallet, :roles, :restaurants).find(params[:id])
+  end
+
   def self.exists_and_has_names? params
     params[:user_id].present? &&
     find(params[:user_id]).first_name.present? &&

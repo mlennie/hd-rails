@@ -22,6 +22,10 @@ class UsersController < ApplicationController
   end
 
   def update
+    #delete uneeded params
+    params[:user].delete('wallet_id')
+    params[:user].delete('gender')
+
     user = User.find(params[:id])
     if user.update(user_params)
       render json: user, status: 200

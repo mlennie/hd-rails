@@ -11,7 +11,8 @@ unless AdminUser.any? || User.any?
     :email => "superman@gmail.com",
     :password => "kryptonring",
     :password_confirmation => "kryptonring",
-    :confirmed_at => Time.now, :confirmation_token => '1234567890'
+    :confirmed_at => Time.now, :confirmation_token => '1234567890',
+    first_name: "clark", last_name: 'Kent', gender: 'Male'
   )
 
   puts 'created user'
@@ -162,7 +163,8 @@ unless Restaurant.any?
       :password => "123456",
       :password_confirmation => "123456",
       :confirmed_at => Time.now, 
-      :confirmation_token => "1234567890#{r.id}"
+      :confirmation_token => "1234567890#{r.id}",
+      gender: 'Male'
     )
     r.update(user_id: u.id)
 

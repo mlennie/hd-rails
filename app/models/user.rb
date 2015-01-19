@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
 
+  validates_presence_of :last_name, :first_name, :email, :password, 
+                        :password_confirmation, :gender
+  validates_inclusion_of :gender, in: ["Male", "Female"]
+
   has_many :user_roles
   has_many :roles, through: :user_roles
   has_many :restaurants

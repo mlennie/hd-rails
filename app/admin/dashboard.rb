@@ -10,6 +10,7 @@ ActiveAdmin.register_page "Dashboard" do
           link_to reservation.id, admin_reservation_path(reservation) 
         end
         column(:status)
+        column(:bill_amount)
         column(:booking_name)
         column(:nb_people) 
         column(:time)

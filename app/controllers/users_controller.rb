@@ -1,12 +1,15 @@
 class UsersController < ApplicationController
 
+  #GET /users/:id
   def show 
-    user = User.includes(:wallet).find(params[:id])
-    unless user.wallet.present?
-      Wallet.create_for_user user
-      user = User.includes(:wallet, :roles, :restaurant).find(params[:id])
+    user = User.check_wallet_and_include_associations params
+
+    #authenticate and reply
+    if user_signed_in? && user.id = current_user.id
+      render json: user, status: 200
+    else
+      head 401
     end
-    render json: user, status: 200
   end
 
   def create

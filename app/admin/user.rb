@@ -89,11 +89,11 @@ ActiveAdmin.register User do
 
   form do |f|
     f.inputs "User Details" do
+      f.input :last_name
+      f.input :first_name
       f.input :email
       f.input :password
       f.input :password_confirmation
-      f.input :last_name
-      f.input :first_name
       f.input :phone
       f.input :birth_date, :as => :date_picker
       f.input :gender, as: :select, collection:['Male', 'Female']

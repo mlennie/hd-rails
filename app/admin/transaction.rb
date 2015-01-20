@@ -89,7 +89,7 @@ ActiveAdmin.register Transaction do
       f.input :amount, required: true
       f.input :reason, required: true
       if params[:id]
-        f.input :concernable_id, input_html: { value: params[:id] }, hidden: true 
+        f.input :concernable_id, input_html: { value: params[:id], hidden: true  }, label: false
       end
     end
     f.actions

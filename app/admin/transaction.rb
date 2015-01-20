@@ -20,7 +20,13 @@ ActiveAdmin.register Transaction do
     end
 
     def create
-      Transaction.create_adjustable_transaction params
+      if Transaction.create_adjustable_transaction params current_admin_user.id
+        flash[:success] = "Transaction Added"
+        redirect_to admin_user_transactions(self)
+      else
+        flash[:danger] = "Transaction Could not be added. Please make sure reason is filled out so we know you're not just sending yourself money :)"
+        redirect_to new_admin_user_transaction(self)
+      end
     end
 
     def destroy

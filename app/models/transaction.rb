@@ -27,12 +27,8 @@ class Transaction < ActiveRecord::Base
     transaction.discount = discount
     transaction.user_contribution = user_contribution
 
-    #add wallet if concernable doesn't have one already
-    concernable.create_new_wallet unless concernable.wallet.present?
-    #make balance 0 incase its nil
-    concernable.wallet.update(balance: 0) if concernable.wallet.balance.blank?
-    #set transaction original balance
-    original_balance = transaction.original_balance = concernable.wallet.balance
+    #set original_balance
+    original_balance = transaction.original_balance = get_original_balance concernable
 
     #set transaction amount
     transaction.amount = amount
@@ -63,9 +59,15 @@ class Transaction < ActiveRecord::Base
     return transaction.id
   end
 
-  def self.create_adjustable_transaction params
-    #get amount and concernable (user or restaurant)
+  def self.create_adjustable_transaction params admin_id
+    #get amount
     amount = params[:transaction][:amount].to_f
+
+    #add reason presence validation
+    return false if params[:transaction][:reason].empty?
+    reason = params[:transaction][:reason]
+
+    #get concernable (user or restaurant)
     if params[:user_id]
       concernable = User.find(params[:user_id])
     elsif params[:restaurant_id]
@@ -80,5 +82,34 @@ class Transaction < ActiveRecord::Base
 
     #set transaction kind
     transaction.kind = "adjustment"
+
+    #set transaction reason
+    transaction.reason = reason
+
+    #set admin who made transaction
+    transaction.admin_id
+
+    #set original_balance
+    transaction.original_balance = get_original_balance concernable
+
+    #set final amount
+    transaction.final_balance = transaction.original_balance + amount
+
+    #update user wallet balance
+    concernable.wallet.update(balance: transaction.final_balance)
+
+    #save transaction
+    transaction.save!
   end
+
+  private
+
+    def self.get_original_balance concernable
+      #add wallet if concernable doesn't have one already
+      concernable.create_new_wallet unless concernable.wallet.present?
+      #make balance 0 incase its nil
+      concernable.wallet.update(balance: 0) if concernable.wallet.balance.blank?
+      #set transaction original balance
+      return concernable.wallet.balance
+    end
 end

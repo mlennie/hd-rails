@@ -62,4 +62,23 @@ class Transaction < ActiveRecord::Base
     #return the transaction id  
     return transaction.id
   end
+
+  def self.create_adjustable_transaction params
+    #get amount and concernable (user or restaurant)
+    amount = params[:transaction][:amount].to_f
+    if params[:user_id]
+      concernable = User.find(params[:user_id])
+    elsif params[:restaurant_id]
+      concernable = Restaurant.find(params[:restaurant_id])
+    end
+
+    #build new transaction
+    transaction = Transaction.new
+
+    #add concernable to transaction
+    transaction.concernable = concernable
+
+    #set transaction kind
+    transaction.kind = "adjustment"
+  end
 end

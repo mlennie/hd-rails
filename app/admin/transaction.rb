@@ -5,6 +5,7 @@ ActiveAdmin.register Transaction do
                 :reason
 
   belongs_to :user, optional: true
+  belongs_to :restaurant, optional: true
 
   controller do
     def scoped_collection
@@ -20,15 +21,29 @@ ActiveAdmin.register Transaction do
     end
 
     def create
-      user = User.find(params[:user_id])
-      id = user.id
-      type = "User"
-      if Transaction.create_adjustable_transaction params, current_admin_user.id
-        flash[:success] = "Transaction Added"
-        redirect_to admin_transactions_path(id: id, type: type)
+      if params[:user_id] || params[:restaurant_id]
+
+        #get concernable variables for redirect
+        if params[:user_id]
+          id = params[:user_id]
+          type = "User"
+        else
+          id = params[:restaurant_id]
+          type = "Restaurant"
+        end
+
+        #create transaction
+        if Transaction.create_adjustable_transaction params, current_admin_user.id
+          flash[:success] = "Transaction Added"
+          redirect_to admin_transactions_path(id: id, type: type)
+        else
+          flash[:danger] = "Transaction Could not be added. Please make sure reason is filled out so we know you're not just sending yourself money :)"
+          redirect_to :back
+        end
+
       else
-        flash[:danger] = "Transaction Could not be added. Please make sure reason is filled out so we know you're not just sending yourself money :)"
-        redirect_to new_admin_user_transaction(user)
+        flash[:danger] = "Transaction Could not be added. Please make a transaction through a user or restaurant first"
+        redirect_to :back
       end
     end
 

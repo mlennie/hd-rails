@@ -16,8 +16,9 @@ class UsersController < ApplicationController
 
     promotion = Promotion.check_presence params
 
-    #delete promotion code from params
-    params[:user].delete(:promotionCode)
+    #delete uneccessary params
+    params[:user].delete(:promotion_code)
+    params[:user].delete(:wallet_id)
 
     #build user
     user = User.new(user_params)

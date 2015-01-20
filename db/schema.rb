@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113151301) do
+ActiveRecord::Schema.define(version: 20150120115928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -331,8 +331,11 @@ ActiveRecord::Schema.define(version: 20150113151301) do
     t.datetime "updated_at"
     t.float    "discount",          default: 0.0,   null: false
     t.float    "user_contribution", default: 0.0,   null: false
+    t.string   "reason"
+    t.integer  "admin_id"
   end
 
+  add_index "transactions", ["admin_id"], name: "index_transactions_on_admin_id", using: :btree
   add_index "transactions", ["archived"], name: "index_transactions_on_archived", using: :btree
   add_index "transactions", ["concernable_id"], name: "index_transactions_on_concernable_id", using: :btree
   add_index "transactions", ["itemable_id"], name: "index_transactions_on_itemable_id", using: :btree

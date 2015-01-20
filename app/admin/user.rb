@@ -28,6 +28,7 @@ ActiveAdmin.register User do
     ul do
       li link_to 'New Reservation', new_admin_user_reservation_path(user)
       li link_to 'View Reservations', admin_user_reservations_path(user)
+      li link_to 'New Transaction', new_admin_user_transaction_path(user)
       li link_to 'View Transactions', admin_transactions_path(id: user.id, type: "User")
     end
   end

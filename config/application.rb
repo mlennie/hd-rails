@@ -15,9 +15,9 @@ Bundler.require(*Rails.groups)
 
 module Hdrails
   class Application < Rails::Application
-     config.middleware.use Rack::Cors do
+     config.middleware.insert_before 0, "Rack::Cors", :debug => true, :logger => (-> { Rails.logger }) do
       allow do
-        origins "*"
+        origins 'https://hdemberstag.herokuapp.com'
         resource "*", headers: :any, methods: [:get, :post, :put, :delete, :options]
       end
     end

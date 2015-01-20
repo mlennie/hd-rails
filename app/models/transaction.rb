@@ -11,95 +11,106 @@ class Transaction < ActiveRecord::Base
 
   def self.create_transaction(amount, discount, user_contribution, 
                               reservation, concernable)
-  	#build new transaction 
-    transaction = Transaction.new
+  	ActiveRecord::Base.transaction do 
+      #build new transaction 
+      transaction = Transaction.new
 
-    #add concernable to transaction
-    transaction.concernable = concernable
+      #add concernable to transaction
+      transaction.concernable = concernable
 
-    #add reservation to transaction
-    transaction.itemable = reservation
+      #add reservation to transaction
+      transaction.itemable = reservation
 
-    #set transaction kind
-    transaction.kind = "reservation"
+      #set transaction kind
+      transaction.kind = "reservation"
 
-    #set transaction discount and user contribution
-    transaction.discount = discount
-    transaction.user_contribution = user_contribution
+      #set transaction discount and user contribution
+      transaction.discount = discount
+      transaction.user_contribution = user_contribution
 
-    #set original_balance
-    original_balance = transaction.original_balance = get_original_balance concernable
+      #set original_balance
+      original_balance = transaction.original_balance = get_original_balance concernable
 
-    #set transaction amount
-    transaction.amount = amount
-    #set whether transaction is positive or not and update final balance
-    if discount > 0 # if discount used
-      transaction.amount_positive = (concernable.class.name == 'User') ? true : false
-      if concernable.class.name == 'User'
-      	transaction.final_balance = original_balance + amount * discount
-      else
-      	transaction.final_balance = original_balance - amount * discount
+      #set transaction amount
+      transaction.amount = amount
+
+      #set whether transaction is positive or not and update final balance
+      if discount > 0 # if discount used
+        transaction.amount_positive = (concernable.class.name == 'User') ? true : false
+        if concernable.class.name == 'User'
+        	transaction.final_balance = original_balance + amount * discount
+        else
+        	transaction.final_balance = original_balance - amount * discount
+        end
+      else # if user used their euros
+        transaction.amount_positive = (concernable.class.name == 'User') ? false : true
+        if concernable.class.name == 'User'
+        	transaction.final_balance = original_balance - user_contribution
+        else
+        	transaction.final_balance = original_balance + user_contribution
+        end
       end
-    else # if user used their euros
-      transaction.amount_positive = (concernable.class.name == 'User') ? false : true
-      if concernable.class.name == 'User'
-      	transaction.final_balance = original_balance - user_contribution
-      else
-      	transaction.final_balance = original_balance + user_contribution
-      end
+
+      #update user wallet balance
+      concernable.wallet.update(balance: transaction.final_balance)
+
+      #save transaction
+      transaction.save
     end
-
-    #update user wallet balance
-    concernable.wallet.update(balance: transaction.final_balance)
-
-    #save transaction
-    transaction.save
     
     #return the transaction id  
     return transaction.id
   end
 
-  def self.create_adjustable_transaction params admin_id
-    #get amount
-    amount = params[:transaction][:amount].to_f
+  def self.create_adjustable_transaction params, admin_id
+    ActiveRecord::Base.transaction do 
+      #get amount
+      amount = params[:transaction][:amount].to_f
 
-    #add reason presence validation
-    return false if params[:transaction][:reason].empty?
-    reason = params[:transaction][:reason]
+      #add reason presence validation
+      return false if params[:transaction][:reason].empty?
+      reason = params[:transaction][:reason]
 
-    #get concernable (user or restaurant)
-    if params[:user_id]
-      concernable = User.find(params[:user_id])
-    elsif params[:restaurant_id]
-      concernable = Restaurant.find(params[:restaurant_id])
+      #get concernable (user or restaurant)
+      if params[:user_id]
+        concernable = User.find(params[:user_id])
+      elsif params[:restaurant_id]
+        concernable = Restaurant.find(params[:restaurant_id])
+      end
+
+      #build new transaction
+      transaction = Transaction.new
+
+      #set transaction amount
+      transaction.amount = amount
+
+      #set amoutn positive
+      transaction.amount_positive = (amount > 0) ? true : false
+
+      #add concernable to transaction
+      transaction.concernable = concernable
+
+      #set transaction kind
+      transaction.kind = "adjustment"
+
+      #set transaction reason
+      transaction.reason = reason
+
+      #set admin who made transaction
+      transaction.admin_id = admin_id
+
+      #set original_balance
+      transaction.original_balance = get_original_balance concernable
+
+      #set final amount
+      transaction.final_balance = transaction.original_balance + amount
+
+      #update user wallet balance
+      concernable.wallet.update(balance: transaction.final_balance)
+
+      #save transaction
+      transaction.save
     end
-
-    #build new transaction
-    transaction = Transaction.new
-
-    #add concernable to transaction
-    transaction.concernable = concernable
-
-    #set transaction kind
-    transaction.kind = "adjustment"
-
-    #set transaction reason
-    transaction.reason = reason
-
-    #set admin who made transaction
-    transaction.admin_id
-
-    #set original_balance
-    transaction.original_balance = get_original_balance concernable
-
-    #set final amount
-    transaction.final_balance = transaction.original_balance + amount
-
-    #update user wallet balance
-    concernable.wallet.update(balance: transaction.final_balance)
-
-    #save transaction
-    transaction.save!
   end
 
   private

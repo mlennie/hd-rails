@@ -20,12 +20,15 @@ ActiveAdmin.register Transaction do
     end
 
     def create
-      if Transaction.create_adjustable_transaction params current_admin_user.id
+      user = User.find(params[:user_id])
+      id = user.id
+      type = "User"
+      if Transaction.create_adjustable_transaction params, current_admin_user.id
         flash[:success] = "Transaction Added"
-        redirect_to admin_user_transactions(self)
+        redirect_to admin_transactions_path(id: id, type: type)
       else
         flash[:danger] = "Transaction Could not be added. Please make sure reason is filled out so we know you're not just sending yourself money :)"
-        redirect_to new_admin_user_transaction(self)
+        redirect_to new_admin_user_transaction(user)
       end
     end
 
@@ -47,8 +50,6 @@ ActiveAdmin.register Transaction do
     column :amount
     column :amount_positive
     column :final_balance
-    column :itemable
-    column :concernable
     column :reason
     column :admin_id
     column :created_at
@@ -62,8 +63,6 @@ ActiveAdmin.register Transaction do
   filter :amount
   filter :amount_positive
   filter :final_balance
-  filter :itemable
-  filter :concernable
   filter :reason
   filter :admin_id
   filter :created_at

@@ -18,41 +18,41 @@ ActiveAdmin.register Promotion do
   index do
     selectable_column
     id_column
-    column :name
+    #column :name
     column :code
     column :description
     column :amount 
-    column :percent
-    column :new_user_only
-    column :expiry_date
-    column :usage_limit
+    #column :percent
+    #column :new_user_only
+    #column :expiry_date
+    #column :usage_limit
     column :times_used
     column :created_at
     actions
  end
 
-  filter :name
+  #filter :name
   filter :code
   filter :description
   filter :amount 
-  filter :percent
-  filter :new_user_only
-  filter :expiry_date
-  filter :usage_limit
+  #filter :percent
+  #filter :new_user_only
+  #filter :expiry_date
+  #filter :usage_limit
   filter :times_used
   filter :created_at
 
   form do |f|
     f.inputs "Promotion Details" do
-      f.input :name
+      #f.input :name
 	    f.input :code
 	    f.input :description
 	    f.input :amount 
-	    f.input :percent
-	    f.input :new_user_only
-	    f.input :expiry_date
-	    f.input :usage_limit
-	    f.input :times_used
+	    #f.input :percent
+	    #f.input :new_user_only
+	    #f.input :expiry_date
+	    #f.input :usage_limit
+	    #f.input :times_used
     end
     f.actions
  end

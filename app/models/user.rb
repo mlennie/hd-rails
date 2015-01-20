@@ -73,6 +73,17 @@ class User < ActiveRecord::Base
     Wallet.create_for_concernable self
   end
 
+  def save_user_and_apply_promotion promotion
+    if promotion.blank?
+      self.save
+    else
+      ActiveRecord::Base.transaction do 
+        self.save
+        promotion.apply_to self
+      end
+    end
+  end
+
   private
 
     def generate_authentication_token

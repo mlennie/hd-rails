@@ -38,16 +38,6 @@ ActiveAdmin.register User do
     id_column
     column :last_name
     column :first_name
-    column :balance do |user|
-      unless user.wallet.present?
-        Wallet.create_for_user user
-      end
-      user.wallet.balance.nil? ? 0 : user.wallet.balance 
-    end
-    column :email
-    column :phone
-    column :birth_date
-    column :gender
     column 'Balance' do |user|
       if user.try(:wallet).try(:balance)
         user.wallet.balance.to_s + '€'
@@ -55,6 +45,10 @@ ActiveAdmin.register User do
         '0€'
       end
     end
+    column :email
+    column :phone
+    column :birth_date
+    column :gender
     column :street
     column :district
     column :city

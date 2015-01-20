@@ -8,8 +8,44 @@ class Transaction < ActiveRecord::Base
 
   enum kind: [ :reservation, :payment, :withdrawal, :referral, :promotion, 
                :adjustment ]
+  
+  def self.create_promotional_transaction user, promotion
+    ActiveRecord::Base.transaction do 
+        
+      #build new transaction
+      transaction = Transaction.new
 
-  def self.create_transaction(amount, discount, user_contribution, 
+      #set transaction amount
+      transaction.amount = promotion.amount
+
+      #set amount positive
+      transaction.amount_positive = true
+
+      #set transaction kind
+      transaction.kind = "promotion"
+
+      #add concernable to transaction
+      transaction.concernable = user
+
+      #set transaction itemable (promotion)
+      transaction.itemable = promotion
+
+      #set original_balance
+      transaction.original_balance = get_original_balance user
+
+      #set final amount
+      transaction.final_balance = transaction.original_balance + promotion.amount
+
+      #update user wallet balance
+      user.wallet.update(balance: transaction.final_balance)
+
+      #save transaction
+      transaction.save
+        
+    end
+  end
+
+  def self.create_reservation_transaction(amount, discount, user_contribution, 
                               reservation, concernable)
   	ActiveRecord::Base.transaction do 
       #build new transaction 

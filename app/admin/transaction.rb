@@ -2,10 +2,9 @@ ActiveAdmin.register Transaction do
   permit_params :id, :kind, :original_balance, :amount, :amount_positive,
                 :final_balance, :confirmation, :itemable_type, :itemable_id, 
                 :itemable, :concernable, :concernable_type, :concernable_id,
-                :reason
+                :reason, :restaurant_id
 
   belongs_to :user, optional: true
-  belongs_to :restaurant, optional: true
 
   controller do
     def scoped_collection
@@ -21,14 +20,16 @@ ActiveAdmin.register Transaction do
     end
 
     def create
-      if params[:user_id] || params[:restaurant_id]
+      #concernable id is restaurant id. 
+      #Active admin couldn't make nested routes for both users and restaurants
+      if params[:user_id].present? || params[:transaction][:concernable_id].present?
 
         #get concernable variables for redirect
-        if params[:user_id]
+        if params[:user_id].present?
           id = params[:user_id]
           type = "User"
         else
-          id = params[:restaurant_id]
+          id = params[:transaction][:concernable_id]
           type = "Restaurant"
         end
 
@@ -87,6 +88,9 @@ ActiveAdmin.register Transaction do
     f.inputs "New transaction" do
       f.input :amount, required: true
       f.input :reason, required: true
+      if params[:id]
+        f.input :concernable_id, input_html: { value: params[:id] }, hidden: true 
+      end
     end
     f.actions
   end

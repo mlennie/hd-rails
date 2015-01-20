@@ -74,8 +74,8 @@ class Transaction < ActiveRecord::Base
       #get concernable (user or restaurant)
       if params[:user_id]
         concernable = User.find(params[:user_id])
-      elsif params[:restaurant_id]
-        concernable = Restaurant.find(params[:restaurant_id])
+      elsif params[:transaction][:concernable_id]
+        concernable = Restaurant.find(params[:transaction][:concernable_id])
       end
 
       #build new transaction

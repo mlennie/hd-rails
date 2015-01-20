@@ -30,9 +30,9 @@ ActiveAdmin.register Restaurant do
       li link_to "Services",    admin_restaurant_services_path(restaurant)
       #li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
       li link_to "Invoices", admin_restaurant_invoices_path(restaurant)
-      li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
-      li link_to 'New Transaction', new_admin_restaurant_transaction_path(restaurant)
+      li link_to 'New Transaction', new_admin_transaction_path(id: restaurant.id)
       li link_to 'View Transactions', admin_transactions_path(id: restaurant.id, type: "Restaurant")
+      li link_to "Reservation Errors", admin_restaurant_reservation_errors_path(restaurant)
     end
   end
 
@@ -40,6 +40,13 @@ ActiveAdmin.register Restaurant do
     selectable_column
     id_column
     column :name
+    column 'Balance' do |restaurant|
+      if restaurant.try(:wallet).try(:balance)
+        restaurant.wallet.balance.to_s + '€'
+      else
+        '0€'
+      end
+    end
     column :description
     column :img_url
     column :owner_name
@@ -56,13 +63,6 @@ ActiveAdmin.register Restaurant do
     column :city
     column :country
     column :zipcode
-    column 'Balance' do |restaurant|
-      if restaurant.try(:wallet).try(:balance)
-        restaurant.wallet.balance.to_s + '€'
-      else
-        '0€'
-      end
-    end
     column :wallet_id
     column :created_at
     column :wants_sms_per_reservation

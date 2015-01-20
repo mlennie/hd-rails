@@ -27,10 +27,14 @@ class UsersController < ApplicationController
     params[:user].delete('gender')
 
     user = User.find(params[:id])
-    if user.update(user_params)
-      render json: user, status: 200
+    if user_signed_in? && user.id === current_user.id
+      if user.update(user_params)
+        render json: user, status: 200
+      else
+        render json: user.errors, status: 422
+      end
     else
-      render json: user.errors, status: 422
+      head 401
     end
   end
 

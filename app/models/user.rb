@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   include Archiving
 
   before_save :ensure_authentication_token
+  before_save :ensure_referral_code
+
   after_save :create_new_wallet
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
@@ -84,6 +86,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def ensure_referral_code
+    if referral_code.blank?
+      self.referral_code = generate_referral_code
+    end
+  end
+
   private
 
     def generate_authentication_token
@@ -97,6 +105,13 @@ class User < ActiveRecord::Base
       loop do
         token = Devise.friendly_token
         break token unless User.where(reset_password_token: token).first
+      end
+    end
+
+    def generate_referral_code
+      loop do
+        token = SecureRandom.hex[0,15]
+        break token unless Reservation.where(confirmation: token).first
       end
     end
 end

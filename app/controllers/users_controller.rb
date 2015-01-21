@@ -15,16 +15,20 @@ class UsersController < ApplicationController
   def create
 
     promotion = Promotion.check_presence params
+    referred_user_code = params[:user][:referred_user_code]
 
     #delete uneccessary params
     params[:user].delete(:promotion_code)
     params[:user].delete(:wallet_id)
+    params[:user].delete(:referred_user_code)
+    params[:user].delete(:referral_code)
+
 
     #build user
     user = User.new(user_params)
 
     #save user and add promotion if present
-    if user.save_user_and_apply_promotion promotion
+    if user.save_user_and_apply_extras promotion, referred_user_code
       render json: user, status: 201
     else
       render json: user.errors, status: 422

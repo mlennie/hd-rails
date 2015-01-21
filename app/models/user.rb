@@ -75,7 +75,16 @@ class User < ActiveRecord::Base
     Wallet.create_for_concernable self
   end
 
-  def save_user_and_apply_promotion promotion
+  def save_user_and_apply_extras promotion, referred_user_code
+    #check if referral code is present and apply if so
+    if referred_user_code.present?
+      #find referrer
+      referrer = User.find_by(referral_code: referred_user_code)
+      #set user's referral id to referrers id if referrer present
+      self.referrer_id = referrer.id if referrer.present?
+    end
+
+    #check if promotion is present and apply if so
     if promotion.blank?
       self.save
     else
@@ -111,7 +120,7 @@ class User < ActiveRecord::Base
     def generate_referral_code
       loop do
         token = SecureRandom.hex[0,15]
-        break token unless User.where(confirmation: token).first
+        break token unless User.where(referral_code: token).first
       end
     end
 end

@@ -31,6 +31,7 @@ gem "rack-cors", require: "rack/cors"
 group :development do
   gem 'spring'
   gem 'rubocop', '~> 0.27.1'
+  gem "figaro"
 end
 
 #

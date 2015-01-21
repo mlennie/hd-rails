@@ -2,7 +2,10 @@ class User < ActiveRecord::Base
   include Archiving
 
   before_save :ensure_authentication_token
-  after_save :create_new_wallet
+  before_save :ensure_referral_code
+
+  after_create :create_new_wallet
+  after_create :send_congrats_email_to_referrer
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
@@ -21,6 +24,7 @@ class User < ActiveRecord::Base
   has_many :reservation_errors
   has_many :user_promotions
   has_many :promotions, through: :user_promotions
+  has_one :referral_transaction, as: :itemable
 
 
   def is_superadmin?
@@ -73,7 +77,19 @@ class User < ActiveRecord::Base
     Wallet.create_for_concernable self
   end
 
-  def save_user_and_apply_promotion promotion
+  def save_user_and_apply_extras promotion, referred_user_code
+    #check if referral code is present and apply if so
+    if referred_user_code.present?
+      #find referrer
+      referrer = User.find_by(referral_code: referred_user_code)
+      #set user's referral id to referrers id if referrer present
+      if referrer.present?
+        self.referrer_id = referrer.id 
+        self.referral_amount = 5
+      end
+    end
+
+    #check if promotion is present and apply if so
     if promotion.blank?
       self.save
     else
@@ -81,6 +97,42 @@ class User < ActiveRecord::Base
         self.save
         promotion.apply_to self
       end
+    end
+  end
+
+  def ensure_referral_code
+    if referral_code.blank?
+      self.referral_code = generate_referral_code
+    end
+  end
+
+  def send_congrats_email_to_referrer
+    unless self.referrer_id.blank?
+      UserMailer.new_referral_registration(self).deliver 
+    end
+  end
+
+  def send_money_to_referrer
+    #make sure user was referred and referrer hasn't been paid yet
+    #and user only has one validated reservation
+    if self.referrer_id.present? && self.referrer_paid.blank? &&
+      self.reservations.validated.count === 1
+      ActiveRecord::Base.transaction do 
+        #update users referrer paid attribute to show referrer has been paid
+        self.update(referrer_paid: true)
+
+        #get amount
+        amount = self.referral_amount
+
+        #get referrer
+        referrer = User.find(self.referrer_id)
+
+        #create transaction to pay user
+        Transaction.create_referral_transaction amount, referrer, self
+      end
+
+      #send payment email
+      UserMailer.new_referral_payment(self).deliver 
     end
   end
 
@@ -97,6 +149,13 @@ class User < ActiveRecord::Base
       loop do
         token = Devise.friendly_token
         break token unless User.where(reset_password_token: token).first
+      end
+    end
+
+    def generate_referral_code
+      loop do
+        token = SecureRandom.hex[0,15]
+        break token unless User.where(referral_code: token).first
       end
     end
 end

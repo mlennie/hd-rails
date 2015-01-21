@@ -45,6 +45,42 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  def self.create_referral_transaction amount, referrer, user
+    ActiveRecord::Base.transaction do 
+        
+      #build new transaction
+      transaction = Transaction.new
+
+      #set transaction amount
+      transaction.amount = amount
+
+      #set amount positive
+      transaction.amount_positive = true
+
+      #set transaction kind
+      transaction.kind = "referral"
+
+      #add concernable to transaction
+      transaction.concernable = referrer
+
+      #set transaction itemable (promotion)
+      transaction.itemable = user
+
+      #set original_balance
+      transaction.original_balance = get_original_balance referrer
+
+      #set final amount
+      transaction.final_balance = transaction.original_balance + amount
+
+      #update referrers wallet balance
+      referrer.wallet.update(balance: transaction.final_balance)
+
+      #save transaction
+      transaction.save!
+        
+    end
+  end
+
   def self.create_reservation_transaction(amount, discount, user_contribution, 
                               reservation, concernable)
   	ActiveRecord::Base.transaction do 
@@ -92,10 +128,8 @@ class Transaction < ActiveRecord::Base
 
       #save transaction
       transaction.save
+      transaction
     end
-    
-    #return the transaction id  
-    return transaction.id
   end
 
   def self.create_adjustable_transaction params, admin_id

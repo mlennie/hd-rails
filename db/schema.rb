@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121101606) do
+ActiveRecord::Schema.define(version: 20150121141648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -407,6 +407,7 @@ ActiveRecord::Schema.define(version: 20150121101606) do
     t.boolean  "archived",               default: false
     t.string   "authentication_token"
     t.string   "referral_code"
+    t.integer  "referral_amount"
   end
 
   add_index "users", ["archived"], name: "index_users_on_archived", using: :btree

@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   before_save :ensure_referral_code
 
   after_save :create_new_wallet
+  after_save :send_congrats_email_to_referrer
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
@@ -81,7 +82,10 @@ class User < ActiveRecord::Base
       #find referrer
       referrer = User.find_by(referral_code: referred_user_code)
       #set user's referral id to referrers id if referrer present
-      self.referrer_id = referrer.id if referrer.present?
+      if referrer.present?
+        self.referrer_id = referrer.id 
+        self.referral_amount = 5
+      end
     end
 
     #check if promotion is present and apply if so
@@ -99,6 +103,10 @@ class User < ActiveRecord::Base
     if referral_code.blank?
       self.referral_code = generate_referral_code
     end
+  end
+
+  def send_congrats_email_to_referrer
+    UserMailer.new_referral_registration(self).deliver unless self.referrer_id.blank?
   end
 
   private

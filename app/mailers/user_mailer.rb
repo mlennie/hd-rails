@@ -22,4 +22,12 @@ class UserMailer < ActionMailer::Base
     @email = @referrer.email
     mail to: @email, subject: "Congrats! You have recieved one friend referral."
   end
+
+  def new_referral_payment user
+    @user = user
+    @referrer = User.find(user.referrer_id)
+    @amount = user.referral_amount
+    @email = @referrer.email
+    mail to: @email, subject: "Congrats! You have recieved one friend referral."
+  end
 end

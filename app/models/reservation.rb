@@ -13,8 +13,8 @@ class Reservation < ActiveRecord::Base
   has_many :promotions, through: :user_promotions
   has_many :transactions, as: :itemable
 
-  before_save :add_confirmation
-  after_save :send_new_reservation_emails
+  before_create :add_confirmation
+  after_create :send_new_reservation_emails
 
   just_define_datetime_picker :time
 
@@ -34,19 +34,23 @@ class Reservation < ActiveRecord::Base
     #or else everything does a rollback
     ActiveRecord::Base.transaction do 
       #make transaction for user
-      t1_id = Transaction.create_reservation_transaction(
+      t1 = Transaction.create_reservation_transaction(
         amount_param, discount_param, user_contribution_param, self, user
       )
       #make transaction for restaurant
-      t2_id = Transaction.create_reservation_transaction(
+      t2 = Transaction.create_reservation_transaction(
         amount_param, discount_param, user_contribution_param, self, restaurant
       )
       RelatedTransaction.create(
-        transaction_id: t1_id,
-        other_transaction_id: t2_id
+        transaction_id: t1.id,
+        other_transaction_id: t2.id
       )
       #update reseration
       self.update(status: 'validated')
+
+      #send money to referrer if this is user's first reservation
+      #and if user was referred by another user
+      user.send_money_to_referrer 
     end
   end
 

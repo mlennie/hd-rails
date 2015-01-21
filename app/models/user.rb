@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
     def generate_referral_code
       loop do
         token = SecureRandom.hex[0,15]
-        break token unless Reservation.where(confirmation: token).first
+        break token unless User.where(confirmation: token).first
       end
     end
 end

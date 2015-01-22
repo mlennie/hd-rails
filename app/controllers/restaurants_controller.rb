@@ -4,4 +4,5 @@ class RestaurantsController < ApplicationController
 		restaurants = Restaurant.includes(:cuisines).all
 		render json: restaurants
 	end
+
 end

@@ -55,8 +55,8 @@ unless Restaurant.any?
   #1 to 3 tomorrow service
   one_to_three_tomorrow_service = {
     availabilities: 99,
-    start_time: Time.now.midnight + 13.hours,
-    last_booking_time: Time.now.midnight + 15.hours,
+    start_time: Time.now.midnight + 1.day + 13.hours,
+    last_booking_time: Time.now.midnight + 1.day + 15.hours,
     nb_10: 99
   }
 
@@ -82,10 +82,6 @@ unless Restaurant.any?
   #add cuisines
   r1.cuisines << seafood 
   r1.cuisines << classy
-
-  #add services
-  r1.services.create(one_to_three_today_service)
-  r1.services.create(five_to_ten_today_service)
 
   r2 = Restaurant.create(
     name: "Shang hi noon",

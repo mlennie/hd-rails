@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :contact_emails, only: [:create]
   resources :restaurants, only: [:index]
   resources :services, only: [:index]
+  resources :reservations, only: [:create]
 
   get 'resend_confirmation', to: 'users#resend_confirmation', 
                              as: 'resend_confirmation'

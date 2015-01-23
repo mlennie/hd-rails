@@ -18,7 +18,7 @@ class ReservationsController < ApplicationController
       params.require(:reservation).permit(
         :nb_people, :time, :status, :restaurant_id, 
         :user_id, :service_id, :discount, :user_contribution,
-        :booking_name
+        :booking_name, :status
       )
     end
 end

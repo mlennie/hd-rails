@@ -1,14 +1,19 @@
 class ReservationsController < ApplicationController
 
   def create
-    #build reservation
-    reservation = Reservation.new(reservation_params)
+    if user_signed_in? && 
+      current_user.id == params[:reservation][:user_id].to_i
+      #build reservation
+      reservation = Reservation.new(reservation_params)
 
-    #save reservation
-    if reservation.save!
-      render json: reservation, status: 201
+      #save reservation
+      if reservation.save
+        render json: reservation, status: 201
+      else
+        render json: reservation.errors, status: 422
+      end
     else
-      render json: reservation.errors, status: 422
+      head 401
     end
   end
 

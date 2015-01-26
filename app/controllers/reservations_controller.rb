@@ -3,6 +3,10 @@ class ReservationsController < ApplicationController
   def create
     if user_signed_in? && 
       current_user.id == params[:reservation][:user_id].to_i
+
+      #get service id
+      params[:reservation][:service_id] = Service.get_service_id params
+
       #build reservation
       reservation = Reservation.new(reservation_params)
 

@@ -73,6 +73,24 @@ unless Restaurant.any?
     nb_25: 1
   }
 
+  #make service with no availabilities left
+  #1 to 3 current day service
+  one_to_three_today_service_no_availabilities = {
+    availabilities: 0,
+    start_time: Time.now.midnight + 13.hours,
+    last_booking_time: Time.now.midnight + 15.hours,
+    nb_10: 99,
+    nb_20: 2
+  }
+
+  #5 to 10 current day service
+  five_to_ten_today_service_no_availabilities = {
+    availabilities: 0,
+    start_time: Time.now.midnight + 17.hours,
+    last_booking_time: Time.now.midnight + 22.hours,
+    nb_10: 99
+  }
+
   #add restaurant
   r1 = Restaurant.create(
   	name: "Blue Nile",
@@ -154,7 +172,7 @@ unless Restaurant.any?
 
   puts 'created restaurant owner role'
 
-  Restaurant.all.each do |r|
+  Restaurant.all.each_with_index do |r, index|
 
     #add users for restaurants
     u = Role.first.users.create(
@@ -171,8 +189,13 @@ unless Restaurant.any?
 
     #add default services to restaurants
     #add for today
-    r.services.create(one_to_three_today_service)
-    r.services.create(five_to_ten_today_service)
+    if index == 0 #add service with no availabilites
+      r.services.create(one_to_three_today_service_no_availabilities)
+      r.services.create(five_to_ten_today_service_no_availabilities)
+    else
+      r.services.create(one_to_three_today_service)
+      r.services.create(five_to_ten_today_service)
+    end
     #add for tomorrow
     r.services.create(one_to_three_tomorrow_service)
     r.services.create(five_to_ten_tomorrow_service)

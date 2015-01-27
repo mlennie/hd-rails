@@ -4,17 +4,31 @@ class ReservationsController < ApplicationController
     if user_signed_in? && 
       current_user.id == params[:reservation][:user_id].to_i
 
-      #get service id
-      params[:reservation][:service_id] = Service.get_service_id params
+      #get service
+      service = Service.get_service params
 
-      #build reservation
-      reservation = Reservation.new(reservation_params)
+      #make sure discount is up to date
+      #if not, send back error message with updated discount
+      unless service.current_discount != params[:reservation][:discount]
 
-      #save reservation
-      if reservation.save
-        render json: reservation, status: 201
+        #get service id
+        params[:reservation][:service_id] = service.id
+
+        #build reservation
+        reservation = Reservation.new(reservation_params)
+
+        #save reservation
+        if reservation.save
+          render json: reservation, status: 201
+        else
+          render json: reservation.errors, status: 422
+        end
       else
-        render json: reservation.errors, status: 422
+        render json: { errors: 
+                        {
+                          discount: service.current_discount
+                        } 
+                      }, status: 422
       end
     else
       head 401

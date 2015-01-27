@@ -10,7 +10,7 @@ class Service < ActiveRecord::Base
 
   before_save :update_current_discount
 
-  def self.get_service_id params
+  def self.get_service params
 
   	#add service 
     #get restaurant
@@ -23,7 +23,7 @@ class Service < ActiveRecord::Base
     ).first
 
     #update service params
-    return service.present? ? service.id : nil
+    return service
   end
 
   #before save or update, adjust current discount

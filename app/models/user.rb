@@ -113,7 +113,6 @@ class User < ActiveRecord::Base
   end
 
   def send_money_to_referrer
-    binding.pry
     #make sure user was referred and referrer hasn't been paid yet
     #and user only has one validated reservation
     if self.referrer_id.present? && self.referrer_paid.blank? &&

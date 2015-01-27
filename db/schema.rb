@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121141648) do
+ActiveRecord::Schema.define(version: 20150127152833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,13 +303,14 @@ ActiveRecord::Schema.define(version: 20150121141648) do
     t.datetime "start_time"
     t.datetime "last_booking_time"
     t.integer  "restaurant_id"
-    t.integer  "nb_10"
-    t.integer  "nb_15"
-    t.integer  "nb_20"
-    t.integer  "nb_25"
+    t.integer  "nb_10",             default: 0
+    t.integer  "nb_15",             default: 0
+    t.integer  "nb_20",             default: 0
+    t.integer  "nb_25",             default: 0
     t.boolean  "archived",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "current_discount",  default: 0.0
   end
 
   add_index "services", ["archived"], name: "index_services_on_archived", using: :btree

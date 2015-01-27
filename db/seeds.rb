@@ -41,7 +41,7 @@ unless Restaurant.any?
     availabilities: 99,
     start_time: Time.now.midnight + 13.hours,
     last_booking_time: Time.now.midnight + 15.hours,
-    nb_10: 99
+    nb_10: 99,
     nb_20: 2
   }
 
@@ -58,7 +58,7 @@ unless Restaurant.any?
     availabilities: 2,
     start_time: Time.now.midnight + 1.day + 13.hours,
     last_booking_time: Time.now.midnight + 1.day + 15.hours,
-    nb_10: 99
+    nb_10: 99,
     nb_15: 1
   }
 
@@ -67,9 +67,9 @@ unless Restaurant.any?
     availabilities: 6,
     start_time: Time.now.midnight + 1.day + 17.hours,
     last_booking_time: Time.now.midnight + 1.day + 22.hours,
-    nb_10: 99
-    nb_15: 1
-    nb_20: 1
+    nb_10: 99,
+    nb_15: 1,
+    nb_20: 1,
     nb_25: 1
   }
 

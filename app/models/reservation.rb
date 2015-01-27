@@ -13,6 +13,7 @@ class Reservation < ActiveRecord::Base
   has_many :promotions, through: :user_promotions
   has_many :transactions, as: :itemable
 
+  after_save :update_current_discount_to_service
   before_create :add_confirmation
   after_create :send_new_reservation_emails
 
@@ -149,6 +150,40 @@ class Reservation < ActiveRecord::Base
     RestaurantMailer.new_reservation(self).deliver 
     #send new reservation email to admin
     AdminMailer.new_reservation(self).deliver
+  end
+
+  #change current discount for service when new reservation is made
+  #or when one is cancelled
+  def update_current_discount_to_service
+    service = self.service
+    #get spots already taken
+    availabilites = service.availabilites
+    spots_taken = service.reservations.get_unarchived.where(
+                    "status != ?", Reservation.statuses[:cancelled]
+                  ).count
+
+    #get percentage availabilites
+    number_of_ten_available = service.nb_10
+    number_of_fifteen_available = service.nb_15
+    number_of_twenty_available = service.nb_20
+    number_of_twenty_five_available = service.nb_25
+
+    #get new current discount
+    #return 0 if no spots left
+    if spots_taken >= availabilites 
+      discount = 0
+    #start highest to lowest percentages 
+    #to see which percentage is still available 
+    elsif spots_taken < number_of_twenty_five_available
+      discount = 0.25
+    elsif spots_taken < number_of_twenty_available
+      discount = 0.20
+    elsif spots_taken < number_of_fifteen_available
+      disccount = 0.15
+    else
+      discount = 0.10
+    end
+    service.update(current_discount: discount)
   end
 
   private

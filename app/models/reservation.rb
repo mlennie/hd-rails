@@ -51,6 +51,7 @@ class Reservation < ActiveRecord::Base
 
       #send money to referrer if this is user's first reservation
       #and if user was referred by another user
+      binding.pry
       user.send_money_to_referrer 
     end
   end

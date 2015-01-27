@@ -42,6 +42,7 @@ unless Restaurant.any?
     start_time: Time.now.midnight + 13.hours,
     last_booking_time: Time.now.midnight + 15.hours,
     nb_10: 99
+    nb_20: 2
   }
 
   #5 to 10 current day service
@@ -54,18 +55,22 @@ unless Restaurant.any?
 
   #1 to 3 tomorrow service
   one_to_three_tomorrow_service = {
-    availabilities: 99,
+    availabilities: 2,
     start_time: Time.now.midnight + 1.day + 13.hours,
     last_booking_time: Time.now.midnight + 1.day + 15.hours,
     nb_10: 99
+    nb_15: 1
   }
 
   #5 to 10 tomorrow service
   five_to_ten_tomorrow_service = {
-    availabilities: 99,
+    availabilities: 6,
     start_time: Time.now.midnight + 1.day + 17.hours,
     last_booking_time: Time.now.midnight + 1.day + 22.hours,
     nb_10: 99
+    nb_15: 1
+    nb_20: 1
+    nb_25: 1
   }
 
   #add restaurant

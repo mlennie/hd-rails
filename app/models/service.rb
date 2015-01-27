@@ -10,6 +10,16 @@ class Service < ActiveRecord::Base
 
   before_save :update_current_discount
 
+  
+  def self.future_with_availabilities
+    get_unarchived.where(
+      "start_time > :yesterday",
+      { yesterday: Time.new.midnight }
+    ).where("current_discount > :zero",
+      { zero: 0 }
+    )
+  end
+
   def self.get_service params
 
   	#add service 

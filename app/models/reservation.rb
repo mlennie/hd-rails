@@ -133,13 +133,13 @@ class Reservation < ActiveRecord::Base
     transactions.get_unarchived.any? &&
     
     #check to see if bill amounts differ 
-    amount_param != bill_amount ||
+    (amount_param != bill_amount ||
 
     #check to see if discounts differ
     discount_param != discount ||
 
     #check to see if user_contributions differ
-    user_contribution_param != user_contribution
+    user_contribution_param != user_contribution)
   end
 
   def send_new_reservation_emails

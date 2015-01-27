@@ -157,7 +157,7 @@ class Reservation < ActiveRecord::Base
   def update_current_discount_to_service
     service = self.service
     #get spots already taken
-    availabilites = service.availabilites
+    availabilities = service.availabilities
     spots_taken = service.reservations.get_unarchived.where(
                     "status != ?", Reservation.statuses[:cancelled]
                   ).count
@@ -170,7 +170,7 @@ class Reservation < ActiveRecord::Base
 
     #get new current discount
     #return 0 if no spots left
-    if spots_taken >= availabilites 
+    if spots_taken >= availabilities 
       discount = 0
     #start highest to lowest percentages 
     #to see which percentage is still available 

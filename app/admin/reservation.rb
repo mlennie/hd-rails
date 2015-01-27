@@ -16,6 +16,7 @@ ActiveAdmin.register Reservation do
 
     def create
       params[:reservation][:user_id] = params[:user_id]
+      params.delete(:user_id)
       super
     end
 

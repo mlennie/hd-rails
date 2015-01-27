@@ -11,7 +11,7 @@ class ReservationsController < ApplicationController
       reservation = Reservation.new(reservation_params)
 
       #save reservation
-      if reservation.save!
+      if reservation.save
         render json: reservation, status: 201
       else
         render json: reservation.errors, status: 422

@@ -19,8 +19,8 @@ class Reservation < ActiveRecord::Base
   just_define_datetime_picker :time
 
   validates_presence_of :nb_people, :time, :restaurant_id, :user_id, 
-                        :discount, :user_contribution, :booking_name,
-                        :service_id
+                        :discount, :user_contribution, :booking_name
+                        #:service_id
 
   def add_confirmation
     confirmation = generate_confirmation
@@ -92,6 +92,10 @@ class Reservation < ActiveRecord::Base
   end
 
   def transactions_should_be_created? params
+    #make sure bill amount, discount and user contribution are present
+    !(params[:reservation][:bill_amount].blank?) &&
+    !(params[:reservation][:discount].blank?) &&
+    !(params[:reservation][:user_contribution].blank?) &&
     #add transactions only if bill amount has changed and no 
     # transactions exist already and either discount or user_contribution 
     #is more than 0
@@ -107,6 +111,14 @@ class Reservation < ActiveRecord::Base
   end
 
   def transactions_should_be_reset? params
+    binding.pry
+    #make sure transactions exist
+    transactions.get_unarchived.any? && 
+
+    #make sure bill amount, discount and user contribution are present
+    !(params[:reservation][:bill_amount].blank?) &&
+    !(params[:reservation][:discount].blank?) &&
+    !(params[:reservation][:user_contribution].blank?) &&
     #get params
     (amount_param = params[:reservation][:bill_amount].to_f) &&
     (discount_param = params[:reservation][:discount].to_f) &&

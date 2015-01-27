@@ -9,8 +9,8 @@ class ReservationsController < ApplicationController
 
       #make sure discount is up to date
       #if not, send back error message with updated discount
-      unless service.current_discount != params[:reservation][:discount]
-
+      if service && service.current_discount == params[:reservation][:discount] &&
+         service.current_discount > 0
         #get service id
         params[:reservation][:service_id] = service.id
 

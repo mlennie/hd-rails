@@ -38,7 +38,6 @@ class UsersController < ApplicationController
   def update
     #delete uneeded params
     params[:user].delete('wallet_id')
-    params[:user].delete('gender')
 
     user = User.find(params[:id])
     if user_signed_in? && user.id === current_user.id

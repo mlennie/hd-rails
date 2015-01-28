@@ -98,7 +98,7 @@ unless Restaurant.any?
     description: "Best food ever!! soooo good",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street',
+    street: '223 main street',
     principle_email: "fake@restaurant.com"
   )
 
@@ -112,7 +112,7 @@ unless Restaurant.any?
     description: "Fancy fancy fancy oh and did we say fancy",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street',
+    street: '623 main street',
     principle_email: "fake@restaurant.com"
   )
 
@@ -126,7 +126,7 @@ unless Restaurant.any?
     description: "The Lobster is to die for",
     zipcode: '75017',
     city: 'Paris', 
-    street: '123 main street',
+    street: '823 main street',
     principle_email: "fake@restaurant.com"
   )
 
@@ -140,7 +140,7 @@ unless Restaurant.any?
     description: "Classy Brasserie sur Saint Germain",
     zipcode: '75008',
     city: 'Paris', 
-    street: '123 main street',
+    street: '7723 main street',
     principle_email: "fake@restaurant.com"
   )
 
@@ -154,7 +154,7 @@ unless Restaurant.any?
     description: "Sarkozy ate here. Enough said.",
     zipcode: '75008',
     city: 'Paris', 
-    street: '123 main street',
+    street: '1823 main street',
     principle_email: "fake@restaurant.com"
   )
 

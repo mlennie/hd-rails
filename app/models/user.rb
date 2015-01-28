@@ -133,6 +133,8 @@ class User < ActiveRecord::Base
 
       #send payment email
       UserMailer.new_referral_payment(self).deliver 
+    else
+      return true
     end
   end
 

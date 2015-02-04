@@ -91,11 +91,13 @@ unless Restaurant.any?
     nb_10: 99
   }
 
+  description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus urna metus, dictum non nulla feugiat, pharetra fringilla sem. Pellentesque sed fringilla massa, sed efficitur nisl. Nunc rutrum posuere lobortis. Praesent iaculis leo id felis bibendum, sed tempus est porta. Vivamus molestie interdum tempus. Donec hendrerit, erat in accumsan sodales, orci ipsum finibus erat, eget laoreet massa mauris et lorem. Proin egestas, diam vitae rutrum dapibus, sapien orci consectetur ligula, a posuere tellus urna in libero. Integer quis leo urna. Nulla aliquam ac tortor vel porta.'
+
   #add restaurant
   r1 = Restaurant.create(
   	name: "Blue Nile",
     img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
-    description: "Best food ever!! soooo good",
+    description: description,
     zipcode: '75017',
     city: 'Paris', 
     street: '223 main street',
@@ -109,7 +111,7 @@ unless Restaurant.any?
   r2 = Restaurant.create(
     name: "Shang hi noon",
     img_url: "http://www.huahintoday.com/wp-content/uploads/2013/04/InAzia-Restaurant-II.jpg",
-    description: "Fancy fancy fancy oh and did we say fancy",
+    description: description,
     zipcode: '75017',
     city: 'Paris', 
     street: '623 main street',
@@ -123,7 +125,7 @@ unless Restaurant.any?
   r3 = Restaurant.create(
     name: "Haute couture",
     img_url: "http://www.a-onehotel.com/pattaya/pattaya_images/300ppi/50MARITIME%20RESTAURANT.JPG",
-    description: "The Lobster is to die for",
+    description: description,
     zipcode: '75017',
     city: 'Paris', 
     street: '823 main street',
@@ -137,7 +139,7 @@ unless Restaurant.any?
   r4 = Restaurant.create(
     name: "Brasserie Lip",
     img_url: "http://www.paris-bistro.com/culture/ecrivain/pics_ecrivain/prix_lipp.jpg",
-    description: "Classy Brasserie sur Saint Germain",
+    description: description,
     zipcode: '75008',
     city: 'Paris', 
     street: '7723 main street',
@@ -151,7 +153,7 @@ unless Restaurant.any?
   r5 = Restaurant.create(
     name: "Fouquet",
     img_url: "http://www.lucienbarriere.com/localized/image/photoelement/pj/500x240-ho-hbf-fouquet's-salle1_opt318838617194458100.jpg",
-    description: "Sarkozy ate here. Enough said.",
+    description: description,
     zipcode: '75008',
     city: 'Paris', 
     street: '1823 main street',

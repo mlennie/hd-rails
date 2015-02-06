@@ -28,7 +28,7 @@ ActiveAdmin.register Restaurant do
   sidebar "Services and Reservations", only: [:show, :edit] do
     ul do
       li link_to "Services",    admin_restaurant_services_path(restaurant)
-      #li link_to "Reservations", admin_restaurant_reservations_path(restaurant)
+      li link_to "Menus",    admin_restaurant_menus_path(restaurant)
       li link_to "Invoices", admin_restaurant_invoices_path(restaurant)
       li link_to 'New Transaction', new_admin_transaction_path(id: restaurant.id)
       li link_to 'View Transactions', admin_transactions_path(id: restaurant.id, type: "Restaurant")

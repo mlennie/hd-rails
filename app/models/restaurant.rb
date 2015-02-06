@@ -11,6 +11,7 @@ class Restaurant < ActiveRecord::Base
   has_one :wallet, as: :concernable
   has_many :transactions, as: :concernable
   has_many :invoices
+  has_many :menus
 
   after_save :create_new_wallet
 

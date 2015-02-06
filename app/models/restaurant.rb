@@ -13,6 +13,7 @@ class Restaurant < ActiveRecord::Base
   has_many :invoices
   has_many :restaurant_cuisines
   has_many :cuisines, through: :restaurant_cuisines
+  has_many :menus
 
   after_save :create_new_wallet
 

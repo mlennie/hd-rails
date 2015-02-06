@@ -20,6 +20,10 @@ end
 
 unless Restaurant.all.any?
 
+  entree_params = { course: 0, description: "salade with chicken", price: 9.99 }
+  principaux_params = { course: 1, description: "steak and potatoes", price: 13.99 }
+  dessert_params = { course: 2, description: "tiramisou", price: 6.50 }
+
   description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus urna metus, dictum non nulla feugiat, pharetra fringilla sem. Pellentesque sed fringilla massa, sed efficitur nisl. Nunc rutrum posuere lobortis. Praesent iaculis leo id felis bibendum, sed tempus est porta. Vivamus molestie interdum tempus. Donec hendrerit, erat in accumsan sodales, orci ipsum finibus erat, eget laoreet massa mauris et lorem. Proin egestas, diam vitae rutrum dapibus, sapien orci consectetur ligula, a posuere tellus urna in libero. Integer quis leo urna. Nulla aliquam ac tortor vel porta.'
 
   Restaurant.create(
@@ -93,9 +97,12 @@ unless Restaurant.all.any?
       gender: 'Male'
     )
     r.update(user_id: u.id)
+    r.menus.create(entree_params)
+    r.menus.create(principaux_params)
+    r.menus.create(dessert_params)
   end
 
-  puts 'created owners for restaurants'
+  puts 'created owners and menus for restaurants'
 end
 
 

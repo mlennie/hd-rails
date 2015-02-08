@@ -205,10 +205,10 @@ unless Restaurant.any?
     #add for tomorrow
     r.services.create(one_to_three_tomorrow_service)
     r.services.create(five_to_ten_tomorrow_service)
-  end
-    r.menus.create(entree_params)
-    r.menus.create(principaux_params)
-    r.menus.create(dessert_params)
+
+    #r.menus.create(entree_params)
+    #r.menus.create(principaux_params)
+    #r.menus.create(dessert_params)
   end
 
   puts 'created owners, services and menus for restaurants'

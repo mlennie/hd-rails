@@ -207,18 +207,20 @@ unless Restaurant.any?
     menu_params = { name: "Default", title: "Our everyday menu", 
                     description: "This menu is valid from 15:00 to 22:00",
                     kind: 1}
-    entree_params = { course: 0, name: "chicken salad", description: "salade with chicken", 
+    entree_params = { course: 1, name: "chicken salad", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tincidunt efficitur est sit amet laoreet.", 
                       price: 9.99 }
-    principaux_params = { course: 1, name: "steak a la potato", description: "steak and potatoes", 
+    principaux_params = { course: 2, name: "steak a la potato", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tincidunt efficitur est sit amet laoreet.", 
                       price: 13.99 }
-    dessert_params = { course: 2, name: "tireamisou", description: "oh lala c'est bon ça", 
+    dessert_params = { course: 3, name: "tireamisou", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tincidunt efficitur est sit amet laoreet.", 
                       price: 6.50 }
 
-    #add menu and menu items
+    #add menu and 3 menu items per menu category
     m = r.menus.create(menu_params)
-    m.menu_items.create(entree_params)
-    m.menu_items.create(principaux_params)
-    m.menu_items.create(dessert_params)
+    3.times do 
+      m.menu_items.create(entree_params)
+      m.menu_items.create(principaux_params)
+      m.menu_items.create(dessert_params)
+    end
   end
 
   puts 'created owners, services and menus for restaurants'

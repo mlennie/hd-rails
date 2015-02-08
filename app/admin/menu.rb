@@ -1,3 +1,4 @@
+=begin
 ActiveAdmin.register Menu do
   permit_params :restaurant_id, :course, :description, :price
 
@@ -51,3 +52,4 @@ ActiveAdmin.register Menu do
   end
 
 end
+=end

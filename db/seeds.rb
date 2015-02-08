@@ -97,9 +97,9 @@ unless Restaurant.all.any?
       gender: 'Male'
     )
     r.update(user_id: u.id)
-    r.menus.create(entree_params)
-    r.menus.create(principaux_params)
-    r.menus.create(dessert_params)
+    #r.menus.create(entree_params)
+    #r.menus.create(principaux_params)
+    #r.menus.create(dessert_params)
   end
 
   puts 'created owners and menus for restaurants'

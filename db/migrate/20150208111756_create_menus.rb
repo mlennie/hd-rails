@@ -7,7 +7,7 @@ class CreateMenus < ActiveRecord::Migration
       t.integer :kind
       t.float :price
       t.integer :restaurant_id
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end

@@ -20,10 +20,6 @@ end
 
 unless Restaurant.all.any?
 
-  entree_params = { course: 0, description: "salade with chicken", price: 9.99 }
-  principaux_params = { course: 1, description: "steak and potatoes", price: 13.99 }
-  dessert_params = { course: 2, description: "tiramisou", price: 6.50 }
-
   description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus urna metus, dictum non nulla feugiat, pharetra fringilla sem. Pellentesque sed fringilla massa, sed efficitur nisl. Nunc rutrum posuere lobortis. Praesent iaculis leo id felis bibendum, sed tempus est porta. Vivamus molestie interdum tempus. Donec hendrerit, erat in accumsan sodales, orci ipsum finibus erat, eget laoreet massa mauris et lorem. Proin egestas, diam vitae rutrum dapibus, sapien orci consectetur ligula, a posuere tellus urna in libero. Integer quis leo urna. Nulla aliquam ac tortor vel porta.'
 
   Restaurant.create(
@@ -97,9 +93,24 @@ unless Restaurant.all.any?
       gender: 'Male'
     )
     r.update(user_id: u.id)
-    #r.menus.create(entree_params)
-    #r.menus.create(principaux_params)
-    #r.menus.create(dessert_params)
+
+    #create menu for restaurant with menu items
+    #setup params
+    menu_params = { name: "Default", title: "Our everyday menu", 
+                    description: "This menu is valid from 15:00 to 22:00",
+                    kind: 1}
+    entree_params = { course: 0, name: "chicken salad", description: "salade with chicken", 
+                      price: 9.99 }
+    principaux_params = { course: 1, name: "steak a la potato", description: "steak and potatoes", 
+                      price: 13.99 }
+    dessert_params = { course: 2, name: "tireamisou", description: "oh lala c'est bon ça", 
+                      price: 6.50 }
+
+    #add menu and menu items
+    m = r.menus.create(menu_params)
+    m.menu_items.create(entree_params)
+    m.menu_items.create(principaux_params)
+    m.menu_items.create(dessert_params)
   end
 
   puts 'created owners and menus for restaurants'

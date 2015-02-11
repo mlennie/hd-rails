@@ -8,8 +8,33 @@ ActiveAdmin.register User do
       User.get_unarchived
     end
 
+    def create
+      user = User.new permitted_params[:user]
+      if user.save
+
+        #MIXPANEL: add registration event
+        @tracker.track(user.id.to_s , 'Registered', { 'Made By' => 'Admin' } )
+        #MIXPANEL: add new user profile
+        @tracker.people.set(user.id.to_s, {
+          '$first_name'       => user.first_name,
+          '$last_name'        => user.last_name,
+          '$email'            => user.email,
+          '$phone'            => user.phone,
+          'Gender'            => user.gender
+        })
+
+        #flash notice and redirect
+        flash[:success] = "You have successfully created this user"
+        redirect_to admin_user_path user
+      else
+        flash[:danger] = "Zut!! User could not be saved! Please make sure email is not already used and that all required fields are filled"
+        redirect_to new_admin_user_path user
+      end
+    end
+
     def update
-      if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      if params[:user][:password].blank? && 
+        params[:user][:password_confirmation].blank?
         params[:user].delete("password")
         params[:user].delete("password_confirmation")
       end

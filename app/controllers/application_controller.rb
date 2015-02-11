@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_filter :add_allow_credentials_headers
   before_filter :authenticate_user_from_token!
+  before_filter :set_mixpanel_variable
 
   private
 
@@ -27,5 +28,9 @@ class ApplicationController < ActionController::Base
 
     def options                                                                                                                                                                                                                                                                              
       head :status => 200, :'Access-Control-Allow-Headers' => 'accept, content-type'                                                                                                                                                                                                         
+    end
+
+    def set_mixpanel_variable
+      @tracker = Mixpanel::Tracker.new(ENV['MIXPANEL_CODE'])
     end
 end

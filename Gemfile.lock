@@ -193,6 +193,7 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.1)
     minitest (5.4.3)
+    mixpanel-ruby (1.7.0)
     multi_json (1.10.1)
     newrelic_rpm (3.9.8.273)
     nifty-attachments (1.0.3)
@@ -367,6 +368,7 @@ DEPENDENCIES
   just-time-picker (~> 0.0.2)
   launchy (~> 2.4.3)
   mailcatcher
+  mixpanel-ruby (~> 1.7.0)
   newrelic_rpm (~> 3.9.8.273)
   pg
   pry-debugger (~> 0.2.3)

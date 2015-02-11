@@ -63,6 +63,7 @@ gem 'activeadmin', github: 'activeadmin'
 gem 'documentation', '~> 1.0.7'
 gem 'just-time-picker', '~> 0.0.2'
 gem 'just-datetime-picker', '~> 0.0.6'
+gem 'mixpanel-ruby', '~> 1.7.0'
 
 #
 #Emailing

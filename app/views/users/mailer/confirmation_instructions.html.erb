@@ -1,5 +1,12 @@
-<p>Welcome <%= @email %>!</p>
+<p>Bienvenue <%= @resource.first_name %>!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>Pour confirmer votre inscription, il suffit de cliquer sur : <%= link_to 'confirmer votre compte', confirm_url(id: @resource.id, token: @resource.confirmation_token) %></p>
 
-<p><%= link_to 'Confirm my account', confirm_url(id: @resource.id, token: @resource.confirmation_token) %></p>
+<p>Vous pourrez ensuite effectuer votre première réservation parmi les dizaines de restaurants sélectionnés pour vous.<p>
+
+<p>N’hésitez pas à nous joindre : </p>
+<ul>
+	<li>par mail : hello@happydining.fr </li>
+	<li>ou par téléphone : 09 52 66 53 19</li>
+</ul>
+<p>L’équipe Happy Dining</p>

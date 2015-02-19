@@ -69,8 +69,9 @@ class User < ActiveRecord::Base
 
   def update_reset_password_token
     token = generate_reset_password_token
-    self.update(reset_password_token: token)
-    self.update(reset_password_sent_at: Time.now)
+    self.reset_password_token = token
+    self.reset_password_sent_at = Time.now
+    self.save(validate: false)
   end 
 
   def create_new_wallet

@@ -12,7 +12,12 @@ class Promotion < ActiveRecord::Base
   #check to see if promotion returns and return it if it does
   def self.check_presence params
     if params[:user][:promotion_code].present?
-      return Promotion.find_by(code: params[:user][:promotion_code])
+      promotion = Promotion.find_by(code: params[:user][:promotion_code])
+      if promotion 
+        return promotion
+      else
+        return "bad code"
+      end
     else
     	return nil
     end

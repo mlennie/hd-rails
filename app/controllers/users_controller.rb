@@ -28,10 +28,19 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     #save user and add promotion if present
-    if user.save_user_and_apply_extras promotion, referred_user_code
+    if promotion != "bad code" && user.save_user_and_apply_extras(promotion, referred_user_code)
       render json: user, status: 201
     else
-      render json: user.errors, status: 422
+      if promotion == "bad code"
+        errors = {
+          errors: {
+            code: "bad"
+          }
+        }
+        render json: errors, status: 422
+      else
+        render json: user.errors, status: 422
+      end
     end
   end
 

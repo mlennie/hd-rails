@@ -81,9 +81,7 @@ class User < ActiveRecord::Base
 
   def give_user_money_if_referred
     if self.referrer_id.present?
-      wallet = self.wallet
-      wallet.balance = 5
-      wallet.save(validate: false)  
+      Transaction.create_referral_transaction 5, self, User.find(self.referrer_id)
     end
   end
 

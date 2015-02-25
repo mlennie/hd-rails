@@ -45,6 +45,8 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  #give money to person either being referred or person who did referring
+  #referrer is the person who will receive the money
   def self.create_referral_transaction amount, referrer, user
     ActiveRecord::Base.transaction do 
         

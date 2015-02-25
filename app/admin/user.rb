@@ -85,6 +85,7 @@ ActiveAdmin.register User do
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
+    column :confirmed_at
     actions
  end
 
@@ -105,7 +106,6 @@ ActiveAdmin.register User do
   filter :referrer_paid
   filter :current_sign_in_at
   filter :sign_in_count
-  filter :created_at
 
   form do |f|
     f.inputs "User Details" do
@@ -123,6 +123,7 @@ ActiveAdmin.register User do
       f.input :state
       f.input :country, default: "France"
       f.input :zipcode
+      f.input :created_at
     end
     f.actions
  end

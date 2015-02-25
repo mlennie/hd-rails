@@ -75,10 +75,12 @@ class User < ActiveRecord::Base
     self.save(validate: false)
   end 
 
+  #create and associate a wallet to newly created user 
   def create_new_wallet
     Wallet.create_for_concernable self
   end
 
+  #after user is created give them money if they were referred by another user
   def give_user_money_if_referred
     if self.referrer_id.present?
       Transaction.create_referral_transaction 5, self, User.find(self.referrer_id)

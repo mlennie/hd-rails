@@ -9,11 +9,11 @@ class UserMailer < ActionMailer::Base
 
   def new_reservation reservation
   	@reservation = reservation
-  	@time = reservation.time.strftime("%m/%d/%Y, at %H:%M") 
+  	@time = reservation.time.strftime("%d/%m/%Y, à %H:%M") 
   	@user = reservation.user
   	@restaurant = reservation.restaurant
   	@email = @user.email
-  	mail to: @email, subject: "New Reservation Through Happy Dining"
+  	mail to: @email, subject: "Réservation confirmée"
   end
 
   def new_referral_registration user

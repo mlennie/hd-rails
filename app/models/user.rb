@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token
   before_save :ensure_referral_code
 
-  after_create :create_new_wallet
+  before_create :create_new_wallet
+  after_create :give_user_money_if_referred
   after_create :send_congrats_email_to_referrer
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
@@ -76,6 +77,14 @@ class User < ActiveRecord::Base
 
   def create_new_wallet
     Wallet.create_for_concernable self
+  end
+
+  def give_user_money_if_referred
+    if self.referrer_id.present?
+      wallet = self.wallet
+      wallet.balance = 5
+      wallet.save(validate: false)  
+    end
   end
 
   def save_user_and_apply_extras promotion, referred_user_code

@@ -74,23 +74,9 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     if user.confirmation_token == params[:token] && user.confirmed_at.blank?
       user.update(confirmed_at: Time.now)
-      #can't get environment variables to work here ???
-      if Rails.env.production?
-        redirect_to 'https://hd-ember.herokuapp.com/login?confirmation_success=true'
-      elsif Rails.env.staging?
-        redirect_to 'https://hdemberstag.herokuapp.com/login?confirmation_success=true'
-      elsif Rails.env.development?
-        redirect_to 'http://localhost:4200/login?confirmation_success=true'
-      end
+      redirect_to ENV['FRONT_HOST'] + '/login?confirmation_success=true'
     else
-      #can't get environment variables to work here ???
-      if Rails.env.production?
-        redirect_to 'https://hd-ember.herokuapp.com/login?confirmation_fail=true'
-      elsif Rails.env.staging?
-        redirect_to 'https://hdemberstag.herokuapp.com/login?confirmation_fail=true'
-      elsif Rails.env.development?
-        redirect_to 'http://localhost:4200/login?confirmation_fail=true'
-      end
+      redirect_to ENV['FRONT_HOST'] + '/login?confirmation_fail=true'
     end
   end
 
@@ -110,14 +96,7 @@ class UsersController < ApplicationController
   def edit_password
     user = User.find(params[:user_id])
     reset_password_token = params[:password_reset_token]
-    #can't get environment variables to work here ???
-    if Rails.env.production?
-      redirect_to "https://hd-ember.herokuapp.com/edit-password?token=#{reset_password_token}"
-    elsif Rails.env.staging?
-      redirect_to "https://hdemberstag.herokuapp.com/edit-password?token=#{reset_password_token}"
-    elsif Rails.env.development?
-      redirect_to "http://localhost:4200/edit-password?token=#{reset_password_token}"
-    end
+    redirect_to ENV['FRONT_HOST'] + "/edit-password?token=#{reset_password_token}"
   end
 
   def update_password

@@ -142,12 +142,15 @@ class Reservation < ActiveRecord::Base
   end
 
   def send_new_reservation_emails
-    #send new reservation email to user
-    UserMailer.new_reservation(self).deliver 
-    #send new reservation email to restaurant
-    RestaurantMailer.new_reservation(self).deliver 
-    #send new reservation email to admin
-    AdminMailer.new_reservation(self).deliver
+    #only send emails if reservation is for the future
+    if self.time > Time.now - 10.minutes
+      #send new reservation email to user
+      UserMailer.new_reservation(self).deliver 
+      #send new reservation email to restaurant
+      RestaurantMailer.new_reservation(self).deliver 
+      #send new reservation email to admin
+      AdminMailer.new_reservation(self).deliver
+    end
   end
 
   private

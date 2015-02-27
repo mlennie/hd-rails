@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   def new_reservation reservation
   	@reservation = reservation
-  	@time = reservation.time.strftime("%m/%d/%Y, at %H:%M") 
+  	@time = reservation.time.strftime("%d/%m/%Y, at %H:%M") 
   	@user = reservation.user
   	@restaurant = reservation.restaurant
   	@email = 'admin@happydining.fr'

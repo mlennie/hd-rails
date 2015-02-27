@@ -1,27 +1,32 @@
-<h1>New Reservation</h1>
+<p>New Reservation! Congrats Team!</p>
+<p>If you feel like celebrating click this link: <a href="https://www.youtube.com/watch?v=otCpCn0l4Wo&t=0m59s" target="_blank">Celebrate!</a></p>
 <ul>
 	<li>
-		<strong>Confirmation Number: </strong>
-		<span><%=@reservation.confirmation%></span>
+		<strong>User :</strong>
+		<span><%= link_to @user.full_name, admin_user_url(@user), target: "_blank" %></span>
 	</li>
 	<li>
-		<strong>Restaurant: </strong>
-		<span><%=@restaurant.name%></span>
+		<strong>Restaurant : </strong>
+		<span><%= link_to @restaurant.name, admin_restaurant_url(@restaurant), target: "_blank"%></span>
 	</li>
 	<li>
-		<strong>Time: </strong>
-		<span><%=@time%></span>
+		<strong>Numéro de réservation : </strong>
+		<span><%= link_to @reservation.confirmation, admin_reservation_url(@reservation), target: "_blank"%></span>
 	</li>
 	<li>
-		<strong>User: </strong>
-		<span><%=@user.full_name%></span>
-	</li>
-	<li>
-		<strong>Booking Name: </strong>
+		<strong>Nom de la réservation</strong>
 		<span><%=@reservation.booking_name%></span>
 	</li>
 	<li>
-		<strong>Address: </strong>
-		<span><%=@restaurant.full_address%></span>
+		<strong>Nb de couverts : </strong>
+		<span><%=@reservation.nb_people%></span>
+	</li>
+	<li>
+		<strong>Horaire : </strong>
+		<span><%=@time%></span>
+	</li>
+	<li>
+		<strong>Rétribution : </strong>
+		<span>10%</span>
 	</li>
 </ul>

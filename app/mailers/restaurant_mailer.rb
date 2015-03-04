@@ -9,4 +9,8 @@ class RestaurantMailer < ActionMailer::Base
   	@email = @restaurant.principle_email
   	mail to: @email, subject: "Nouvelle réservation de la part de Happy Dining"
   end
+
+  def google_doc_to_validate_reservation restaurant
+  	@restaurant = restaurant
+  end
 end

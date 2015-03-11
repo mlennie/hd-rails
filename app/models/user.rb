@@ -148,6 +148,22 @@ class User < ActiveRecord::Base
     end
   end
 
+  #send email to user after they finished a reservation telling them they 
+  #received money
+  def send_received_reservation_money_email transaction
+
+    #make sure transaction is positive and users last transaction is the new 
+    #transaction that was just created
+    if transaction.amount_positive &&
+      self.transactions.last === transaction 
+      amount = transaction.final_balance - transaction.original_balance
+      amount = amount.to_s.gsub(/\./, ',')
+      UserMailer.received_reservation_money(self, amount).deliver
+    end
+
+    return true
+  end
+
   private
 
     def generate_authentication_token

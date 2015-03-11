@@ -51,6 +51,9 @@ class Reservation < ActiveRecord::Base
       #send money to referrer if this is user's first reservation
       #and if user was referred by another user
       user.send_money_to_referrer 
+
+      #send email to user telling them they recieved money for their reservation
+      user.send_received_reservation_money_email t1
     end
   end
 

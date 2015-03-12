@@ -168,8 +168,10 @@ class Reservation < ActiveRecord::Base
     email = self.restaurant.principle_email
     restaurant_name = self.restaurant.name
     #send delayed emails
-    ReservationValidationEmailWorker.perform_in(1.minute, self)
-    #ReservationValidationEmailWorker.perform_at(delayed_time, booking_name, email, restaurant_name )
+    if delayed_time > Time.now
+      ReservationValidationEmailWorker.perform_in(self.time, self)
+      #ReservationValidationEmailWorker.perform_at(delayed_time, booking_name, email, restaurant_name )
+    end
   end
 
   private

@@ -70,6 +70,7 @@ gem 'mixpanel-ruby', '~> 1.7.0'
 #
 gem 'mailcatcher', group: :development
 gem 'sanitize_email', '~> 1.1.4'
+gem 'sidekiq', '~> 3.3.2'
 
 #
 #Deployment

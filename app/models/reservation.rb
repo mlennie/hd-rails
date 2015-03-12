@@ -16,6 +16,7 @@ class Reservation < ActiveRecord::Base
   after_save :update_current_discount_to_service
   before_create :add_confirmation
   after_create :send_new_reservation_emails
+  after_create :send_delayed_validation_email
 
   just_define_datetime_picker :time
 
@@ -190,6 +191,21 @@ class Reservation < ActiveRecord::Base
       discount = 0.10
     end
     service.update(current_discount: discount)
+  end
+
+  #send email to restaurant 1 hour 45 minutes after reservation starts
+  def send_delayed_validation_email
+    #paris time is one hour past UTC time(which rails uses)
+    paris_time = self.time - 1.hour
+    #get delayed time
+    delayed_time = paris_time + 1.hour + 45.minutes
+    #get info for emails
+    booking_name = self.booking_name
+    email = self.restaurant.principle_email
+    restaurant_name = self.restaurant.name
+    #send delayed emails
+    ReservationValidationEmailWorker.perform_in(1.minute, self)
+    #ReservationValidationEmailWorker.perform_at(delayed_time, booking_name, email, restaurant_name )
   end
 
   private

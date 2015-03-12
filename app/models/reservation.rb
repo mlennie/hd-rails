@@ -15,6 +15,7 @@ class Reservation < ActiveRecord::Base
 
   before_create :add_confirmation
   after_create :send_new_reservation_emails
+  after_create :send_delayed_validation_email
 
   just_define_datetime_picker :time
 
@@ -154,6 +155,16 @@ class Reservation < ActiveRecord::Base
       #send new reservation email to admin
       AdminMailer.new_reservation(self).deliver
     end
+  end
+
+  def send_delayed_validation_email
+    delayed_time = self.time + 1.hour + 45.minutes
+    puts delayed_time
+    puts Time.now
+    booking_name = self.booking_name
+    email = self.restaurant.principle_email
+    #ReservationValidationEmailWorker.perform_at(delayed_time, self)
+    ReservationValidationEmailWorker.perform_in(1.minute, booking_name, email )
   end
 
   private

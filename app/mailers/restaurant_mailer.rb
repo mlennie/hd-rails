@@ -10,9 +10,9 @@ class RestaurantMailer < ActionMailer::Base
   	mail to: @email, subject: "Nouvelle réservation de la part de Happy Dining"
   end
 
-  def reservation_validation reservation
-    @booking_name = reservation.booking_name
-    @email = reservation.restaurant.principle_email
-    mail to: @email, subject: "Nouvelle réservation de la part de Happy Dining"
+  def reservation_validation(booking_name, email)
+    @booking_name = booking_name
+    @email = email
+    mail to: @email, subject: "montant de l'addition"
   end
 end

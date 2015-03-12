@@ -9,4 +9,11 @@ class AdminMailer < ActionMailer::Base
   	@email = 'admin@happydining.fr'
   	mail to: @email, subject: "Nouvelle réservation"
   end
+
+  def validation_email_sent booking_name, restaurant_name
+  	@restaurant_name = restaurant_name
+  	@booking_name = booking_name
+  	@email = 'admin@happydining.fr'
+  	mail to: @email, subject: "Reservation Validation Email Sent"
+  end
 end

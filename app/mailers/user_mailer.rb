@@ -31,11 +31,12 @@ class UserMailer < ActionMailer::Base
     mail to: @email, subject: "Félicitations, 5 euros de plus."
   end
 
-  def received_reservation_money user, amount
+  def received_reservation_money user, amount, reservation
     @user = user
     @email = user.email
     @amount = amount
-    @reservation = @user.transactions.last.itemable
+    @link = ENV['FRONT_HOST'] + '/users/mes-euros'
+    @reservation = reservation 
     @time = @reservation.time.strftime("%d/%m/%Y, à %H:%M")
     @restaurant = @reservation.restaurant
     mail to: @email, subject: "Félicitations, Vous avez été crédités par Happy Dining."

@@ -54,7 +54,7 @@ class Reservation < ActiveRecord::Base
       user.send_money_to_referrer 
 
       #send email to user telling them they recieved money for their reservation
-      user.send_received_reservation_money_email t1
+      user.send_received_reservation_money_email t1, self
     end
   end
 

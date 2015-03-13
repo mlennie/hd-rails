@@ -95,7 +95,7 @@ unless Restaurant.any?
 
   #add restaurant
   r1 = Restaurant.create(
-  	name: "Blue Nile",
+  	name: 'Grand Bistro Maillot Saint Ferdinand',
     img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
     description: description,
     zipcode: '75017',

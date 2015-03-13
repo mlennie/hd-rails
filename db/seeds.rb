@@ -23,7 +23,7 @@ unless Restaurant.all.any?
   description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus urna metus, dictum non nulla feugiat, pharetra fringilla sem. Pellentesque sed fringilla massa, sed efficitur nisl. Nunc rutrum posuere lobortis. Praesent iaculis leo id felis bibendum, sed tempus est porta. Vivamus molestie interdum tempus. Donec hendrerit, erat in accumsan sodales, orci ipsum finibus erat, eget laoreet massa mauris et lorem. Proin egestas, diam vitae rutrum dapibus, sapien orci consectetur ligula, a posuere tellus urna in libero. Integer quis leo urna. Nulla aliquam ac tortor vel porta.'
 
   Restaurant.create(
-  	name: "Blue Nile",
+  	name: 'Grand Bistro Maillot Saint Ferdinand',
     img_url: "http://www.toxel.com/wp-content/uploads/2009/06/restaurant08.jpg",
     description: description,
     zipcode: '75017',

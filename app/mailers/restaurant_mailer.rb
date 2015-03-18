@@ -1,5 +1,5 @@
 class RestaurantMailer < ActionMailer::Base
-  default from: 'Happy Dining <no-reply@happydining.fr>'
+  default from: 'Happy Dining <admin@happydining.fr>'
 
   def new_reservation reservation
   	@reservation = reservation

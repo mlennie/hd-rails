@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
   #after user is created give them money if they were referred by another user
   def give_user_money_if_referred
     if self.referrer_id.present?
-      Transaction.create_referral_transaction 5, self, User.find(self.referrer_id)
+      Transaction.create_referral_transaction self.referral_amount, self, User.find(self.referrer_id)
     end
   end
 
@@ -95,7 +95,7 @@ class User < ActiveRecord::Base
       #set user's referral id to referrers id if referrer present
       if referrer.present?
         self.referrer_id = referrer.id 
-        self.referral_amount = 5
+        self.referral_amount = ENV["REFERRAL_AMOUNT"]
       end
     end
 

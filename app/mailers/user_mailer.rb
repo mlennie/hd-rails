@@ -20,6 +20,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @referrer = User.find(user.referrer_id)
     @email = @referrer.email
+    @amount = ENV["REFERRAL_AMOUNT"].to_s
     mail to: @email, subject: "Félicitations vous avez parrainé quelqu'un."
   end
 
@@ -28,7 +29,7 @@ class UserMailer < ActionMailer::Base
     @referrer = User.find(user.referrer_id)
     @amount = user.referral_amount
     @email = @referrer.email
-    mail to: @email, subject: "Félicitations, 5 euros de plus."
+    mail to: @email, subject: "Félicitations, " + @user.referral_amount.to_s + " euros de plus."
   end
 
   def received_reservation_money user, amount, reservation

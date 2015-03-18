@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: 'Happy Dining <no-reply@happydining.fr>'
+  default from: 'Happy Dining <hello@happydining.fr>'
 
   def password_reset user
     @user = user

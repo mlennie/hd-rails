@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     #and then find use and include wallet, roles and restaurants
     user = find(params[:id])
     Wallet.create_for_user user unless user.wallet.present?
-    includes(:wallet, :roles, :restaurants).find(params[:id])
+    includes(:wallet, :roles, :restaurants, :reservations).find(params[:id])
   end
 
   def self.exists_and_has_names? params

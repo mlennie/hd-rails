@@ -3,4 +3,5 @@ class UserSerializer < ActiveModel::Serializer
   has_one :wallet
   has_many :roles
   has_many :restaurants
+  has_many :reservations
 end

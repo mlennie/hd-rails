@@ -27,6 +27,13 @@ class Reservation < ActiveRecord::Base
     self.confirmation = confirmation
   end
 
+  def earnings
+    t = self.transactions.first
+    return nil unless (t.try(:final_balance) && t.try(:original_balance))
+    amount = t.final_balance - t.original_balance
+    return amount.to_s
+  end
+
   def create_transactions_and_update_reservation params
     amount_param = params[:reservation][:bill_amount].to_f
     discount_param = params[:reservation][:discount].to_f

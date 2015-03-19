@@ -33,7 +33,7 @@ class Reservation < ActiveRecord::Base
     t = self.transactions.first
     return nil unless (t.try(:final_balance) && t.try(:original_balance))
     amount = t.final_balance - t.original_balance
-    return amount.to_s
+    return amount.round(2).to_s.gsub(/\./, ',')
   end
 
   def create_transactions_and_update_reservation params

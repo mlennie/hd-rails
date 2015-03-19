@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
     if transaction.amount_positive &&
       self.transactions.last === transaction 
       amount = transaction.final_balance - transaction.original_balance
-      amount = amount.to_s.gsub(/\./, ',')
+      amount = amount.round(2).to_s.gsub(/\./, ',')
       UserMailer.received_reservation_money(self, amount, reservation).deliver
     end
 

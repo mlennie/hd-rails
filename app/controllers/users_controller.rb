@@ -115,6 +115,22 @@ class UsersController < ApplicationController
     end
   end
 
+  def unsubscribe
+    confirmation_token = params[:unsubscribe_token]
+    u = User.where(confirmation_token: confirmation_token).first
+    if u.id == params[:user_id].to_i
+      p = u.preferences
+      p.receive_emails = false
+      if p.save
+        redirect_to ENV['FRONT_HOST'] + "/unsubscribed?unsubscription=success"
+      else
+        redirect_to ENV['FRONT_HOST'] + "/unsubscribed?unsubscription=fail"
+      end
+    else
+      redirect_to ENV['FRONT_HOST'] + "/unsubscribed?unsubscription=fail"
+    end
+  end
+
   private
   
     def user_params

@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   before_create :create_new_wallet
   after_create :give_user_money_if_referred
   after_create :send_congrats_email_to_referrer
+  after_create :create_new_preferences
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
          :validatable, :confirmable, :lockable
@@ -26,6 +27,7 @@ class User < ActiveRecord::Base
   has_many :user_promotions
   has_many :promotions, through: :user_promotions
   has_one :referral_transaction, as: :itemable
+  has_one :preferences
 
 
   def is_superadmin?
@@ -54,12 +56,13 @@ class User < ActiveRecord::Base
         .where(confirmed_at: nil)
         .where('created_at < ?', Time.new.midnight)        
         .find_each do |user|
+          #create preferences table for user if user doesn't have one yet
+          user.create_new_preferences 
+          #don't send to users that have unsubscribed from emailing.
           unless user.preferences.receive_emails === false
             UserMailer.confirmation_reminder(user).deliver
           end
-        end
-
-    #TO DO: don't select users that have unsubscribed from emailing. 
+        end 
   end
 
   def self.check_wallet_and_include_associations params
@@ -100,6 +103,11 @@ class User < ActiveRecord::Base
   #create and associate a wallet to newly created user 
   def create_new_wallet
     Wallet.create_for_concernable self
+  end
+
+  #create and associate a preferences table for newly created user
+  def create_new_preferences
+    Preferences.create_for_user self
   end
 
   #after user is created give them money if they were referred by another user

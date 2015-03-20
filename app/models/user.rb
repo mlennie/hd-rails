@@ -65,6 +65,16 @@ class User < ActiveRecord::Base
         end 
   end
 
+  def self.get_emails_of_unconfirmed_users
+    emails = []
+    User.get_unarchived.where(confirmed_at: nil).where('created_at < ?', Time.new.midnight).find_each do |user|
+      emails << user.email
+    end 
+    emails.each_with_index do |e,i|
+      puts emails[i]
+    end
+  end
+
   def self.check_wallet_and_include_associations params
     #create wallet for user if user doesn't have one already
     #and then find use and include wallet, roles and restaurants

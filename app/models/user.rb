@@ -54,8 +54,10 @@ class User < ActiveRecord::Base
         .where(confirmed_at: nil)
         .where('created_at < ?', Time.new.midnight)        
         .find_each do |user|
-        UserMailer.confirmation_reminder(user).deliver
-    end
+          unless user.preferences.receive_emails === false
+            UserMailer.confirmation_reminder(user).deliver
+          end
+        end
 
     #TO DO: don't select users that have unsubscribed from emailing. 
   end

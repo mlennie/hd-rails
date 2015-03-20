@@ -46,6 +46,7 @@ class UserMailer < ActionMailer::Base
   def confirmation_reminder user
     @user = user
     @email = user.email
+    @unsubscribe_link = ENV['HOST'] + '/unsubscribe'
     mail to: @email, subject: "Confirmer votre compte"
   end
 end

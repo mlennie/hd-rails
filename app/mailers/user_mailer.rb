@@ -48,9 +48,9 @@ class UserMailer < ActionMailer::Base
     @email = user.email
     @unsubscribe_link = ENV['HOST'] + '/unsubscribe' + 
                         '?unsubscribe_token=' + 
-                        user.confirmation_token +
+                        user.confirmation_token.to_s +
                         '&user_id=' +
-                        user.id
+                        user.id.to_s
 
     mail to: @email, subject: "Confirmer votre compte"
   end

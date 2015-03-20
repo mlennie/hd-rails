@@ -117,8 +117,8 @@ class UsersController < ApplicationController
 
   def unsubscribe
     confirmation_token = params[:unsubscribe_token]
-    u = User.find(confirmation_token: confirmation_token)
-    if u.id == params[:user_id]
+    u = User.where(confirmation_token: confirmation_token).first
+    if u.id == params[:user_id].to_i
       p = u.preferences
       p.receive_emails = false
       if p.save

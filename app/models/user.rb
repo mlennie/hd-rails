@@ -40,6 +40,26 @@ class User < ActiveRecord::Base
     end
   end
 
+  #use heroku schedular to send confirmation reminder
+  #emails to users that have not confirmed their account 
+  #for more than a day
+  def self.send_confirmation_reminder_emails
+    #since heroku's only option is either every ten minutes, hour or day
+    #we first check to see if it's a the day we want. 
+    #If its not, leave method
+    return if !Time.new.friday?
+
+    #find all unarchived users who have not confirmed for more than a day
+    User.get_unarchived
+        .where(confirmed_at: null)
+        .where(created_at < Time.new.midnight)
+        .find_each do |user|
+        UserMailer.confirmation_reminder(user).deliver
+    end
+
+    #TO DO: don't select users that have unsubscribed from emailing. 
+  end
+
   def self.check_wallet_and_include_associations params
     #create wallet for user if user doesn't have one already
     #and then find use and include wallet, roles and restaurants

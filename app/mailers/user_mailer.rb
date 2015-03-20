@@ -42,4 +42,10 @@ class UserMailer < ActionMailer::Base
     @restaurant = @reservation.restaurant
     mail to: @email, subject: "Félicitations, Vous avez été crédités par Happy Dining."
   end
+
+  def confirmation_reminder user
+    @user = user
+    @email = user.email
+    mail to: @email, subject: "Confirmer votre compte"
+  end
 end

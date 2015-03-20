@@ -51,8 +51,8 @@ class User < ActiveRecord::Base
 
     #find all unarchived users who have not confirmed for more than a day
     User.get_unarchived
-        .where(confirmed_at: null)
-        .where(created_at < Time.new.midnight)
+        .where(confirmed_at: nil)
+        .where('created_at < ?', Time.new.midnight)        
         .find_each do |user|
         UserMailer.confirmation_reminder(user).deliver
     end

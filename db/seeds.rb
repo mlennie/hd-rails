@@ -16,6 +16,22 @@ unless AdminUser.all.any? || User.all.any?
   )
 
   puts 'created user'
+
+  unconfirmed_user = User.create(
+    email: "unconfirmed@user.com",
+    password: "password",
+    password_confirmation: "password",
+    confirmation_token: "12345678901",
+    first_name: "unconfirmed",
+    last_name: "user",
+    gender: "Female"
+  )
+
+  #make unconfirmed user created at more that 1 day ago
+  unconfirmed_user.created_at = Time.now - 2.days
+  unconfirmed_user.save!
+
+  puts 'created unconfirmed user'
 end
 
 unless Restaurant.all.any?

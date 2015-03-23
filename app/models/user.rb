@@ -179,7 +179,7 @@ class User < ActiveRecord::Base
     else #if there is a promotional deal present
       ActiveRecord::Base.transaction do 
         self.save
-        Promotion.apply_to(self, deal["code"])
+        Promotion.apply_to(self, deal[:code])
       end
     end
   end

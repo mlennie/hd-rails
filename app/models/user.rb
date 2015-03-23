@@ -42,19 +42,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.check_referral_presence params
-    if params[:user][:promotion_code].present?
-      referral = User.find_by(referral_code: params[:user][:promotion_code])
-      if referral
-        return referral
-      else
-        return "bad code"
-      end
-    else
-      return nil
-    end
-  end
-
   #use heroku schedular to send confirmation reminder
   #emails to users that have not confirmed their account 
   #for more than a day
@@ -76,16 +63,6 @@ class User < ActiveRecord::Base
             UserMailer.confirmation_reminder(user).deliver
           end
         end 
-  end
-
-  def self.get_emails_of_unconfirmed_users
-    emails = []
-    User.get_unarchived.where(confirmed_at: nil).where('created_at < ?', Time.new.midnight).find_each do |user|
-      emails << user.email
-    end 
-    emails.each_with_index do |e,i|
-      puts emails[i]
-    end
   end
 
   def self.check_wallet_and_include_associations params

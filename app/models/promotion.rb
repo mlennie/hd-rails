@@ -11,27 +11,16 @@ class Promotion < ActiveRecord::Base
 
   #check to see if promotion returns and return it if it does
   def self.check_presence params
-    deal = {
-      kind: "",
-      code: ""
-    }
-    
     if params[:user][:promotion_code].present?
       promotion = Promotion.find_by(code: params[:user][:promotion_code])
-      referral = User.find_by(referral_code: params[:user][:promotion_code])
       if promotion 
-        deal["kind"] = "promotion"
-        deal["code"] = promotion
-      elsif referral
-        deal["kind"] = "referral"
-        deal["code"] = referral
+        return promotion
       else
-        deal["kind"] = "not valid"
+        return "bad code"
       end
     else
     	return nil
     end
-    return deal
   end
 
   def apply_to user

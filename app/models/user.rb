@@ -78,7 +78,7 @@ class User < ActiveRecord::Base
     #since heroku's only option is either every ten minutes, hour or day
     #we first check to see if it's a the day we want. 
     #If its not, leave method
-    return if !Time.new.sunday?
+    return if !Time.new.monday?
 
     #find all unarchived users who have not confirmed for more than a day
     User.get_unarchived

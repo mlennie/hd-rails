@@ -52,16 +52,16 @@ class User < ActiveRecord::Base
       kind: nil,
       code: nil
     }
-
+    
     if params[:user][:promotion_code].present? 
       code = params[:user][:promotion_code]
-      if Promotion.find_by(code: code)
-        deal["kind"] = 'promotion'
-        deal["code"] = code
+      if Promotion.find_by(code: code).present?
+        deal[:kind] = 'promotion'
+        deal[:code] = code
         return deal
-      elsif User.find_by(referral_code: code)
-        deal["kind"] = 'referral'
-        deal["code"] = code
+      elsif User.find_by(referral_code: code).present?
+        deal[:kind] = 'referral'
+        deal[:code] = code
         return deal
       else
         return "bad code"
@@ -149,22 +149,24 @@ class User < ActiveRecord::Base
   def save_user_and_apply_extras deal, referred_user_code
 
     #check if promotion is present and apply if so
-    if deal.blank? || deal["kind"] != 'promotion'
+    if deal.blank? || 
+      (deal[:kind] && deal[:kind] != 'promotion')
 
       #if there is no promotional deal 
       #check if referral code is present and apply if so
-      if referred_user_code.present? || deal["kind"] == 'referral'
+      if referred_user_code.present? || 
+        (deal[:kind] && deal[:kind] == 'referral')
 
         #get code from either referred user code (cookies) or from deal
         if referred_user_code.present?
           code = referred_user_code
         else
-          code = deal["code"]
+          code = deal[:code]
         end
 
         #find referrer
-        referrer = User.find_by(referral_code: referred_user_code)
-        
+        referrer = User.find_by(referral_code: code)
+
         #set user's referral id to referrers id if referrer present
         if referrer.present?
           self.referrer_id = referrer.id 

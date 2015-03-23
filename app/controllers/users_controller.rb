@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     if deal != "bad code" && user.save_user_and_apply_extras(deal, referred_user_code)
       render json: user, status: 201
     else
-      if promotion == "bad code"
+      if deal == "bad code"
         errors = {
           errors: {
             code: "bad"

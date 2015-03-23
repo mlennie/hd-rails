@@ -147,7 +147,6 @@ class User < ActiveRecord::Base
   end
 
   def save_user_and_apply_extras deal, referred_user_code
-
     #check if promotion is present and apply if so
     if deal.blank? || 
       (deal[:kind] && deal[:kind] != 'promotion')
@@ -155,7 +154,7 @@ class User < ActiveRecord::Base
       #if there is no promotional deal 
       #check if referral code is present and apply if so
       if referred_user_code.present? || 
-        (deal[:kind] && deal[:kind] == 'referral')
+        (deal.present? && deal[:kind] && deal[:kind] == 'referral')
 
         #get code from either referred user code (cookies) or from deal
         if referred_user_code.present?

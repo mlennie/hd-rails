@@ -9,30 +9,18 @@ class Promotion < ActiveRecord::Base
 
   validates_presence_of :code, :description, :amount
 
-  #check to see if promotion returns and return it if it does
-  def self.check_presence params
-    if params[:user][:promotion_code].present?
-      promotion = Promotion.find_by(code: params[:user][:promotion_code])
-      if promotion 
-        return promotion
-      else
-        return "bad code"
-      end
-    else
-    	return nil
-    end
-  end
-
-  def apply_to user
+  def self.apply_to user, code
   	ActiveRecord::Base.transaction do 
+      promotion = Promotion.find_by(code: code)
 
-	  	#create transaction and update wallet balance
-	  	Transaction.create_promotional_transaction user, self
+      if promotion
+  	  	#create transaction and update wallet balance
+  	  	Transaction.create_promotional_transaction user, promotion
 
-	  	#update promotion times used 
-	  	times_used = 0 if times_used.nil?
-	  	self.update(times_used: times_used += 1)
-
+  	  	#update promotion times used 
+  	  	times_used = 0 if times_used.nil?
+  	  	promotion.update(times_used: times_used += 1)
+      end
 	  end
   end
 end

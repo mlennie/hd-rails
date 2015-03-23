@@ -42,6 +42,35 @@ class User < ActiveRecord::Base
     end
   end
 
+  #check deal type and return either deal kind and code, 
+  #"bad code" if no code can be found
+  # or nil if there is no code
+  def self.check_deal_presence_and_type params
+
+    #create hash to store deal kind and code
+    deal = {
+      kind: nil,
+      code: nil
+    }
+
+    if params[:user][:promotion_code].present? 
+      code = params[:user][:promotion_code]
+      if Promotion.find_by(code: code)
+        deal["kind"] = 'promotion'
+        deal["code"] = code
+        return deal
+      elsif User.find_by(referral_code: code)
+        deal["kind"] = 'referral'
+        deal["code"] = code
+        return deal
+      else
+        return "bad code"
+      end
+    else
+      return nil
+    end
+  end
+
   #use heroku schedular to send confirmation reminder
   #emails to users that have not confirmed their account 
   #for more than a day
@@ -117,25 +146,38 @@ class User < ActiveRecord::Base
     end
   end
 
-  def save_user_and_apply_extras promotion, referred_user_code
-    #check if referral code is present and apply if so
-    if referred_user_code.present?
-      #find referrer
-      referrer = User.find_by(referral_code: referred_user_code)
-      #set user's referral id to referrers id if referrer present
-      if referrer.present?
-        self.referrer_id = referrer.id 
-        self.referral_amount = ENV["REFERRAL_AMOUNT"]
-      end
-    end
+  def save_user_and_apply_extras deal, referred_user_code
 
     #check if promotion is present and apply if so
-    if promotion.blank?
+    if deal.blank? || deal["kind"] != 'promotion'
+
+      #if there is no promotional deal 
+      #check if referral code is present and apply if so
+      if referred_user_code.present? || deal["kind"] == 'referral'
+
+        #get code from either referred user code (cookies) or from deal
+        if referred_user_code.present?
+          code = referred_user_code
+        else
+          code = deal["code"]
+        end
+
+        #find referrer
+        referrer = User.find_by(referral_code: referred_user_code)
+        
+        #set user's referral id to referrers id if referrer present
+        if referrer.present?
+          self.referrer_id = referrer.id 
+          self.referral_amount = ENV["REFERRAL_AMOUNT"]
+        end
+      end
+
+      #save user
       self.save
-    else
+    else #if there is a promotional deal present
       ActiveRecord::Base.transaction do 
         self.save
-        promotion.apply_to self
+        Promotion.apply_to(self, deal["code"])
       end
     end
   end

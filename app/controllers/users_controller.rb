@@ -14,7 +14,11 @@ class UsersController < ApplicationController
 
   def create
 
-    promotion = Promotion.check_presence params
+    #check deal kind. Deal can either be promotional or referral.
+    deal = User.check_deal_presence_and_type params
+
+    #referral code will be found here if user used query params referral link
+    #which then stored referral code into cookies
     referred_user_code = params[:user][:referred_user_code]
 
     #delete uneccessary params
@@ -28,10 +32,10 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     #save user and add promotion if present
-    if promotion != "bad code" && user.save_user_and_apply_extras(promotion, referred_user_code)
+    if deal != "bad code" && user.save_user_and_apply_extras(deal, referred_user_code)
       render json: user, status: 201
     else
-      if promotion == "bad code"
+      if deal == "bad code"
         errors = {
           errors: {
             code: "bad"

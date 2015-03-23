@@ -14,8 +14,25 @@ class UsersController < ApplicationController
 
   def create
 
-    promotion = Promotion.check_presence params
-    referred_user_code = params[:user][:referred_user_code]
+    #check whether user entered promotion or referral
+    deal = Promotion.check_presence params
+    unless deal.nil?
+      if deal["kind"] === "promotion"
+        promotion = deal["code"]
+        referral = nil
+      elsif deal["kind"] === "referral"
+        promotion = nil
+        referral_user_code = deal["code"]
+      elsif deal["kind"] === "not valid"
+        promotion = "bad code"
+        referral = nil
+      else
+        promotion = nil
+        referral = nil
+      end
+    else
+      referred_user_code = params[:user][:referred_user_code]
+    end
 
     #delete uneccessary params
     params[:user].delete(:promotion_code)
@@ -28,10 +45,11 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     #save user and add promotion if present
-    if promotion != "bad code" && user.save_user_and_apply_extras(promotion, referred_user_code)
+    if promotion != "bad code" && 
+      user.save_user_and_apply_extras(promotion, referred_user_code)
       render json: user, status: 201
     else
-      if promotion == "bad code"
+      if promotion == "bad code" 
         errors = {
           errors: {
             code: "bad"

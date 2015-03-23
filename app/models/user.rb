@@ -42,6 +42,19 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.check_referral_presence params
+    if params[:user][:promotion_code].present?
+      referral = User.find_by(referral_code: params[:user][:promotion_code])
+      if referral
+        return referral
+      else
+        return "bad code"
+      end
+    else
+      return nil
+    end
+  end
+
   #use heroku schedular to send confirmation reminder
   #emails to users that have not confirmed their account 
   #for more than a day

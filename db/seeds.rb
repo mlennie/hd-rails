@@ -116,6 +116,7 @@ unless Restaurant.any?
     description: description,
     zipcode: '75017',
     city: 'Paris', 
+    country: 'France',
     street: '223 main street',
     principle_email: "fake@restaurant.com"
   )
@@ -130,6 +131,7 @@ unless Restaurant.any?
     description: description,
     zipcode: '75017',
     city: 'Paris', 
+    country: 'France',
     street: '623 main street',
     principle_email: "fake@restaurant.com"
   )
@@ -142,9 +144,10 @@ unless Restaurant.any?
     name: "Haute couture",
     img_url: "http://www.a-onehotel.com/pattaya/pattaya_images/300ppi/50MARITIME%20RESTAURANT.JPG",
     description: description,
-    zipcode: '75017',
+    zipcode: '75007',
     city: 'Paris', 
-    street: '823 main street',
+    country: 'France',
+    street: 'Champ de Mars, 5 Avenue Anatole',
     principle_email: "fake@restaurant.com"
   )
 
@@ -156,9 +159,10 @@ unless Restaurant.any?
     name: "Brasserie Lip",
     img_url: "http://www.paris-bistro.com/culture/ecrivain/pics_ecrivain/prix_lipp.jpg",
     description: description,
-    zipcode: '75008',
+    zipcode: '75014',
     city: 'Paris', 
-    street: '7723 main street',
+    country: 'France',
+    street: ' 102 Boulevard du Montparnasse',
     principle_email: "fake@restaurant.com"
   )
 
@@ -172,7 +176,8 @@ unless Restaurant.any?
     description: description,
     zipcode: '75008',
     city: 'Paris', 
-    street: '1823 main street',
+    country: 'France',
+    street: '99 avenue des Champs-Elysées',
     principle_email: "fake@restaurant.com"
   )
 

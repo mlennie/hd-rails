@@ -135,6 +135,7 @@ GEM
     formtastic (3.1.2)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.1.1)
+    geocoder (1.2.8)
     grit (2.0.0)
       diff-lcs (>= 1.1.2)
       mime-types (>= 1.15)
@@ -377,6 +378,7 @@ DEPENDENCIES
   factory_girl (~> 4.5.0)
   figaro
   foobar (~> 0.0.1)
+  geocoder
   jazz_hands (~> 0.5.2)
   jquery-rails
   just-datetime-picker (~> 0.0.6)

@@ -15,6 +15,16 @@ class Restaurant < ActiveRecord::Base
   has_many :cuisines, through: :restaurant_cuisines
   has_many :menus
 
+  #add geolocation and reverse geolocation
+  geocoded_by :full_street_address
+  after_validation :geocode, if: :full_street_address_changed?
+  reverse_geocoded_by :latitude, :longitude do |obj,results|
+    if geo = results.first
+      obj.geocoded_address = geo.address 
+    end
+  end
+  after_validation :reverse_geocode, if: :full_street_address_changed?
+
   after_save :create_new_wallet
 
   validates_presence_of :name, :principle_email
@@ -24,6 +34,21 @@ class Restaurant < ActiveRecord::Base
       name
     else
       email
+    end
+  end
+
+  def full_street_address
+    street + city + country + zipcode
+  end
+
+  def full_street_address_changed?
+    if street == nil ||
+      city == nil ||
+      country == nil ||
+      zipcode == nil
+      return false
+    else
+      street_changed? || city_changed? || country_changed? || zipcode_changed?
     end
   end
 

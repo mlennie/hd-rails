@@ -5,13 +5,17 @@ source 'https://rubygems.org'
 #
 gem 'rails', '4.1.8'
 gem 'pg'
-#gem "unicorn-rails"
 
 #
 #styling
 #
 gem 'sass-rails', '~> 4.0.3'
 gem 'country_select', github: 'stefanpenner/country_select'
+
+#
+#Geolocation
+#
+gem 'geocoder'
 
 #
 #Javascript
@@ -24,7 +28,6 @@ gem 'coffee-rails', '~> 4.0.0'
 #API
 #
 gem 'active_model_serializers', '~> 0.9.2'
-gem "rack-cors", require: "rack/cors"
 
 #
 #Development
@@ -56,6 +59,7 @@ end
 #
 gem 'devise', '~> 3.4.1'
 gem 'cancancan', '~> 1.9.2'
+gem "rack-cors", require: "rack/cors"
 
 #
 #Admin

@@ -7,14 +7,14 @@ class RestaurantSerializer < ActiveModel::Serializer
 	has_many :menus
 
   def services
-  	self.services.future_with_availabilities.get_unarchived
+  	object.services.get_unarchived.future_with_availabilities
   end
 
   def cuisines
-  	self.cuisines.get_unarchived
+  	object.cuisines.get_unarchived
   end
 
   def menus
-    self.menus.get_unarchived
+    object.menus.get_unarchived
   end
 end

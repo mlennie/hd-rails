@@ -8,7 +8,8 @@ class SessionsController < Devise::SessionsController
         data = {
           user_token: self.resource.authentication_token,
           user_email: self.resource.email,
-          user_id: self.resource.id
+          user_id: self.resource.id,
+          is_owner: self.resource.restaurants.any? ? true : false
         }
         render json: data, status: 201
       end

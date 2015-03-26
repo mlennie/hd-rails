@@ -4,4 +4,8 @@ class UserSerializer < ActiveModel::Serializer
   has_many :roles
   has_many :restaurants
   has_many :reservations
+
+  def reservations
+    Reservation.where(user_id: self.id).get_unarchived
+  end
 end

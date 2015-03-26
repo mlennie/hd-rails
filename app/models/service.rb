@@ -12,7 +12,7 @@ class Service < ActiveRecord::Base
 
   
   def self.future_with_availabilities
-    get_unarchived.where(
+    self.where(
       "start_time > :yesterday",
       { yesterday: Time.new.midnight }
     ).where("current_discount > :zero",

@@ -1,5 +1,14 @@
 class ReservationsController < ApplicationController
 
+  def index
+    if user_signed_in? && current_user.is_owner?
+      reservations = current_user.reservations.get_unarchived.not_finished
+      render json: reservations, status: 200
+    else
+      head 401
+    end
+  end
+
   def create
     if user_signed_in? && 
       current_user.id == params[:reservation][:user_id].to_i

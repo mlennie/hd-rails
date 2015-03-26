@@ -48,65 +48,6 @@ unless Restaurant.any?
   indian = Cuisine.create(name: 'Indian')
   seafood = Cuisine.create(name: 'Seafood')
 
-  #
-  #Services
-  #
-
-  #1 to 3 current day service
-  one_to_three_today_service = {
-    availabilities: 99,
-    start_time: Time.now.midnight + 13.hours,
-    last_booking_time: Time.now.midnight + 15.hours,
-    nb_10: 99,
-    nb_20: 2
-  }
-
-  #5 to 10 current day service
-  five_to_ten_today_service = {
-    availabilities: 99,
-    start_time: Time.now.midnight + 17.hours,
-    last_booking_time: Time.now.midnight + 22.hours,
-    nb_10: 99
-  }
-
-  #1 to 3 tomorrow service
-  one_to_three_tomorrow_service = {
-    availabilities: 2,
-    start_time: Time.now.midnight + 1.day + 13.hours,
-    last_booking_time: Time.now.midnight + 1.day + 15.hours,
-    nb_10: 99,
-    nb_15: 1
-  }
-
-  #5 to 10 tomorrow service
-  five_to_ten_tomorrow_service = {
-    availabilities: 6,
-    start_time: Time.now.midnight + 1.day + 17.hours,
-    last_booking_time: Time.now.midnight + 1.day + 22.hours,
-    nb_10: 99,
-    nb_15: 1,
-    nb_20: 1,
-    nb_25: 1
-  }
-
-  #make service with no availabilities left
-  #1 to 3 current day service
-  one_to_three_today_service_no_availabilities = {
-    availabilities: 0,
-    start_time: Time.now.midnight + 13.hours,
-    last_booking_time: Time.now.midnight + 15.hours,
-    nb_10: 99,
-    nb_20: 2
-  }
-
-  #5 to 10 current day service
-  five_to_ten_today_service_no_availabilities = {
-    availabilities: 0,
-    start_time: Time.now.midnight + 17.hours,
-    last_booking_time: Time.now.midnight + 22.hours,
-    nb_10: 99
-  }
-
   description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus urna metus, dictum non nulla feugiat, pharetra fringilla sem. Pellentesque sed fringilla massa, sed efficitur nisl. Nunc rutrum posuere lobortis. Praesent iaculis leo id felis bibendum, sed tempus est porta. Vivamus molestie interdum tempus. Donec hendrerit, erat in accumsan sodales, orci ipsum finibus erat, eget laoreet massa mauris et lorem. Proin egestas, diam vitae rutrum dapibus, sapien orci consectetur ligula, a posuere tellus urna in libero. Integer quis leo urna. Nulla aliquam ac tortor vel porta.'
 
   #add restaurant
@@ -198,7 +139,7 @@ unless Restaurant.any?
   Restaurant.all.each_with_index do |r, index|
 
     #add users for restaurants
-    u = Role.first.users.create(
+    u = Role.first.users.create!(
       first_name: "Owner",
       last_name: r.name.gsub(/\s+/, ""),
       :email => "owner@#{r.name.gsub(/\s+/, "")}.com",
@@ -210,18 +151,49 @@ unless Restaurant.any?
     )
     r.update(user_id: u.id)
 
-    #add default services to restaurants
-    #add for today
-    if index == 0 #add service with no availabilites
-      r.services.create(one_to_three_today_service_no_availabilities)
-      r.services.create(five_to_ten_today_service_no_availabilities)
-    else
-      r.services.create(one_to_three_today_service)
-      r.services.create(five_to_ten_today_service)
+    #make a reservation for every day of the week for current restaruant
+    7.times do |day_index|
+
+      #SERVICES
+      #make service for every day for every restaurant
+      #1 to 3 pm service
+      one_to_three_service = {
+        availabilities: 99,
+        start_time: Time.now.midnight + day_index.day + 13.hours,
+        last_booking_time: Time.now.midnight + day_index.day + 15.hours,
+        nb_10: 99,
+        nb_20: 2,
+        nb_25: 1
+      }
+
+      #5 to 10 pm service
+      five_to_ten_service = {
+        availabilities: 99,
+        start_time: Time.now.midnight + day_index.day + 17.hours,
+        last_booking_time: Time.now.midnight + day_index.day + 22.hours,
+        nb_10: 99,
+        nb_15: 1
+      }
+
+      r.services.create!(one_to_three_service)
+      s = r.services.create!(five_to_ten_service)
+
+
+      #RESERVATIONS
+      #add reservations
+      reservation_params = {
+        nb_people: 5,
+        time: Time.new.midnight + day_index.day + 20.hours,
+        user_id: r.id,
+        discount: 0.1,
+        service_id: s.id,
+        user_contribution: 0,
+        booking_name: User.find(r.id).first_name
+      }
+      r.reservations.create!(reservation_params)
     end
-    #add for tomorrow
-    r.services.create(one_to_three_tomorrow_service)
-    r.services.create(five_to_ten_tomorrow_service)
+
+    puts 'created services and reservations for ' + Restaurant.find(r.id).name
 
     #create menu for restaurant with menu items
     #setup params

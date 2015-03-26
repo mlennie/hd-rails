@@ -22,11 +22,18 @@ class Reservation < ActiveRecord::Base
 
   validates_presence_of :nb_people, :time, :restaurant_id, :user_id, 
                         :discount, :user_contribution, :booking_name
-                        #:service_id
 
   def add_confirmation
     confirmation = generate_confirmation
     self.confirmation = confirmation
+  end
+
+  #get all reservations without a finished status
+  def self.not_finished
+    self.where(
+      "status != :finished",
+      { finished: Reservation.statuses[:finished] }
+    )
   end
 
   def earnings

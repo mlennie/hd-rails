@@ -3,7 +3,10 @@ class ReservationsController < ApplicationController
   def index
     if user_signed_in? && current_user.is_owner?
       reservations = current_user.restaurants.first.reservations.get_unarchived
-      render json: reservations, status: 200
+      render json: reservations, 
+             status: 200,
+             owner: true , 
+             each_serializer: OwnerReservationsSerializer
     else
       head 401
     end

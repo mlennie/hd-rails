@@ -2,7 +2,8 @@ class Reservation < ActiveRecord::Base
 
   include Archiving
 
-  enum status: [ :not_viewed, :viewed, :cancelled, :validated, :finished ]
+  enum status: [ :not_viewed, :viewed, :cancelled, :validated, 
+                 :finished, :absent ]
 
   belongs_to :user
   belongs_to :restaurant
@@ -27,6 +28,11 @@ class Reservation < ActiveRecord::Base
     confirmation = generate_confirmation
     self.confirmation = confirmation
   end
+
+  #add serializer for when owners get their reservations
+  #def active_model_serializer
+   # OwnerReservationsSerializer
+  #end
 
   #get all reservations without a finished status
   def self.not_finished

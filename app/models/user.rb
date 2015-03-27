@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   end
 
   def is_owner?
-    self.roles.find(name: 'owner').present?
+    self.roles.where(name: 'owner').any?
   end
 
   def full_name

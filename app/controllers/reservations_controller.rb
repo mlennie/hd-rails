@@ -2,7 +2,7 @@ class ReservationsController < ApplicationController
 
   def index
     if user_signed_in? && current_user.is_owner?
-      reservations = current_user.reservations.get_unarchived.not_finished
+      reservations = current_user.reservations.get_unarchived
       render json: reservations, status: 200
     else
       head 401

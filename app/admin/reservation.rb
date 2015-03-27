@@ -11,7 +11,12 @@ ActiveAdmin.register Reservation do
 
   controller do
     def scoped_collection
-      Reservation.get_unarchived
+      if params[:user_id]
+        restaurant_id = Restaurant.where(user_id: params[:user_id])
+        Reservation.where(restaurant_id: restaurant_id).get_unarchived
+      else
+        Reservation.get_unarchived
+      end
     end
 
     def create

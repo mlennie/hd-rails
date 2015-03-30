@@ -155,6 +155,7 @@ unless Restaurant.any?
     7.times do |day_index|
 
       #SERVICES
+
       #make service for every day for every restaurant
       #1 to 3 pm service
       one_to_three_service = {
@@ -175,23 +176,79 @@ unless Restaurant.any?
         nb_15: 1
       }
 
-      r.services.create!(one_to_three_service)
-      s = r.services.create!(five_to_ten_service)
+      s1 = r.services.create!(one_to_three_service)
+      s2 = r.services.create!(five_to_ten_service)
 
 
       #RESERVATIONS
       #add reservations
-      reservation_params = {
-        nb_people: 5,
+      reservation_night_params = {
+        nb_people: 12,
         time: Time.new.midnight + day_index.day + 20.hours,
         user_id: r.id,
         discount: 0.1,
-        service_id: s.id,
+        service_id: s2.id,
         user_contribution: 0,
-        booking_name: User.find(r.id).first_name
+        booking_name: "Twinny"
       }
-      r.reservations.create!(reservation_params)
+      reservation_day_params = {
+        nb_people: 2,
+        time: Time.new.midnight + day_index.day + 14.hours,
+        user_id: r.id,
+        discount: 0.1,
+        service_id: s1.id,
+        user_contribution: 0,
+        booking_name: "Pierre"
+      }
+      r.reservations.create!(reservation_night_params)
+      r.reservations.create!(reservation_day_params)
     end
+
+    #
+    #PAST SERVICE AND RESERVATIONS
+    #
+    #make past services
+    one_to_three_yesterday_service = {
+      availabilities: 99,
+      start_time: Time.now.midnight - 1.day + 13.hours,
+      last_booking_time: Time.now.midnight - 1.day + 15.hours,
+      nb_10: 99,
+      nb_20: 2,
+      nb_25: 1
+    }
+    #5 to 10 pm service
+    five_to_ten_yesterday_service = {
+      availabilities: 99,
+      start_time: Time.now.midnight - 1.day + 17.hours,
+      last_booking_time: Time.now.midnight - 1.day + 22.hours,
+      nb_10: 99,
+      nb_15: 1
+    }
+
+    s1 = r.services.create!(one_to_three_yesterday_service)
+    s2 = r.services.create!(five_to_ten_yesterday_service)
+
+    #add past reservations
+    reservation_night_params = {
+      nb_people: 6,
+      time: Time.new.midnight - 1.day + 20.hours,
+      user_id: r.id,
+      discount: 0.1,
+      service_id: s2.id,
+      user_contribution: 0,
+      booking_name: "Maxime"
+    }
+    reservation_day_params = {
+      nb_people: 4,
+      time: Time.new.midnight - 1.day + 14.hours,
+      user_id: r.id,
+      discount: 0.1,
+      service_id: s1.id,
+      user_contribution: 0,
+      booking_name: "Benjamin"
+    }
+    r.reservations.create!(reservation_night_params)
+    r.reservations.create!(reservation_day_params)
 
     puts 'created services and reservations for ' + Restaurant.find(r.id).name
 

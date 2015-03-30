@@ -47,6 +47,20 @@ class ReservationsController < ApplicationController
     end
   end
 
+  def update
+    if user_signed_in?
+      #check to make sure user is owner and reservation is 
+      #owner's reservation then update if it is
+      if Reservation.check_and_update(current_user.id, params)
+        head 204
+      else
+        head 422
+      end
+    else
+      head 401
+    end
+  end
+
   private
   
     def reservation_params

@@ -33,6 +33,31 @@ class Reservation < ActiveRecord::Base
     self.where(id: get_in_progress_ids)
   end
 
+  def self.check_and_update(owner_id, params)
+    reservation_id = params[:id].to_i
+    restaurant_id = params[:reservation][:restaurant_id].to_i
+    reservation = Reservation.find(reservation_id)
+    amount = params[:reservation][:amount]
+    user = User.find(owner_id)
+
+    #Authorization: start checking credentials and associations
+    if user.is_owner? &&
+      reservation &&
+      user.restaurants.first.reservation_ids.include?(reservation_id) &&
+      user.restaurant_ids.include?(restaurant_id) &&
+      reservation.restaurant_id === restaurant_id &&
+      amount > 0
+
+      #update and save
+      reservation.bill_amount = amount
+      reservation.validated!
+      reservation.save!
+      return true
+    else
+      return false
+    end
+  end
+
   def self.get_in_progress_ids
     r_ids = []
     self.all.each do |r|

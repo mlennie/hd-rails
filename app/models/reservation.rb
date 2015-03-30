@@ -29,10 +29,19 @@ class Reservation < ActiveRecord::Base
     self.confirmation = confirmation
   end
 
-  #add serializer for when owners get their reservations
-  #def active_model_serializer
-   # OwnerReservationsSerializer
-  #end
+  def self.in_progress 
+    self.where(id: get_in_progress_ids)
+  end
+
+  def self.get_in_progress_ids
+    r_ids = []
+    self.all.each do |r|
+      if r.status != Reservation.statuses[:absent] &&  
+        r.status != Reservation.statuses[:validated]    
+          r_ids << r.id    
+          end  
+      end    
+  end
 
   #get all reservations without a finished status
   def self.not_finished

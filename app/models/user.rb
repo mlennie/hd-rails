@@ -46,6 +46,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def owner_reservations
+    self.restaurants.first.reservations.get_unarchived
+  end
+
   #check deal type and return either deal kind and code, 
   #"bad code" if no code can be found
   # or nil if there is no code

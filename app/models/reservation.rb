@@ -3,7 +3,7 @@ class Reservation < ActiveRecord::Base
   include Archiving
 
   enum status: [ :not_viewed, :viewed, :cancelled, :validated, 
-                 :finished, :absent ]
+                 :finished, :absent, :pending_confirmation ]
 
   belongs_to :user
   belongs_to :restaurant
@@ -29,10 +29,6 @@ class Reservation < ActiveRecord::Base
     self.confirmation = confirmation
   end
 
-  def self.in_progress 
-    self.where(id: get_in_progress_ids)
-  end
-
   def self.check_and_update(owner_id, params)
     reservation_id = params[:id].to_i
     restaurant_id = params[:reservation][:restaurant_id].to_i
@@ -50,7 +46,7 @@ class Reservation < ActiveRecord::Base
 
       #update and save
       reservation.bill_amount = amount
-      reservation.validated!
+      reservation.pending_confirmation!
       reservation.save!
       return true
     else
@@ -58,11 +54,16 @@ class Reservation < ActiveRecord::Base
     end
   end
 
+  def self.in_progress 
+    self.where(id: get_in_progress_ids)
+  end
+
   def self.get_in_progress_ids
     r_ids = []
     self.all.each do |r|
       if r.status != Reservation.statuses[:absent] &&  
-        r.status != Reservation.statuses[:validated]    
+        r.status != Reservation.statuses[:validated] &&     
+        r.status != Reservation.statuses[:pending_confirmation]     
           r_ids << r.id    
           end  
       end    
@@ -162,10 +163,12 @@ class Reservation < ActiveRecord::Base
 
     #get params
     (amount_param = params[:reservation][:bill_amount].to_f) &&
+    (status = params[:reservation][:status]) &&
     (discount_param = params[:reservation][:discount].to_f) &&
     (user_contribution_param = params[:reservation][:user_contribution].to_f) &&
     
-    amount_param.present? && 
+    amount_param.present? &&
+    status === "validated" &&
     (discount_param > 0 || user_contribution_param > 0)
   end
 

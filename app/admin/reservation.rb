@@ -126,8 +126,8 @@ ActiveAdmin.register Reservation do
       f.input :booking_name
       if !f.object.new_record?
         f.input :bill_amount
-        f.input :status, :as => :select, :collection => ['not_viewed', 'viewed',
-              'cancelled', 'validated', 'finished']
+        f.input :status, :as => :select, 
+                :collection => ['validated', 'absent', 'cancelled']
         f.input :viewed_at
         f.input :cancelled_at
         f.input :validated_at

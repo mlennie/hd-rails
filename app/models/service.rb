@@ -2,6 +2,8 @@ class Service < ActiveRecord::Base
 
   include Archiving
 
+  enum status: [ :complete ]
+
   has_many :reservations
   belongs_to :restaurant
 
@@ -18,6 +20,43 @@ class Service < ActiveRecord::Base
     ).where("current_discount > :zero",
       { zero: 0 }
     )
+  end
+
+  #don't get services where restaurants said they 
+  #were complete (full)
+  def self.not_complete
+    self.where(id: get_not_complete_ids)
+  end
+
+  def self.get_not_complete_ids
+    s_ids = []
+    self.all.each do |s|
+      if s.status != Service.statuses[:complete]      
+          s_ids << s.id    
+          end  
+      end    
+  end
+
+  def self.check_and_update(owner_id, params)
+    service_id = params[:id].to_i
+    restaurant_id = params[:service][:restaurant_id].to_i
+    service = Service.find(service_id)
+    user = User.find(owner_id)
+
+    #Authorization: start checking credentials and associations
+    if user.is_owner? &&
+      service &&
+      user.restaurants.first.service_ids.include?(service_id) &&
+      user.restaurant_ids.include?(restaurant_id) &&
+      service.restaurant_id === restaurant_id 
+
+      #update and save
+      service.complete!
+      service.save!
+      return true
+    else
+      return false
+    end
   end
 
   def self.get_service params

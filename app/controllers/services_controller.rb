@@ -13,4 +13,18 @@ class ServicesController < ApplicationController
 			head 401
 		end
 	end
+
+	def update
+    if user_signed_in?
+      #check to make sure user is owner and service belongs to
+      #owner then update if it is
+      if Service.check_and_update(current_user.id, params)
+        head 204
+      else
+        head 422
+      end
+    else
+      head 401
+    end
+  end
 end

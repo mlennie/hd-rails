@@ -6,6 +6,7 @@ class Service < ActiveRecord::Base
 
   has_many :reservations
   belongs_to :restaurant
+  belongs_to :service_template
 
   just_define_datetime_picker :start_time
   just_define_datetime_picker :last_booking_time

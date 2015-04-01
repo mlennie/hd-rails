@@ -5,7 +5,7 @@ ActiveAdmin.register Service do
                 :last_booking_time_date, :last_booking_time_time_hour, 
                 :last_booking_time_time_minute
 
-  belongs_to :restaurant
+  belongs_to :restaurant, optional: true
 
   controller do
     def scoped_collection
@@ -50,6 +50,9 @@ ActiveAdmin.register Service do
 
   form do |f|
     f.inputs "Service Details" do
+      if params[:service_template_id]
+        f.input :service_template_id, value: params[:service_template_id]
+      end 
       f.input :availabilities
       f.input :start_time, :as => :just_datetime_picker
       f.input :last_booking_time, :as => :just_datetime_picker

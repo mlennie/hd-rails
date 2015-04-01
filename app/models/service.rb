@@ -23,10 +23,16 @@ class Service < ActiveRecord::Base
     )
   end
 
+  def self.get_template_services_for_day(service_template_id, day)
+    where(service_template_id: service_template_id)
+    .where(template_day: day)
+    .get_unarchived
+  end
+
   #don't get services where restaurants said they 
   #were complete (full)
   def self.not_complete
-    self.where(id: get_not_complete_ids)
+    self.where(id: get_not_complete_ids).get_unarchived
   end
 
   def self.get_not_complete_ids
@@ -105,5 +111,14 @@ class Service < ActiveRecord::Base
       discount = 0.10
     end
     self.current_discount = discount
+  end
+
+  def service_params
+    params.require(:service).permit(:availabilities, :start_time, :last_booking_time,
+                :restaurant_id, :nb_10, :nb_15, :nb_20, :nb_25,
+                :start_time_date, :start_time_time_hour, :start_time_time_minute,
+                :last_booking_time_date, :last_booking_time_time_hour, 
+                :last_booking_time_time_minute, :service_template_id, :service_template,
+                :template_day)
   end
 end

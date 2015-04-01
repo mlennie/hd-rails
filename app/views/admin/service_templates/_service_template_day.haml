@@ -1,3 +1,11 @@
 = link_to("Add Service", new_admin_service_path(service_template_id: id, day: day))
-= id
-= day
+- services = Service.get_template_services_for_day(id, day)
+- services.each do |service|
+	= service.availabilities
+	= service.start_time
+	= service.last_booking_time
+	= service.nb_10
+	= service.nb_15
+	= service.nb_20
+	= service.nb_25
+	= service.nb_25

@@ -47,7 +47,12 @@ ActiveAdmin.register Service do
       r = Service.find(params[:id])
       r.archive
       flash[:notice] = "You have successfully archived this resource"
-      redirect_to admin_restaurant_services_path r.restaurant
+      if params[:service_template_id]
+        flash[:notice] = "You Successfully removed this service"
+        redirect_to edit_admin_service_template_path params[:service_template_id]
+      else
+        redirect_to admin_restaurant_services_path r.restaurant
+      end
     end
   end
 

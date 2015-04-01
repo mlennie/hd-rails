@@ -24,6 +24,21 @@ ActiveAdmin.register ServiceTemplate do
     actions
   end
 
+  show do 
+    attributes_table do
+      row :name
+      row :description
+    end
+    days = %w(Monday Tuesday Wedesday Thursday Friday Saturday Sunday)
+
+    days.each do |day|
+
+      panel day do
+        render partial: "service_template_day", locals: {day: day, id: params[:id], show: true}
+      end
+    end
+  end
+
   filter :name
   filter :description
   filter :created_at
@@ -41,7 +56,7 @@ ActiveAdmin.register ServiceTemplate do
         days.each do |day|
 
           panel day do
-            render partial: "service_template_day", locals: {day: day, id: params[:id]}
+            render partial: "service_template_day", locals: {day: day, id: params[:id], show: false}
           end
         end
       end

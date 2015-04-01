@@ -17,3 +17,21 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+.service_box {
+	padding: 20px;
+	border: 1px solid #000;
+	width: 200px;
+	display: inline-block;
+	margin-right: 10px;
+
+	p {
+		font-size: 1.2em;
+		margin-bottom: 5px;
+	}
+}
+
+.white-text > a {
+	color: #fff !important;
+	text-decoration: none;
+}

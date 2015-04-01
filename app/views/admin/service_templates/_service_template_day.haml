@@ -1,11 +1,38 @@
-= link_to("Add Service", new_admin_service_path(service_template_id: id, day: day))
 - services = Service.get_template_services_for_day(id, day)
 - services.each do |service|
-	= service.availabilities
-	= service.start_time
-	= service.last_booking_time
-	= service.nb_10
-	= service.nb_15
-	= service.nb_20
-	= service.nb_25
-	= service.nb_25
+	.service_box
+		%p 
+			Availabilities: 
+			= service.availabilities
+		%p
+			Start Time: 
+			= service.start_time.strftime("%H:%M") rescue nil 
+		%p
+			Last Booking Time
+			= service.last_booking_time.strftime("%H:%M") rescue nil 
+		%p
+			Number of 10% discounts: 
+			= service.nb_10
+		%p
+			Number of 15% discounts:
+			= service.nb_15
+		%p
+			Number of 20% discounts:
+			= service.nb_20
+		%p
+			Number of 25% discounts
+			= service.nb_25
+		%br
+		- unless show
+			= link_to admin_service_path(service, service_template_id: id), :method => :delete, :data => {:confirm => "Are you sure you would like to delete this service?"} do 
+				%button
+					Delete Service
+%br
+%br
+%br
+- unless show
+	= link_to new_admin_service_path(service_template_id: id, day: day) do
+		%button.white-text
+			= link_to "Add Service", new_admin_service_path(service_template_id: id, day: day)
+	
+	   	

@@ -14,6 +14,8 @@ class Restaurant < ActiveRecord::Base
   has_many :restaurant_cuisines
   has_many :cuisines, through: :restaurant_cuisines
   has_many :menus
+  has_many :restaurant_service_templates
+  has_many :service_templates, through: :restaurant_service_templates
 
   #add geolocation and reverse geolocation
   geocoded_by :full_street_address
@@ -23,6 +25,7 @@ class Restaurant < ActiveRecord::Base
       obj.geocoded_address = geo.address 
     end
   end
+
   after_validation :reverse_geocode, if: :full_street_address_changed?
 
   after_save :create_new_wallet

@@ -14,8 +14,7 @@ class Restaurant < ActiveRecord::Base
   has_many :restaurant_cuisines
   has_many :cuisines, through: :restaurant_cuisines
   has_many :menus
-  has_many :restaurant_service_templates
-  has_many :service_templates, through: :restaurant_service_templates
+  has_many :service_templates
 
   #add geolocation and reverse geolocation
   geocoded_by :full_street_address

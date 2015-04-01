@@ -1,5 +1,7 @@
 ActiveAdmin.register ServiceTemplate do
-  permit_params 
+  permit_params :name, :description, :restaurant_id, :restaurant
+
+  belongs_to :restaurant, optional: true
 
   controller do
     def scoped_collection
@@ -12,6 +14,11 @@ ActiveAdmin.register ServiceTemplate do
       flash[:success] = "You have successfully archived this resource"
       redirect_to admin_service_templates_path
     end
+
+    def create
+      params[:service_template][:restaurant_id] = params[:restaurant_id]
+      super
+    end
   end
 
   index do
@@ -19,6 +26,7 @@ ActiveAdmin.register ServiceTemplate do
     id_column
     column :name
     column :description
+    column :restaurant
     column :created_at
     column :updated_at
     actions
@@ -28,6 +36,7 @@ ActiveAdmin.register ServiceTemplate do
     attributes_table do
       row :name
       row :description
+      row :restaurant
     end
     days = %w(Monday Tuesday Wedesday Thursday Friday Saturday Sunday)
 
@@ -48,6 +57,7 @@ ActiveAdmin.register ServiceTemplate do
     f.inputs "Menu Details" do
       f.input :name
       f.input :description
+      f.input :restaurant
 
       if params[:id]
 

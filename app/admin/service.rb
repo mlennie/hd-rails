@@ -88,8 +88,8 @@ ActiveAdmin.register Service do
     end
     f.inputs message do
       if st_id
-        f.input :service_template_id, label: false, input_html: {value: st_id } #, type: :hidden}
-        f.input :template_day, label: false, input_html: {value: day} #, type: :hidden}
+        f.input :service_template_id, label: false, input_html: {value: st_id, type: :hidden}
+        f.input :template_day, label: false, input_html: {value: day, type: :hidden}
       end 
       f.input :availabilities
       if st_id

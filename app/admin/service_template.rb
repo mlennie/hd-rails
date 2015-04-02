@@ -21,6 +21,30 @@ ActiveAdmin.register ServiceTemplate do
       end
       super
     end
+
+    def update
+      name = params[:service_template][:name]
+      description = params[:service_template][:description]
+      restaurant_id = params[:service_template][:restaurant_id]
+      service_template_id = params[:id]
+      other_template_id = params[:service_template_id]
+
+      service_template = ServiceTemplate.find(service_template_id)
+
+      ServiceTemplate.add_services_from_template(service_template, other_template_id)
+
+      service_template.name = name
+      service_template.description = description
+      service_template.restaurant_id = restaurant_id
+
+      if service_template.save
+        flash[:notice] = "You have successfully updated this template"
+        redirect_to admin_service_template_path service_template_id
+      else
+        flash[:notice] = "Oops template could not be updated :/"
+        redirect_to edit_admin_service_template_path service_template.id
+      end
+    end
   end
 
   index do

@@ -23,4 +23,34 @@ class ServiceTemplate < ActiveRecord::Base
 
 		return where(id: template_ids)
 	end
+
+	def self.has_services? id
+		s_ids = []
+		find(id.to_i).services.each do |s|  
+			s_ids << s.id unless s.archived? 
+		end
+		s_ids.any?
+	end
+
+	#use another template's services to create new services for current template
+	def self.add_services_from_template(service_template, other_template_id)
+		return if other_template_id.blank?
+		other_template = ServiceTemplate.find(other_template_id)
+
+		if service_template && other_template
+			other_services = other_template.services.get_unarchived
+			other_services.each do |other_service|
+				new_service = service_template.services.new
+				new_service.availabilities = other_service.availabilities
+				new_service.start_time = other_service.start_time
+				new_service.last_booking_time = other_service.last_booking_time
+				new_service.nb_10 = other_service.nb_10
+				new_service.nb_15 = other_service.nb_15
+				new_service.nb_20 = other_service.nb_20
+				new_service.nb_25 = other_service.nb_25
+				new_service.template_day = other_service.template_day
+				new_service.save!
+			end
+		end
+	end
 end

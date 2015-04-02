@@ -1,0 +1,10 @@
+Choose existing template?
+- templates = ServiceTemplate.get_templates id
+= form_tag admin_service_template_url(id), method: :put do |f|
+	%span(style="margin-left: 20px;") 
+		- template_array = templates.map { |t| [ServiceTemplate.find(t.id).restaurant_id ? t.name : t.name + " (Master)", t.id] }
+		= select_tag :service_template_id, options_for_select(template_array)
+	%span(style="margin-left: 30px;") 
+		= submit_tag "Use Template"
+%br
+%br

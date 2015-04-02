@@ -32,7 +32,9 @@
 %br
 - unless show
 	= link_to new_admin_service_path(service_template_id: id, day: day) do
-		%button.white-text
-			= link_to "Add Service", new_admin_service_path(service_template_id: id, day: day)
-	
+		Add Service
+		
+:javascript
+	$('.white-text').parent().find("a").remove();
+
 	   	

@@ -16,7 +16,9 @@ ActiveAdmin.register ServiceTemplate do
     end
 
     def create
-      params[:service_template][:restaurant_id] = params[:restaurant_id]
+      unless params[:service_template][:restaurant_id]
+        params[:service_template][:restaurant_id] = params[:restaurant_id]
+      end
       super
     end
   end
@@ -54,13 +56,18 @@ ActiveAdmin.register ServiceTemplate do
   filter :updated_at
 
   form do |f|
-    f.inputs "Menu Details" do
+    f.inputs "Tempalte Details" do
       f.input :name
       f.input :description
-      f.input :restaurant
+      unless params[:restaurant_id]
+        f.input :restaurant
+      end
+    end
+    f.actions
 
-      if params[:id]
-
+    if params[:id]
+      panel "Services" do 
+        render partial: "service_template_select", locals: { id: params[:id] }
         days = %w(Monday Tuesday Wedesday Thursday Friday Saturday Sunday)
 
         days.each do |day|
@@ -71,7 +78,6 @@ ActiveAdmin.register ServiceTemplate do
         end
       end
     end
-    f.actions
   end
 
 end

@@ -1,0 +1,14 @@
+%link(href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet")
+- @date = session[:date] != nil ? session[:date].to_date : params[:date] ? Date.parse(params[:date]) : Date.today
+- session[:date] = nil if session[:date]
+-if @date.nil?
+  - @date = Date.today
+#service-calendar
+  %h2#month
+    = link_to "<", date: @date.prev_month 
+    = @date.strftime("%B %Y") 
+    = link_to ">", date: @date.next_month
+  %br
+  = calendar @date do |date| 
+    #calendar-date 
+      = date.day 

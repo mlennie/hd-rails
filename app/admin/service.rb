@@ -1,4 +1,6 @@
 ActiveAdmin.register Service do
+  config.filters = false
+  menu false
   permit_params :availabilities, :start_time, :last_booking_time,
                 :restaurant_id, :nb_10, :nb_15, :nb_20, :nb_25,
                 :start_time_date, :start_time_time_hour, :start_time_time_minute,
@@ -57,27 +59,8 @@ ActiveAdmin.register Service do
   end
 
   index do
-    selectable_column
-    id_column
-    column :availabilities
-    column :start_time
-    column :last_booking_time
-    column :restaurant
-    column :nb_10
-    column :nb_15
-    column :nb_20
-    column :nb_25
-    actions
- end
-
-  filter :availabilities
-  filter :start_time
-  filter :last_booking_time
-  filter :restaurant_id
-  filter :nb_10
-  filter :nb_15
-  filter :nb_20
-  filter :nb_25
+    render partial: "service_calendar", locals: { restaurant: Restaurant.find(params[:restaurant_id]) }
+  end
 
   form do |f|
     if st_id = params[:service_template_id]

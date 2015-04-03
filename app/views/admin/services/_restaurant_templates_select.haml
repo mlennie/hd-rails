@@ -1,0 +1,30 @@
+- templates = ServiceTemplate.where(restaurant_id: nil)
+- ServiceTemplate.where(restaurant_id: restaurant.id).each { |t| templates << t }
+- template_array = templates.map { |t| [ServiceTemplate.find(t.id).restaurant_id ? t.name : t.name + " (Master)", t.id] }
+#template-box
+	%h5 Update services using template?
+	= form_tag admin_restaurant_services_url do
+		= hidden_field_tag :batch_action, :use_templates_for_services
+		= hidden_field_tag :batch_action_inputs, {}
+		= hidden_field_tag :restaurant_id, restaurant.id
+		= hidden_field_tag :date, date
+		= label_tag :service_template_id, "Template  "
+		= select_tag :service_template_id, options_for_select(template_array)
+		%span Please choose weeks for Calendar below to apply template to:
+		%span
+			= check_box_tag(:week_one)
+			= label_tag(:week_one, "Week One") 
+		%span
+			= check_box_tag(:week_two)
+			= label_tag(:week_one, "Week Two") 
+		%span
+			= check_box_tag(:week_three)
+			= label_tag(:week_one, "Week Three") 
+		%span
+			= check_box_tag(:week_four)
+			= label_tag(:week_one, "Week Four") 
+		%span
+			= check_box_tag(:week_five)
+			= label_tag(:week_one, "Week Five")
+		%span
+			= submit_tag "Apply Template"

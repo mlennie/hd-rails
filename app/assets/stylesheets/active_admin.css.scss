@@ -36,6 +36,16 @@
 	text-decoration: none;
 }
 
+#template-box {
+	border: 1px solid #000;
+	padding: 10px;
+	margin-bottom: 20px;
+
+	span {
+		margin-left: 10px;
+	}
+}
+
 #service-calendar {
 
 	#month {
@@ -90,6 +100,20 @@ table.calendar {
 	  	padding: 10px;
 	  	background-color: #b0ff7a;
 	  	color: #000;
+	  }
+
+	  a {
+	  	&:link, &:visited, &:hover {
+	  		text-decoration: none;
+	  	}
+	  }
+	  #plus-button {
+	  	text-align: center;
+	  	display: block;
+	  	margin-top: 10px;
+	  	margin-bottom: 10px;
+	  	font-size: 20px;
+	  	color: #DDD;
 	  }
 
 	  .notmonth, .notmonth a { color: #CCC; }

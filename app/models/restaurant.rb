@@ -43,6 +43,17 @@ class Restaurant < ActiveRecord::Base
     street + city + country + zipcode
   end
 
+  def self.use_template_to_create_services params
+    date = params[:date]
+    service_template = ServiceTemplate.find(params[:service_template_id].to_i)
+    restaurant = Restaurant.find(params[:restaurant_id].to_i)
+    week_one = params[:week_one]
+    week_two = params[:week_two]
+    week_three = params[:week_three]
+    week_four = params[:week_four]
+    week_five = params[:week_five]
+  end
+
   def full_street_address_changed?
     if street == nil ||
       city == nil ||

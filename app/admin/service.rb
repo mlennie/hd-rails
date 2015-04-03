@@ -10,12 +10,22 @@ ActiveAdmin.register Service do
 
   belongs_to :restaurant, optional: true
 
+  batch_action :use_templates_for_services do 
+    if Restaurant.use_template_to_create_services params
+      flash[:notice] = "You successfully used a template to update the calendar"
+    else
+      flash[:danger] = "oops there was a problem, calendar could not be updated"
+    end
+    redirect_to admin_restaurant_services_path params[:restaurant_id]
+  end
+
   controller do
     def scoped_collection
       Service.get_unarchived.where(restaurant_id: params[:restaurant_id])
     end
 
     def create
+      binding.pry
       if params[:service][:service_template_id]
 
         service = Service.new
@@ -47,12 +57,16 @@ ActiveAdmin.register Service do
 
     def destroy
       r = Service.find(params[:id])
-      r.archive
-      flash[:notice] = "You have successfully archived this resource"
-      if params[:service_template_id]
-        flash[:notice] = "You Successfully removed this service"
-        redirect_to edit_admin_service_template_path params[:service_template_id]
+      unless r.reservations.any?
+        r.archive
+        if params[:service_template_id]
+          flash[:notice] = "You Successfully removed this service"
+          redirect_to edit_admin_service_template_path params[:service_template_id]
+        else
+          redirect_to admin_restaurant_services_path r.restaurant
+        end
       else
+        flash[:danger] = "This Service already has reservations and can therefore not be deleted."
         redirect_to admin_restaurant_services_path r.restaurant
       end
     end

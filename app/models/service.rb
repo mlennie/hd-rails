@@ -38,9 +38,10 @@ class Service < ActiveRecord::Base
     service_ids = []
     find_each do |s|
       service_time = s.start_time
-      if service_time.day === date_day &&
+      if service_time &&
+        service_time.day === date_day &&
         service_time.month === date_month &&
-        service_time.year === date_year
+        service_time.year === date_year 
         service_ids << s.id
       end
     end

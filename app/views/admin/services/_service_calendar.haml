@@ -3,6 +3,7 @@
 - session[:date] = nil if session[:date]
 -if @date.nil?
   - @date = Date.today
+= render partial: "restaurant_templates_select", locals: { restaurant: Restaurant.find(params[:restaurant_id]), date: @date }
 - services = restaurant.services.get_unarchived
 #service-calendar
   %h2#month
@@ -14,9 +15,12 @@
     #calendar-date 
       = date.day 
       - day_services = services.get_services_for_day date
+    = link_to new_admin_restaurant_service_path(restaurant) do
+      %i.fa.fa-plus-circle#plus-button
     - day_services.each do |service|
       =link_to admin_restaurant_service_path(restaurant, service) do 
         .calendar-service-times
           = service.start_time.strftime('%H:%M') + ' to' 
           = service.last_booking_time.strftime('%H:%M')
+    
 

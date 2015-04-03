@@ -3,6 +3,7 @@
 - session[:date] = nil if session[:date]
 -if @date.nil?
   - @date = Date.today
+- services = restaurant.services.get_unarchived
 #service-calendar
   %h2#month
     = link_to "<", date: @date.prev_month 
@@ -12,3 +13,10 @@
   = calendar @date do |date| 
     #calendar-date 
       = date.day 
+      - day_services = services.get_services_for_day date
+    - day_services.each do |service|
+      =link_to admin_restaurant_service_path(restaurant, service) do 
+        .calendar-service-times
+          = service.start_time.strftime('%H:%M') + ' to' 
+          = service.last_booking_time.strftime('%H:%M')
+

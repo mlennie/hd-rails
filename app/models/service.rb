@@ -29,6 +29,24 @@ class Service < ActiveRecord::Base
     .get_unarchived
   end
 
+  #get services that match date
+  #used for services calendar
+  def self.get_services_for_day date
+    date_day = date.day
+    date_month = date.month
+    date_year = date.year
+    service_ids = []
+    find_each do |s|
+      service_time = s.start_time
+      if service_time.day === date_day &&
+        service_time.month === date_month &&
+        service_time.year === date_year
+        service_ids << s.id
+      end
+    end
+    where(id: service_ids)
+  end
+
   #don't get services where restaurants said they 
   #were complete (full)
   def self.not_complete

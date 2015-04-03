@@ -63,7 +63,7 @@ table.calendar {
 	  }
 
 	  th {
-	    background: #DDD;
+	    background: #51e7ff;
 	    color: #666;
 	    text-align: center;
 	    width: 14.2857142857143%;
@@ -78,6 +78,20 @@ table.calendar {
 	    font-size: 16px;
 	  }
 
+	  #calendar-date {
+	  	margin-bottom: 10px;
+	  }
+
+	  .calendar-service-times {
+	  	font-size: 10px;
+	  	text-align: center;
+	  	margin-bottom: 5px;
+	  	border: 1px solid #000;
+	  	padding: 10px;
+	  	background-color: #b0ff7a;
+	  	color: #000;
+	  }
+
 	  .notmonth, .notmonth a { color: #CCC; }
-	  .today { background-color: #D7F2FF; }
+	  .today { background-color: #ff51b1; }
 	}

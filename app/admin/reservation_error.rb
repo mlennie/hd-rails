@@ -1,6 +1,7 @@
 ActiveAdmin.register ReservationError do
   permit_params :restaurant_id, :reservation_id, :user_id, :kind, :description
   belongs_to :restaurant, optional: true
+  menu false
 
   controller do
     def scoped_collection

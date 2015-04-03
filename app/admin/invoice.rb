@@ -3,6 +3,7 @@ ActiveAdmin.register Invoice do
   							:date_paid, :confirmation, :total_amount_paid, :restaurant_id
 
   belongs_to :restaurant, optional: true
+  menu false
 
   controller do
     def scoped_collection

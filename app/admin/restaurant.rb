@@ -73,7 +73,6 @@ ActiveAdmin.register Restaurant do
       end
       cuisines.join(', ')
     end
-    column :description
     column :img_url
     column :owner_name
     column :responsable_name

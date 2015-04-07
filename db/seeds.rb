@@ -274,6 +274,48 @@ unless Restaurant.any?
   end
 
   puts 'created owners, services and menus for restaurants'
+
+  #SERVICE TEMPLATES
+
+  #create a service template
+  service_template = ServiceTemplate.create({
+    name: "Lord of the templates",
+    description: "One template to rule them all."
+  })
+
+  #add services to service template
+  day_array = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
+  day_array.each do |day|
+
+    #SERVICES
+
+    #1 to 3 pm service
+    one_to_three_service = {
+      availabilities: 99,
+      start_time: Time.now.midnight + 13.hours,
+      last_booking_time: Time.now.midnight + 15.hours,
+      nb_10: 99,
+      nb_20: 2,
+      nb_25: 1,
+      template_day: day
+    }
+
+    #5 to 10 pm service
+    five_to_ten_service = {
+      availabilities: 99,
+      start_time: Time.now.midnight + 17.hours,
+      last_booking_time: Time.now.midnight + 22.hours,
+      nb_10: 99,
+      nb_15: 1,
+      template_day: day
+    }
+
+    #create services
+    service_template.services.create(one_to_three_service)
+    service_template.services.create(five_to_ten_service)
+  end
+
+  puts 'created master service template'
 end
 
 

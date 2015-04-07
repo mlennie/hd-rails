@@ -64,7 +64,7 @@ ActiveAdmin.register ServiceTemplate do
       row :description
       row :restaurant
     end
-    days = %w(Monday Tuesday Wedesday Thursday Friday Saturday Sunday)
+    days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
 
     days.each do |day|
 

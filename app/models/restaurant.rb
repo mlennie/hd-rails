@@ -83,27 +83,9 @@ class Restaurant < ActiveRecord::Base
         first_date_of_month - 6.days
     end
 
-    #get date of first day on last week of calendar 
-    first_date_of_last_week_of_calendar = case last_day_of_last_week_of_month
-      when 1
-        last_date_of_month
-      when 2
-        last_date_of_month - 1.day
-      when 3
-        last_date_of_month - 2.days
-      when 4
-        last_date_of_month - 3.days
-      when 5
-        last_date_of_month - 4.days
-      when 6
-        last_date_of_month - 5.days
-      when 7
-        last_date_of_month - 6.days
-    end
-
     #get number of weeks in calendar 
     first_week_of_calendar = first_date_of_last_week_of_calendar.cweek #eg 14
-    last_week_of_calendar = first_date_of_last_week_of_calendar.cweek #eg 18
+    last_week_of_calendar = last_day_of_last_week_of_month.cweek #eg 18
     number_of_weeks_in_month = last_week_of_calendar - first_week_of_calendar + 1 
 
     #get starting dates for each weeks in calendar
@@ -183,9 +165,9 @@ class Restaurant < ActiveRecord::Base
       end
 
       #get year, month and day
-      service_year = template_service.start_time.year
-      service_month = template_service.start_time.month
-      service_day = template_service.start_time.day
+      service_year = template_date.year
+      service_month = template_date.month
+      service_day = template_date.day
 
       #start hour and minutes
       service_start_hour = template_service.start_time.hour

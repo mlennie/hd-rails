@@ -48,15 +48,8 @@ class Restaurant < ActiveRecord::Base
     #get current date, service template and restaurant
     string_date = params[:date]
     service_template = ServiceTemplate.get_unarchived.find(params[:service_template_id].to_i)
+    service_template_services = service_template.services.get_unarchived
     restaurant = Restaurant.get_unarchived.find(params[:restaurant_id].to_i)
-
-    #get which weeks for calendar where selected
-    week_one = params[:week_one]
-    week_two = params[:week_two]
-    week_three = params[:week_three]
-    week_four = params[:week_four]
-    week_five = params[:week_five]
-    week_six = params[:week_six]
 
     #make date calculations
     array_date = string_date.split("-")
@@ -88,6 +81,7 @@ class Restaurant < ActiveRecord::Base
         first_date_of_month - 5.days
       when 7
         first_date_of_month - 6.days
+    end
 
     #get date of first day on last week of calendar 
     first_date_of_last_week_of_calendar = case last_day_of_last_week_of_month
@@ -105,6 +99,7 @@ class Restaurant < ActiveRecord::Base
         last_date_of_month - 5.days
       when 7
         last_date_of_month - 6.days
+    end
 
     #get number of weeks in calendar 
     first_week_of_calendar = first_date_of_last_week_of_calendar.cweek #eg 14
@@ -112,47 +107,117 @@ class Restaurant < ActiveRecord::Base
     number_of_weeks_in_month = last_week_of_calendar - first_week_of_calendar + 1 
 
     #get starting dates for each weeks in calendar
-    #already have first: first_week of calendar
-    second_week_of_calendar = first_week_of_calendar + 7.days
+    #already have first: first_date_of_calendar
+    second_week_of_calendar = first_date_of_calendar + 7.days
     third_week_of_calendar = second_week_of_calendar + 7.days
     fourth_week_of_calendar = third_week_of_calendar + 7.days
     fifth_week_of_calendar = fourth_week_of_calendar + 7.days
-    if number_of_weeks_in_month == 6
+    if (number_of_weeks_in_month == 6)
       sixth_week_of_calendar = fifth_week_of_calendar + 7.days
     end
 
     if params[:week_one]
-      #add services to week one of calendar
+      restaurant.create_services_for_week(
+        first_date_of_calendar, 
+        service_template_services
+      )
     end
 
     if params[:week_two]
-
+      restaurant.create_services_for_week(
+        second_week_of_calendar,
+        service_template_services
+      )
     end
 
     if params[:week_three]
-
+      restaurant.create_services_for_week(
+        third_week_of_calendar,
+        service_template_services
+      )
     end
 
     if params[:week_four]
-
+      restaurant.create_services_for_week(
+        fourth_week_of_calendar,
+        service_template_services
+      )
     end
 
     if params[:week_five]
-
+      restaurant.create_services_for_week(
+        fifth_week_of_calendar,
+        service_template_services
+      )
     end
 
-    if params[:week_six]
+    if params[:week_six] && (number_of_weeks_in_month == 6)
+      restaurant.create_services_for_week(
+        sixth_week_of_calendar,
+        service_template_services
+      )
+    end
+  end
 
-
-
-
+  def create_services_for_week start_of_week_date, service_template_services
     #create services for restaurant from template
-    service_template.services.get_unarchived.each do |template_service|
-      template_day = template_service.template_day
-      restaurant.services.create({
+    service_template_services.each do |template_service|
+      
+      service_day = template_service.template_day
+
+      template_date = case service_day
+        when "Monday"
+          start_of_week_date
+        when "Tuesday" 
+          start_of_week_date + 1.day
+        when "Wednesday" 
+          start_of_week_date + 2.days
+        when "Thursday"
+          start_of_week_date + 3.days
+        when "Friday"
+          start_of_week_date + 4.days
+        when "Saturday"
+          start_of_week_date + 5.days
+        when "Sunday"
+          start_of_week_date + 6.days
+      end
+
+      #get year, month and day
+      service_year = template_service.start_time.year
+      service_month = template_service.start_time.month
+      service_day = template_service.start_time.day
+
+      #start hour and minutes
+      service_start_hour = template_service.start_time.hour
+      service_start_minutes = template_service.start_time.min
+
+      #last booking hour and minutes
+      service_end_hour = template_service.last_booking_time.hour
+      service_end_minutes = template_service.last_booking_time.min
+
+      #create new start time date
+      service_start_time = DateTime.new(
+        service_year,
+        service_month,
+        service_day,
+        service_start_hour,
+        service_start_minutes
+      )
+
+      #create new end time date
+      service_last_booking_time = DateTime.new(
+        service_year,
+        service_month,
+        service_day,
+        service_end_hour,
+        service_end_minutes
+      )
+      
+      #create service for restaurant
+      self.services.create({
         availabilities: template_service.availabilities,
-        start_time: template_service.start_time,
-        last_booking_time: template_service.last_booking_time,
+        start_time: service_start_time,
+        last_booking_time: service_last_booking_time,
         nb_10: template_service.nb_10,
         nb_15: template_service.nb_15,
         nb_20: template_service.nb_20,

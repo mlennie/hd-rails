@@ -94,7 +94,8 @@ class Service < ActiveRecord::Base
   def self.services_within_time_period(other_start_time, 
                                        other_end_time)
     self.where(
-      "start_time <= :other_start_time AND last_booking_time >= :other_end_time",
+      "start_time <= :other_start_time AND last_booking_time >= :other_start_time OR 
+       start_time <= :other_end_time AND last_booking_time >= :other_end_time",
       { 
         other_start_time: other_start_time,
         other_end_time: other_end_time

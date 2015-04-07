@@ -84,8 +84,8 @@ class Restaurant < ActiveRecord::Base
     end
 
     #get number of weeks in calendar 
-    first_week_of_calendar = first_date_of_last_week_of_calendar.cweek #eg 14
-    last_week_of_calendar = last_day_of_last_week_of_month.cweek #eg 18
+    first_week_of_calendar = first_date_of_calendar.cweek #eg 14
+    last_week_of_calendar = last_date_of_month.cweek #eg 18
     number_of_weeks_in_month = last_week_of_calendar - first_week_of_calendar + 1 
 
     #get starting dates for each weeks in calendar

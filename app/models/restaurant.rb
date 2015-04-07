@@ -50,6 +50,7 @@ class Restaurant < ActiveRecord::Base
     service_template = ServiceTemplate.get_unarchived.find(params[:service_template_id].to_i)
     service_template_services = service_template.services.get_unarchived
     restaurant = Restaurant.get_unarchived.find(params[:restaurant_id].to_i)
+    restaurant_services = restaurant.services.get_unarchived.today_or_future
 
     #make date calculations
     array_date = string_date.split("-")
@@ -98,50 +99,65 @@ class Restaurant < ActiveRecord::Base
       sixth_week_of_calendar = fifth_week_of_calendar + 7.days
     end
 
-    if params[:week_one]
-      restaurant.create_services_for_week(
-        first_date_of_calendar, 
-        service_template_services
-      )
-    end
+    #start a transaction so that if something fails,
+    #database will be rolled back
+    ActiveRecord::Base.transaction do
+  
+      if params[:week_one]
+        restaurant.create_services_for_week(
+          first_date_of_calendar, 
+          service_template_services,
+          restaurant_services
+        )
+      end
 
-    if params[:week_two]
-      restaurant.create_services_for_week(
-        second_week_of_calendar,
-        service_template_services
-      )
-    end
+      if params[:week_two]
+        restaurant.create_services_for_week(
+          second_week_of_calendar,
+          service_template_services,
+          restaurant_services
+        )
+      end
 
-    if params[:week_three]
-      restaurant.create_services_for_week(
-        third_week_of_calendar,
-        service_template_services
-      )
-    end
+      if params[:week_three]
+        restaurant.create_services_for_week(
+          third_week_of_calendar,
+          service_template_services,
+          restaurant_services
+        )
+      end
 
-    if params[:week_four]
-      restaurant.create_services_for_week(
-        fourth_week_of_calendar,
-        service_template_services
-      )
-    end
+      if params[:week_four]
+        restaurant.create_services_for_week(
+          fourth_week_of_calendar,
+          service_template_services,
+          restaurant_services
+        )
+      end
 
-    if params[:week_five]
-      restaurant.create_services_for_week(
-        fifth_week_of_calendar,
-        service_template_services
-      )
-    end
+      if params[:week_five]
+        restaurant.create_services_for_week(
+          fifth_week_of_calendar,
+          service_template_services,
+          restaurant_services
+        )
+      end
 
-    if params[:week_six] && (number_of_weeks_in_month == 6)
-      restaurant.create_services_for_week(
-        sixth_week_of_calendar,
-        service_template_services
-      )
+      if params[:week_six] && (number_of_weeks_in_month == 6)
+        restaurant.create_services_for_week(
+          sixth_week_of_calendar,
+          service_template_services,
+          restaurant_services
+        )
+      end
     end
+    return true
   end
 
-  def create_services_for_week start_of_week_date, service_template_services
+  def create_services_for_week(start_of_week_date, 
+                               service_template_services, 
+                               restaurant_services)
+
     #create services for restaurant from template
     service_template_services.each do |template_service|
       
@@ -195,16 +211,22 @@ class Restaurant < ActiveRecord::Base
         service_end_minutes
       )
       
-      #create service for restaurant
-      self.services.create({
-        availabilities: template_service.availabilities,
-        start_time: service_start_time,
-        last_booking_time: service_last_booking_time,
-        nb_10: template_service.nb_10,
-        nb_15: template_service.nb_15,
-        nb_20: template_service.nb_20,
-        nb_25: template_service.nb_25
-      })
+      #don't add services to days that already have services
+      unless restaurant_services.services_within_time_period(
+               service_start_time, 
+               service_last_booking_time).any? ||
+        service_start_time < Time.new
+        #create service for restaurant
+        self.services.create({
+          availabilities: template_service.availabilities,
+          start_time: service_start_time,
+          last_booking_time: service_last_booking_time,
+          nb_10: template_service.nb_10,
+          nb_15: template_service.nb_15,
+          nb_20: template_service.nb_20,
+          nb_25: template_service.nb_25
+        })
+      end
     end
   end
 

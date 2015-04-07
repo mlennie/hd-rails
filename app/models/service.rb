@@ -15,11 +15,16 @@ class Service < ActiveRecord::Base
 
   
   def self.future_with_availabilities
+    self.today_or_future.where(
+      "current_discount > :zero",
+      { zero: 0 }
+    )
+  end
+
+  def self.today_or_future
     self.where(
       "start_time > :yesterday",
       { yesterday: Time.new.midnight }
-    ).where("current_discount > :zero",
-      { zero: 0 }
     )
   end
 
@@ -83,6 +88,18 @@ class Service < ActiveRecord::Base
     else
       return false
     end
+  end
+
+  #get services between specific times
+  def self.services_within_time_period(other_start_time, 
+                                       other_end_time)
+    self.where(
+      "start_time <= :other_start_time AND last_booking_time >= :other_end_time",
+      { 
+        other_start_time: other_start_time,
+        other_end_time: other_end_time
+      }
+    )
   end
 
   def self.get_service params

@@ -16,7 +16,7 @@ ActiveAdmin.register Service do
     else
       flash[:danger] = "oops there was a problem, calendar could not be updated"
     end
-    redirect_to admin_restaurant_services_path params[:restaurant_id]
+    redirect_to admin_restaurant_services_path params[:restaurant_id], date: params[:date]
   end
 
   controller do

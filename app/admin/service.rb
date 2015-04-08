@@ -25,7 +25,6 @@ ActiveAdmin.register Service do
     end
 
     def create
-      binding.pry
       if params[:service][:service_template_id]
 
         service = Service.new

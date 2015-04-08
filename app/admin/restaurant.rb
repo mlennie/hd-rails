@@ -47,6 +47,7 @@ ActiveAdmin.register Restaurant do
   sidebar "Services and Reservations", only: [:show] do
     ul do
       li link_to "Services",    admin_restaurant_services_path(restaurant)
+      li link_to "Service Templates",    admin_restaurant_service_templates_path(restaurant)
       li link_to 'New Service Template', new_admin_restaurant_service_template_path(restaurant)
       li link_to "Menus",    admin_restaurant_menus_path(restaurant)
       li link_to "Invoices", admin_restaurant_invoices_path(restaurant)

@@ -5,7 +5,12 @@ ActiveAdmin.register ServiceTemplate do
 
   controller do
     def scoped_collection
-      ServiceTemplate.get_unarchived
+      if params[:restaurant_id]
+        ServiceTemplate.get_unarchived
+        .where(restaurant_id: params[:restaurant_id].to_i)
+      else
+        ServiceTemplate.get_unarchived
+      end
     end
 
     def destroy

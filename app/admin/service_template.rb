@@ -89,7 +89,7 @@ ActiveAdmin.register ServiceTemplate do
       f.input :name
       f.input :description
       unless params[:restaurant_id]
-        f.input :restaurant
+        f.input :restaurant, label: "Restaurant (leave blank if this is a Master Template)"
       end
     end
     f.actions

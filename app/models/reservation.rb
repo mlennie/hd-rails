@@ -61,10 +61,10 @@ class Reservation < ActiveRecord::Base
   def self.get_finished_ids
     r_ids = []
     self.all.each do |r|
-      if (r.status == Reservation.statuses[:absent]) ||
-        (r.status == Reservation.statuses[:validated]) ||     
-        (r.status == Reservation.statuses[:pending_confirmation]) ||
-        (r.status == Reservation.statuses[:cancelled]) 
+      if r.status == "absent" ||
+        r.status == "validated" ||     
+        r.status == "pending_confirmation" ||
+        r.status == "cancelled"
           r_ids << r.id
       end  
     end
@@ -78,9 +78,9 @@ class Reservation < ActiveRecord::Base
   def self.get_in_progress_ids
     r_ids = []
     self.all.each do |r|
-      if r.status != Reservation.statuses[:absent] &&  
-        r.status != Reservation.statuses[:validated] &&     
-        r.status != Reservation.statuses[:pending_confirmation]     
+      if r.status != "absent" &&  
+        r.status != "validated" &&     
+        r.status != "pending_confirmation"    
           r_ids << r.id    
       end  
     end

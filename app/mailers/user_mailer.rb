@@ -13,6 +13,7 @@ class UserMailer < ActionMailer::Base
   	@user = reservation.user
   	@restaurant = reservation.restaurant
   	@email = @user.email
+    @user_contribution = @reservation.user_contribution
   	mail to: @email, subject: "Réservation confirmée"
   end
 

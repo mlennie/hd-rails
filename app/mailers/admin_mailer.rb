@@ -6,6 +6,7 @@ class AdminMailer < ActionMailer::Base
   	@time = reservation.time.strftime("%d/%m/%Y, at %H:%M") 
   	@user = reservation.user
   	@restaurant = reservation.restaurant
+    @user_contribution = @reservation.user_contribution
   	@email = 'admin@happydining.fr'
   	mail to: @email, subject: "Nouvelle réservation"
   end

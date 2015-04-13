@@ -5,6 +5,7 @@ class RestaurantMailer < ActionMailer::Base
   	@reservation = reservation
   	@time = reservation.time.strftime("%d/%m/%Y, à %H:%M") 
   	@user = reservation.user
+    @user_contribution = @reservation.user_contribution
   	@restaurant = reservation.restaurant
   	@email = @restaurant.principle_email
   	mail to: @email, subject: "Nouvelle réservation de la part de Happy Dining"

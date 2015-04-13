@@ -24,8 +24,15 @@
 		<strong>Horaire : </strong>
 		<span><%=@time%></span>
 	</li>
-	<li>
-		<strong>Rétribution : </strong>
-		<span>10%</span>
-	</li>
+	<% if @user_contribution > 0 %>
+		<li>
+			<strong>Reduction sur l’addition : </strong>
+			<span><%=@user_contribution%>€</span>
+		</li>
+	<% else %>
+		<li>
+			<strong>Rétribution : </strong>
+			<span>10%</span>
+		</li>
+	<% end %>
 </ul>

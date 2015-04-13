@@ -54,6 +54,23 @@ class Reservation < ActiveRecord::Base
     end
   end
 
+  def self.finished
+    self.where(id: get_finished_ids)
+  end
+
+  def self.get_finished_ids
+    r_ids = []
+    self.all.each do |r|
+      if (r.status == Reservation.statuses[:absent]) ||
+        (r.status == Reservation.statuses[:validated]) ||     
+        (r.status == Reservation.statuses[:pending_confirmation]) ||
+        (r.status == Reservation.statuses[:cancelled]) 
+          r_ids << r.id
+      end  
+    end
+    return r_ids    
+  end
+
   def self.in_progress 
     self.where(id: get_in_progress_ids)
   end
@@ -65,8 +82,9 @@ class Reservation < ActiveRecord::Base
         r.status != Reservation.statuses[:validated] &&     
         r.status != Reservation.statuses[:pending_confirmation]     
           r_ids << r.id    
-          end  
-      end    
+      end  
+    end
+    return r_ids 
   end
 
   #get all reservations without a finished status

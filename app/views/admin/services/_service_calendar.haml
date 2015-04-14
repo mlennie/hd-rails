@@ -2,35 +2,38 @@
 - @date = session[:date] != nil ? session[:date].to_date : params[:date] ? Date.parse(params[:date]) : Date.today
 - session[:date] = nil if session[:date]
 -if @date.nil?
-  - @date = Date.today
+	- @date = Date.today
 = render partial: "restaurant_templates_select", locals: { restaurant: Restaurant.find(params[:restaurant_id]), date: @date }
 - services = restaurant.services.get_unarchived
 #service-calendar
-  %h2#month
-    = link_to "<", date: @date.prev_month 
-    = @date.strftime("%B %Y") 
-    = link_to ">", date: @date.next_month
-  %br
-  = calendar @date do |date| 
-    #calendar-date 
-      = date.day 
-      - day_services = services.get_services_for_day date
-    = link_to new_admin_restaurant_service_path(restaurant) do
-      %i.fa.fa-plus-circle#plus-button
-    - day_services.each do |service|
-      =link_to admin_restaurant_service_path(restaurant, service) do 
-        .calendar-service-times
-          = service.start_time.strftime('%H:%M') + ' to' 
-          = service.last_booking_time.strftime('%H:%M')
+	%h2#month
+		= link_to "<", date: @date.prev_month 
+		= @date.strftime("%B %Y") 
+		= link_to ">", date: @date.next_month
+	%br
+	= calendar @date do |date| 
+		#calendar-date 
+			= date.day 
+			- day_services = services.get_services_for_day date
+		= link_to new_admin_restaurant_service_path(restaurant) do
+			%i.fa.fa-plus-circle#plus-button
+		- day_services.each do |service|
+			=link_to admin_restaurant_service_path(restaurant, service) do 
+				.calendar-service-times
+					= service.start_time.strftime('%H:%M') + ' to' 
+					= service.last_booking_time.strftime('%H:%M')
+					- message = "Are you sure you want to delete this service for " + Restaurant.find(params[:restaurant_id]).name + "? This cannot be undone!"
+					=link_to admin_restaurant_service_url(params[:restaurant_id], service), method: :delete, data: { confirm: message } do 
+						%i.fa.fa-minus-circle#minus-circle
 #template-box
-  %h5 
-    Want to delete all services?
+	%h5 
+		Want to delete all services?
 
-  #service-delete-link
-    - message = "Are you sure you want to delete all reservations for " + Restaurant.find(params[:restaurant_id]).name + "? This cannot be undone!"
-    =link_to admin_restaurant_service_url(params[:restaurant_id], 1, delete_all_services: true), method: :delete, data: { confirm: message } do 
-      %span#delete-services-button 
-        DELETE ALL SERVICES
-        %i.fa.fa-warning
-    
+	#service-delete-link
+		- message = "Are you sure you want to delete all services for " + Restaurant.find(params[:restaurant_id]).name + "? This cannot be undone!"
+		=link_to admin_restaurant_service_url(params[:restaurant_id], 1, delete_all_services: true), method: :delete, data: { confirm: message } do 
+			%span#delete-services-button 
+				DELETE ALL SERVICES
+				%i.fa.fa-warning
+		
 

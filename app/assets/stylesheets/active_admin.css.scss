@@ -133,6 +133,12 @@ table.calendar {
 	  	color: #DDD;
 	  }
 
+	  #minus-circle {
+	  	margin-left: 10px;
+	  	color: red;
+	  	font-size: 1.7em
+	  }
+
 	  .notmonth, .notmonth a { color: #CCC; }
 	  .today { background-color: #ff51b1; }
 	}

@@ -1,4 +1,9 @@
 <p>Bonjour , vous avez une nouvelle réservation confirmée :</p>
+
+<% if @user_contribution > 0 %>
+	<strong>ATTENTION , LE CLIENT EST UN PRESCRIPTEUR , PENSEZ A FAIRE LA REDUCTION SUR L’ADDITION SVP.</strong>
+<% end %>
+
 <ul>
 	<li>
 		<strong>Nb de couverts : </strong>
@@ -23,7 +28,7 @@
 	<% if @user_contribution > 0 %>
 		<li>
 			<strong>Reduction sur l’addition : </strong>
-			<span><%=@user_contribution%>€</span>
+			<span style="color:red;"><%=@user_contribution%>€</span>
 		</li>
 	<% end %>
 	<li>

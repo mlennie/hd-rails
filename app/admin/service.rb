@@ -55,18 +55,35 @@ ActiveAdmin.register Service do
     end
 
     def destroy
-      r = Service.find(params[:id])
-      unless r.reservations.any?
-        r.archive
-        if params[:service_template_id]
-          flash[:notice] = "You Successfully removed this service"
-          redirect_to edit_admin_service_template_path params[:service_template_id]
+
+      #delete all restaurant's services if sent with "delete_all_services" param
+      if params[:delete_all_services]
+        restaurant = Restaurant.find(params[:restaurant_id]);
+        services = restaurant.services.get_unarchived.today_or_future
+
+        #filter all services
+        services.all.each do |service|
+          #archive unless service has reservations 
+          service.archive unless service.reservations.any?
+        end
+
+        #send back to services page with proper flash message
+        flash[:notice] = "You have successfully deleted all services (that didn't have reservations) for this restaruant"
+        redirect_to admin_restaurant_services_path params[:restaurant_id]
+      else
+        r = Service.find(params[:id])
+        unless r.reservations.any?
+          r.archive
+          if params[:service_template_id]
+            flash[:notice] = "You Successfully removed this service"
+            redirect_to edit_admin_service_template_path params[:service_template_id]
+          else
+            redirect_to admin_restaurant_services_path r.restaurant
+          end
         else
+          flash[:danger] = "This Service already has reservations and can therefore not be deleted."
           redirect_to admin_restaurant_services_path r.restaurant
         end
-      else
-        flash[:danger] = "This Service already has reservations and can therefore not be deleted."
-        redirect_to admin_restaurant_services_path r.restaurant
       end
     end
   end

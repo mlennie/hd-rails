@@ -31,6 +31,22 @@
 	}
 }
 
+#service-delete-link > a {
+
+	&:link {
+		text-decoration: none;
+	}
+
+  #delete-services-button {
+		background-color: red;
+		text-decoration: none !important;
+		padding: 15px;
+		border-radius: 10px;
+		margin-bottom: 20px;
+		color: #fff;
+	}
+}
+
 .white-text > a {
 	color: #fff !important;
 	text-decoration: none;
@@ -39,6 +55,7 @@
 #template-box {
 	border: 1px solid #000;
 	padding: 10px;
+	min-height: 70px;
 	margin-bottom: 20px;
 
 	span {

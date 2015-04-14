@@ -22,5 +22,15 @@
         .calendar-service-times
           = service.start_time.strftime('%H:%M') + ' to' 
           = service.last_booking_time.strftime('%H:%M')
+#template-box
+  %h5 
+    Want to delete all services?
+
+  #service-delete-link
+    - message = "Are you sure you want to delete all reservations for " + Restaurant.find(params[:restaurant_id]).name + "? This cannot be undone!"
+    =link_to admin_restaurant_service_url(params[:restaurant_id], 1, delete_all_services: true), method: :delete, data: { confirm: message } do 
+      %span#delete-services-button 
+        DELETE ALL SERVICES
+        %i.fa.fa-warning
     
 

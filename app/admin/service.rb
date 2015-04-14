@@ -11,10 +11,19 @@ ActiveAdmin.register Service do
   belongs_to :restaurant, optional: true
 
   batch_action :use_templates_for_services do 
-    if Restaurant.use_template_to_create_services params
-      flash[:notice] = "You successfully used a template to update the calendar"
+    params[:date] = Restaurant.get_date_from_string params[:date]
+    if params[:whole_year]
+      if Restaurant.use_template_to_create_services_for_12_months params
+        flash[:notice] = "You successfully used a template to update the calendar"
+      else
+        flash[:danger] = "oops there was a problem, calendar could not be updated"
+      end
     else
-      flash[:danger] = "oops there was a problem, calendar could not be updated"
+      if Restaurant.use_template_to_create_services params
+        flash[:notice] = "You successfully used a template to update the calendar"
+      else
+        flash[:danger] = "oops there was a problem, calendar could not be updated"
+      end
     end
     redirect_to admin_restaurant_services_path params[:restaurant_id], date: params[:date]
   end
@@ -64,7 +73,7 @@ ActiveAdmin.register Service do
         #filter all services
         services.all.each do |service|
           #archive unless service has reservations 
-          service.archive unless service.reservations.any?
+          service.delete unless service.reservations.any?
         end
 
         #send back to services page with proper flash message
@@ -73,7 +82,7 @@ ActiveAdmin.register Service do
       else
         r = Service.find(params[:id])
         unless r.reservations.any?
-          r.archive
+          r.delete
           if params[:service_template_id]
             flash[:notice] = "You Successfully removed this service"
             redirect_to edit_admin_service_template_path params[:service_template_id]

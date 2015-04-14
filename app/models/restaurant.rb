@@ -43,21 +43,36 @@ class Restaurant < ActiveRecord::Base
     street + city + country + zipcode
   end
 
+  def self.use_template_to_create_services_for_12_months params
+    original_date = params[:date]
+    12.times do |index|
+      date = original_date + index.months
+      params[:date] = date
+      params[:whole_month] = true
+      Restaurant.use_template_to_create_services params
+    end
+    return true
+  end
+
+  #turn string date eg "2015-4-7" into real date
+  def self.get_date_from_string date
+    #make date calculations
+    array_date = date.split("-")
+    year = array_date[0].to_i # eg. 2015
+    month = array_date[1].to_i # eg. 4 (april)
+    day = array_date[2].to_i # eg. 7 (7th day of month)
+    return Date.new(year, month, day) #eg . Tue, 07 Apr 2015
+  end
+
   def self.use_template_to_create_services params
 
     #get current date, service template and restaurant
-    string_date = params[:date]
+    date = params[:date]
     service_template = ServiceTemplate.get_unarchived.find(params[:service_template_id].to_i)
     service_template_services = service_template.services.get_unarchived
     restaurant = Restaurant.get_unarchived.find(params[:restaurant_id].to_i)
     restaurant_services = restaurant.services.get_unarchived.today_or_future
 
-    #make date calculations
-    array_date = string_date.split("-")
-    year = array_date[0].to_i # eg. 2015
-    month = array_date[1].to_i # eg. 4 (april)
-    day = array_date[2].to_i # eg. 7 (7th day of month)
-    date = Date.new(year,month,day) #eg . Tue, 07 Apr 2015
     day_of_week = date.cwday # eg. 2 (tuesday)
 
     first_date_of_month = date.beginning_of_month #eg. Wed, 01 Apr 2015
@@ -103,7 +118,7 @@ class Restaurant < ActiveRecord::Base
     #database will be rolled back
     ActiveRecord::Base.transaction do
   
-      if params[:week_one]
+      if params[:week_one] || params[:whole_month]
         restaurant.create_services_for_week(
           first_date_of_calendar, 
           service_template_services,
@@ -111,7 +126,7 @@ class Restaurant < ActiveRecord::Base
         )
       end
 
-      if params[:week_two]
+      if params[:week_two] || params[:whole_month]
         restaurant.create_services_for_week(
           second_week_of_calendar,
           service_template_services,
@@ -119,7 +134,7 @@ class Restaurant < ActiveRecord::Base
         )
       end
 
-      if params[:week_three]
+      if params[:week_three] || params[:whole_month]
         restaurant.create_services_for_week(
           third_week_of_calendar,
           service_template_services,
@@ -127,7 +142,7 @@ class Restaurant < ActiveRecord::Base
         )
       end
 
-      if params[:week_four]
+      if params[:week_four] || params[:whole_month]
         restaurant.create_services_for_week(
           fourth_week_of_calendar,
           service_template_services,
@@ -135,7 +150,7 @@ class Restaurant < ActiveRecord::Base
         )
       end
 
-      if params[:week_five]
+      if params[:week_five] || params[:whole_month]
         restaurant.create_services_for_week(
           fifth_week_of_calendar,
           service_template_services,
@@ -143,7 +158,7 @@ class Restaurant < ActiveRecord::Base
         )
       end
 
-      if params[:week_six] && (number_of_weeks_in_month == 6)
+      if (params[:week_six] || params[:whole_month]) && (number_of_weeks_in_month == 6)
         restaurant.create_services_for_week(
           sixth_week_of_calendar,
           service_template_services,

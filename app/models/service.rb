@@ -2,7 +2,7 @@ class Service < ActiveRecord::Base
 
   include Archiving
 
-  enum status: [ :complete ]
+  enum status: [ :complete, :available ]
 
   has_many :reservations
   belongs_to :restaurant
@@ -82,7 +82,12 @@ class Service < ActiveRecord::Base
       service.restaurant_id === restaurant_id 
 
       #update and save
-      service.complete!
+      if service.status == nil || service.status == "available"
+        service.complete!
+      else
+        service.available!
+      end
+
       service.save!
       return true
     else

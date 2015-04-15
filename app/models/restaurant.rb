@@ -28,6 +28,8 @@ class Restaurant < ActiveRecord::Base
   after_validation :reverse_geocode, if: :full_street_address_changed?
 
   after_save :create_new_wallet
+  #add services after creation
+  after_create :add_services_for_one_year_from_automation_template
 
   validates_presence_of :name, :principle_email
 
@@ -48,6 +50,7 @@ class Restaurant < ActiveRecord::Base
   def self.add_services_for_restaurants_if_first_of_month
     date = Time.new
     if date.midnight == date.beginning_of_month
+      puts "updating services..."
       Restaurant.add_services_for_one_year_for_all_restaurants
     else
       puts "no restaurants were added since it's not the first day of the month"
@@ -63,9 +66,11 @@ class Restaurant < ActiveRecord::Base
 
   #add services for one year for restaurant
   def add_services_for_one_year_from_automation_template
-
+    params = {}
     #set date and restaurant params
-    params[:date] = Time.new
+    date = Restaurant.turn_time_to_date_string Time.new
+    
+    params[:date] = Restaurant.get_date_from_string date
     params[:restaurant_id] = self.id
 
     #set service template id param
@@ -74,6 +79,14 @@ class Restaurant < ActiveRecord::Base
     Restaurant.use_template_to_create_services_for_12_months params
   end
 
+  #format time to be string eg. "2015-04-15" from time object (eg.Time.new)
+  def self.turn_time_to_date_string time
+    timeString = time.to_s     
+    timeArray = timeString.split("-") #eg. ["2015","04","15 14:49:25 +0200"]
+    dayArray = timeArray[2].split(" ") #eg. "15"
+
+    return timeArray[0].to_s + "-" + timeArray[1].to_s + "-" + dayArray[0].to_s
+  end
   #get template id that will be used to automate service creation
   def get_automation_service_template_id
     template_id = nil
@@ -225,7 +238,7 @@ class Restaurant < ActiveRecord::Base
                                restaurant_services)
 
     #create services for restaurant from template
-    service_template_services.each do |template_service|
+    service_template_services.all.each do |template_service|
       
       service_day = template_service.template_day
 
@@ -282,6 +295,7 @@ class Restaurant < ActiveRecord::Base
                service_start_time, 
                service_last_booking_time).any? ||
         service_start_time < Time.new
+
         #create service for restaurant
         self.services.create({
           availabilities: template_service.availabilities,
@@ -292,6 +306,9 @@ class Restaurant < ActiveRecord::Base
           nb_20: template_service.nb_20,
           nb_25: template_service.nb_25
         })
+        puts "created service for " + self.name + " from " + 
+             service_start_time.to_s + " to " + service_last_booking_time.to_s +
+             " from template id: " + template_service.service_template.id.to_s
       end
     end
   end

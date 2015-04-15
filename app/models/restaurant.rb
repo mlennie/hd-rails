@@ -43,6 +43,57 @@ class Restaurant < ActiveRecord::Base
     street + city + country + zipcode
   end
 
+  #add year's worth of services for all restaurants 
+  #if today is first day of month
+  def self.add_services_for_restaurants_if_first_of_month
+    date = Time.new
+    if date.midnight == date.beginning_of_month
+      Restaurant.add_services_for_one_year_for_all_restaurants
+    else
+      puts "no restaurants were added since it's not the first day of the month"
+    end
+  end
+
+  #add one years worth of services for all restaurants
+  def self.add_services_for_one_year_for_all_restaurants
+    Restaurant.get_unarchived.all.each do |restaurant|
+      restaurant.add_services_for_one_year_from_automation_template
+    end
+  end
+
+  #add services for one year for restaurant
+  def add_services_for_one_year_from_automation_template
+
+    #set date and restaurant params
+    params[:date] = Time.new
+    params[:restaurant_id] = self.id
+
+    #set service template id param
+    params[:service_template_id] = self.get_automation_service_template_id
+
+    Restaurant.use_template_to_create_services_for_12_months params
+  end
+
+  #get template id that will be used to automate service creation
+  def get_automation_service_template_id
+    template_id = nil
+
+    #get template from restaruant templates if exists
+    self.service_templates.get_unarchived.all.each do |template|
+      template_id = template.id if template.use_for_automation
+    end
+
+    #if restaurant did not have any automation templates, 
+    #get automation template id from master template
+    unless template_id != nil
+      template_id = ServiceTemplate.get_unarchived
+                     .where(restaurant_id: nil)
+                     .where(use_for_automation: true).first.id
+    end
+
+    return template_id
+  end
+
   def self.use_template_to_create_services_for_12_months params
     original_date = params[:date]
     12.times do |index|

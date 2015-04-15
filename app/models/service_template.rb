@@ -5,6 +5,10 @@ class ServiceTemplate < ActiveRecord::Base
 	has_many :services
 	belongs_to :restaurant
 
+	#if no other master templates are being used for automation (first template)
+	#change use_for_automation to true for this template
+	before_save :check_for_automation
+
 	#filter templates based on master templates (no restaurant id attached)
 	#or templates belonging to current restaurant (restaurant id that equals 
 		#current template restaurant id)
@@ -30,6 +34,20 @@ class ServiceTemplate < ActiveRecord::Base
 			s_ids << s.id unless s.archived? 
 		end
 		s_ids.any?
+	end
+
+	def check_for_automation
+		#return if not a master template
+		return if self.restaurant_id.present?
+
+		#check to see if there are any other master templates 
+		#being used for automation and return if so
+		master_templates = ServiceTemplate.where(restaurant_id: nil)
+		master_automation_templates = master_templates.where(use_for_automation: true)
+		return if master_automation_templates.any?
+
+		#if passes, set use_for_automation to true
+		self.use_for_automation = true
 	end
 
 	#use another template's services to create new services for current template

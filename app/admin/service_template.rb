@@ -1,5 +1,6 @@
 ActiveAdmin.register ServiceTemplate do
-  permit_params :name, :description, :restaurant_id, :restaurant
+  permit_params :name, :description, :restaurant_id, :restaurant, 
+                :use_for_automation
 
   belongs_to :restaurant, optional: true
 
@@ -91,6 +92,7 @@ ActiveAdmin.register ServiceTemplate do
       unless params[:restaurant_id]
         f.input :restaurant, label: "Restaurant (leave blank if this is a Master Template)"
       end
+      f.input :use_for_automation, label: "Use for automating service creation?"
     end
     f.actions
 

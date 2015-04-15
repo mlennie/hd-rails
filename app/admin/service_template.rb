@@ -34,6 +34,7 @@ ActiveAdmin.register ServiceTemplate do
       restaurant_id = params[:service_template][:restaurant_id]
       service_template_id = params[:id]
       other_template_id = params[:service_template_id]
+      use_for_automation = params[:use_for_automation]
 
       service_template = ServiceTemplate.find(service_template_id)
 
@@ -42,6 +43,7 @@ ActiveAdmin.register ServiceTemplate do
       service_template.name = name
       service_template.description = description
       service_template.restaurant_id = restaurant_id
+      service_template.use_for_automation = use_for_automation
 
       if service_template.save
         flash[:notice] = "You have successfully updated this template"
@@ -58,6 +60,7 @@ ActiveAdmin.register ServiceTemplate do
     id_column
     column :name
     column :description
+    column :use_for_automation
     column :restaurant
     column :created_at
     column :updated_at
@@ -89,10 +92,20 @@ ActiveAdmin.register ServiceTemplate do
     f.inputs "Tempalte Details" do
       f.input :name
       f.input :description
-      unless params[:restaurant_id]
+      #don't show restaurant select if came through a restaurant to get here.
+      #don't show if this is an edit page and there is only one service template
+      #or if this is a new page and there are not service templates yet (there should
+      #always be at least one master template)
+      unless params[:restaurant_id] || 
+        (params[:id] && 
+        ServiceTemplate.get_unarchived.where(restaurant_id: nil).count == 1 &&
+        ServiceTemplate.get_unarchived.find(params[:id]).restaurant_id.blank?) ||
+        ServiceTemplate.get_unarchived.count  == 0
         f.input :restaurant, label: "Restaurant (leave blank if this is a Master Template)"
       end
-      f.input :use_for_automation, label: "Use for automating service creation?"
+      unless params[:id] && ServiceTemplate.get_unarchived.find(params[:id]).restaurant_id.nil?
+        f.input :use_for_automation, label: "Use for automating service creation?"
+      end
     end
     f.actions
 

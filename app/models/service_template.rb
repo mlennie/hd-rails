@@ -37,6 +37,19 @@ class ServiceTemplate < ActiveRecord::Base
 	end
 
 	def check_for_automation
+		#remove other automations if this template has been chosen to replace
+		#others for automation
+		self.remove_other_automations_if_needed
+
+		#if no other master templates are being used for automation
+		#set this template true for automation
+		self.set_automation_if_first_master
+	end
+
+	def set_automation_if_first_master
+		#return if automation is already set to true
+		return if self.use_for_automation
+
 		#return if not a master template
 		return if self.restaurant_id.present?
 
@@ -48,6 +61,31 @@ class ServiceTemplate < ActiveRecord::Base
 
 		#if passes, set use_for_automation to true
 		self.use_for_automation = true
+	end
+
+	def remove_other_automations_if_needed
+		#return if template doesn't have automation set to true
+		return if !self.use_for_automation
+
+		#if restaurant template, remove automation from all other
+		#templates for same restaurant
+		if self.restaurant_id.present?
+			templates = ServiceTemplate.where(restaurant_id: self.restaurant_id)
+		else
+			#if master template, remove automation from all other master templates
+			templates = ServiceTemplate.where(restaurant_id: nil)
+		end
+		ServiceTemplate.change_automation_to_false_unless_current(self, templates)
+	end
+
+	#change all templates automation to false unless its the current_template
+	def self.change_automation_to_false_unless_current current_template, templates
+		templates.all.each do |template|
+			if template.use_for_automation && template != current_template
+				template.use_for_automation = false
+				template.save!
+			end
+		end
 	end
 
 	#use another template's services to create new services for current template

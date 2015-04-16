@@ -278,7 +278,9 @@ class Restaurant < ActiveRecord::Base
         service_month,
         service_day,
         service_start_hour,
-        service_start_minutes
+        service_start_minutes,
+        0,
+        '+2'
       )
 
       #create new end time date
@@ -287,7 +289,9 @@ class Restaurant < ActiveRecord::Base
         service_month,
         service_day,
         service_end_hour,
-        service_end_minutes
+        service_end_minutes,
+        0,
+        '+2'
       )
       
       #don't add services to days that already have services

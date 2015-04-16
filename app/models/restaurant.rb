@@ -271,7 +271,6 @@ class Restaurant < ActiveRecord::Base
       #last booking hour and minutes
       service_end_hour = template_service.last_booking_time.hour
       service_end_minutes = template_service.last_booking_time.min
-      binding.pry
 
       #create new start time date
       service_start_time = Time.zone.local(

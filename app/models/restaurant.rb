@@ -296,7 +296,7 @@ class Restaurant < ActiveRecord::Base
       unless restaurant_services.services_within_time_period(
                service_start_time, 
                service_last_booking_time).any? ||
-        service_start_time < Time.new
+        service_last_booking_time < Time.new
 
         #create service for restaurant
         self.services.create({

@@ -1,5 +1,5 @@
-- templates = ServiceTemplate.where(restaurant_id: nil)
-- ServiceTemplate.where(restaurant_id: restaurant.id).each { |t| templates << t }
+- templates = ServiceTemplate.get_unarchived.where(restaurant_id: nil)
+- ServiceTemplate.get_unarchived.where(restaurant_id: restaurant.id).each { |t| templates << t }
 - template_array = templates.map { |t| [ServiceTemplate.find(t.id).restaurant_id ? t.name : t.name + " (Master)", t.id] }
 #template-box
 	%h5 Update services using template?

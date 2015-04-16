@@ -11,7 +11,7 @@ unless AdminUser.any? || User.any?
     :email => "superman@gmail.com",
     :password => "kryptonring",
     :password_confirmation => "kryptonring",
-    :confirmed_at => Time.now, :confirmation_token => '1234567890',
+    :confirmed_at => Time.zone.now, :confirmation_token => '1234567890',
     first_name: "clark", last_name: 'Kent', gender: 'Male'
   )
 
@@ -28,7 +28,7 @@ unless AdminUser.any? || User.any?
   )
 
   #make unconfirmed user created at more that 1 day ago
-  unconfirmed_user.created_at = Time.now - 2.days
+  unconfirmed_user.created_at = Time.zone.now - 2.days
   unconfirmed_user.save!
 
   puts 'created unconfirmed user'
@@ -53,8 +53,8 @@ unless Restaurant.any?
     #1 to 3 pm service
     one_to_three_service = {
       availabilities: 99,
-      start_time: Time.now.midnight + 13.hours,
-      last_booking_time: Time.now.midnight + 15.hours,
+      start_time: Time.zone.now.midnight + 13.hours,
+      last_booking_time: Time.zone.now.midnight + 15.hours,
       nb_10: 99,
       nb_20: 2,
       nb_25: 1,
@@ -64,8 +64,8 @@ unless Restaurant.any?
     #5 to 10 pm service
     five_to_ten_service = {
       availabilities: 99,
-      start_time: Time.now.midnight + 17.hours,
-      last_booking_time: Time.now.midnight + 22.hours,
+      start_time: Time.zone.now.midnight + 17.hours,
+      last_booking_time: Time.zone.now.midnight + 22.hours,
       nb_10: 99,
       nb_15: 1,
       template_day: day
@@ -187,12 +187,12 @@ unless Restaurant.any?
       :email => "owner@#{r.name.gsub(/\s+/, "")}.com",
       :password => "123456",
       :password_confirmation => "123456",
-      :confirmed_at => Time.now, 
+      :confirmed_at => Time.zone.now, 
       :confirmation_token => "1234567890#{r.id}",
       gender: 'Male'
     )
     r.update(user_id: u.id)
-
+=begin
     #make a reservation for every day of the week for current restaruant
     7.times do |day_index|
 
@@ -202,8 +202,8 @@ unless Restaurant.any?
       #1 to 3 pm service
       one_to_three_service = {
         availabilities: 99,
-        start_time: Time.now.midnight + day_index.day + 13.hours,
-        last_booking_time: Time.now.midnight + day_index.day + 15.hours,
+        start_time: Time.zone.now.midnight + day_index.day + 13.hours,
+        last_booking_time: Time.zone.now.midnight + day_index.day + 15.hours,
         nb_10: 99,
         nb_20: 2,
         nb_25: 1
@@ -212,8 +212,8 @@ unless Restaurant.any?
       #5 to 10 pm service
       five_to_ten_service = {
         availabilities: 99,
-        start_time: Time.now.midnight + day_index.day + 17.hours,
-        last_booking_time: Time.now.midnight + day_index.day + 22.hours,
+        start_time: Time.zone.now.midnight + day_index.day + 17.hours,
+        last_booking_time: Time.zone.now.midnight + day_index.day + 22.hours,
         nb_10: 99,
         nb_15: 1
       }
@@ -252,8 +252,8 @@ unless Restaurant.any?
     #make past services
     one_to_three_yesterday_service = {
       availabilities: 99,
-      start_time: Time.now.midnight - 1.day + 13.hours,
-      last_booking_time: Time.now.midnight - 1.day + 15.hours,
+      start_time: Time.zone.now.midnight - 1.day + 13.hours,
+      last_booking_time: Time.zone.now.midnight - 1.day + 15.hours,
       nb_10: 99,
       nb_20: 2,
       nb_25: 1
@@ -261,8 +261,8 @@ unless Restaurant.any?
     #5 to 10 pm service
     five_to_ten_yesterday_service = {
       availabilities: 99,
-      start_time: Time.now.midnight - 1.day + 17.hours,
-      last_booking_time: Time.now.midnight - 1.day + 22.hours,
+      start_time: Time.zone.now.midnight - 1.day + 17.hours,
+      last_booking_time: Time.zone.now.midnight - 1.day + 22.hours,
       nb_10: 99,
       nb_15: 1
     }
@@ -293,6 +293,7 @@ unless Restaurant.any?
     r.reservations.create!(reservation_day_params)
 
     puts 'created services and reservations for ' + Restaurant.find(r.id).name
+=end
 
     #create menu for restaurant with menu items
     #setup params

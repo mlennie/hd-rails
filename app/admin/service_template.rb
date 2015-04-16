@@ -34,7 +34,7 @@ ActiveAdmin.register ServiceTemplate do
       restaurant_id = params[:service_template][:restaurant_id]
       service_template_id = params[:id]
       other_template_id = params[:service_template_id]
-      use_for_automation = params[:use_for_automation]
+      use_for_automation = params[:service_template][:use_for_automation]
 
       service_template = ServiceTemplate.find(service_template_id)
 
@@ -72,6 +72,7 @@ ActiveAdmin.register ServiceTemplate do
       row :name
       row :description
       row :restaurant
+      row :use_for_automation
     end
     days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
 

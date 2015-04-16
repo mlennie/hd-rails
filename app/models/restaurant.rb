@@ -271,27 +271,26 @@ class Restaurant < ActiveRecord::Base
       #last booking hour and minutes
       service_end_hour = template_service.last_booking_time.hour
       service_end_minutes = template_service.last_booking_time.min
+      binding.pry
 
       #create new start time date
-      service_start_time = DateTime.new(
+      service_start_time = Time.zone.local(
         service_year,
         service_month,
         service_day,
         service_start_hour,
         service_start_minutes,
-        0,
-        '+2'
+        0
       )
 
       #create new end time date
-      service_last_booking_time = DateTime.new(
+      service_last_booking_time = Time.zone.local(
         service_year,
         service_month,
         service_day,
         service_end_hour,
         service_end_minutes,
-        0,
-        '+2'
+        0
       )
       
       #don't add services to days that already have services

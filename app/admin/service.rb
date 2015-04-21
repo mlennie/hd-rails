@@ -12,9 +12,9 @@ ActiveAdmin.register Service do
 
   batch_action :use_templates_for_services do 
     params[:date] = Restaurant.get_date_from_string params[:date]
-    unless params[:whole_year] || params[:week_one] || params[:week_two] || 
-           params[:week_three] || params[:week_four] || params[:week_five] ||
-           params[:week_six] || params[:whole_month]
+    if !params[:whole_year] && !params[:week_one] && !params[:week_two] &&
+           !params[:week_three] && !params[:week_four] && !params[:week_five] &&
+           !params[:week_six] && !params[:whole_month]
       flash[:danger] = "Please select and option"
     elsif params[:whole_year]
       if Restaurant.use_template_to_create_services_for_12_months params

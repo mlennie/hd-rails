@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     roles.include? Role.superadmin
   end
 
+  def is_owner?
+    roles.include? Role.owner
+  end
+
   def full_name
     unless first_name.blank? || last_name.blank?
       first_name + " " + last_name

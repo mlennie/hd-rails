@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :restaurants, only: [:index]
   resources :services, only: [:index, :update]
   resources :reservations, only: [:index,:create, :update]
+  resources :transactions, only: [:index]
 
   get 'resend_confirmation', to: 'users#resend_confirmation', 
                              as: 'resend_confirmation'

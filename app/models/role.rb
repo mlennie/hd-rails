@@ -5,4 +5,8 @@ class Role < ActiveRecord::Base
   def self.superadmin
     find_by(name: "superadmin")
   end
+
+  def self.owner
+    find_by(name: "owner")
+  end
 end

@@ -31,19 +31,38 @@ ActiveAdmin.register Reservation do
         #and discounts available
         service = Service.find(params[:reservation][:service_id])
 
-        params[:reservation][:restaurant_id] = service.restaurant.id
+        #check if admin chose proper time and warn if didn't
+        start_time = service.start_time
+        end_time = service.last_booking_time
+        date_array = params[:reservation][:time_date].split('-')
+        year = date_array[0]
+        month = date_array[1]
+        day = date_array[2]
+        hour = params[:reservation][:time_time_hour]
+        minutes = params[:reservation][:time_time_minute]
+        reservation_time = Time.zone.local(year,month,day,hour,minutes)
 
-        if service && service.current_discount > 0
-          #set discount from service's current discount
-          #unless user uses their euros (user_contribution is not 0)
-          
-          if params[:reservation][:user_contribution] == "0" 
-            params[:reservation][:discount] = service.current_discount
+        #check if admin chose proper time and warn if didn't
+        if reservation_time > start_time && reservation_time < end_time
+          params[:reservation][:restaurant_id] = service.restaurant.id
+
+          if service && service.current_discount > 0
+            #set discount from service's current discount
+            #unless user uses their euros (user_contribution is not 0)
+            
+            if params[:reservation][:user_contribution] == "0" 
+              params[:reservation][:discount] = service.current_discount
+            end
+            super
+          else
+            flash[:danger] = "Could not create reservation. The service selected " +
+                        "does not have anymore availabilities and/or discounts left"
+            redirect_to new_admin_reservation_path(
+              service_id: params[:reservation][:service_id]
+            )
           end
-          super
         else
-          flash[:danger] = "Could not create reservation. The service selected " +
-                      "does not have anymore availabilities and/or discounts left"
+          flash[:danger] = "date and time must be within service date and time"
           redirect_to new_admin_reservation_path(
             service_id: params[:reservation][:service_id]
           )

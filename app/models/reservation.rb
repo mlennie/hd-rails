@@ -71,6 +71,16 @@ class Reservation < ActiveRecord::Base
     return r_ids    
   end
 
+  def self.not_cancelled
+    r_ids = []
+    self.all.each do |r|
+      if r.status != "cancelled"    
+        r_ids << r.id    
+      end  
+    end
+    self.where(id: r_ids)
+  end
+
   def self.in_progress 
     self.where(id: get_in_progress_ids)
   end
@@ -240,9 +250,7 @@ class Reservation < ActiveRecord::Base
     service = self.service
     #get spots already taken
     availabilities = service.availabilities
-    spots_taken = service.reservations.get_unarchived.where(
-                    "status != ?", Reservation.statuses[:cancelled]
-                  ).count
+    spots_taken = service.reservations.get_unarchived.not_cancelled.count
 
     #get percentage availabilites
     number_of_ten_available = service.nb_10
@@ -265,6 +273,7 @@ class Reservation < ActiveRecord::Base
     else
       discount = 0.10
     end
+    
     service.update(current_discount: discount)
   end
 

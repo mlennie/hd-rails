@@ -11,7 +11,7 @@ class Service < ActiveRecord::Base
   just_define_datetime_picker :start_time
   just_define_datetime_picker :last_booking_time
 
-  before_save :update_current_discount
+  #before_save :update_current_discount
 
   
   def self.future_with_availabilities

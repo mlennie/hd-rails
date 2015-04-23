@@ -101,6 +101,13 @@ ActiveAdmin.register Service do
     end
   end
 
+  sidebar "Services and Reservations", only: [:show] do
+    ul do
+      li link_to "Reservations",    admin_reservations_path(service_id: service.id)
+      li link_to "New Reservation", new_admin_reservation_path(service_id: service.id)
+    end
+  end
+
   index do
     render partial: "service_calendar", locals: { restaurant: Restaurant.find(params[:restaurant_id]) }
   end

@@ -20,9 +20,38 @@ ActiveAdmin.register Reservation do
     end
 
     def create
-      params[:reservation][:user_id] = params[:user_id]
-      params.delete(:user_id)
-      super
+
+      if params[:reservation][:service_id]
+
+        if params[:reservation][:user_contribution].empty?
+          params[:reservation][:user_contribution] = "0" 
+        end
+
+        #get service and check that there are still availabilities 
+        #and discounts available
+        service = Service.find(params[:reservation][:service_id])
+
+        params[:reservation][:restaurant_id] = service.restaurant.id
+
+        if service && service.current_discount > 0
+          #set discount from service's current discount
+          #unless user uses their euros (user_contribution is not 0)
+          
+          if params[:reservation][:user_contribution] == "0" 
+            params[:reservation][:discount] = service.current_discount
+          end
+          super
+        else
+          flash[:danger] = "Could not create reservation. The service selected " +
+                      "does not have anymore availabilities and/or discounts left"
+          redirect_to new_admin_reservation_path(
+            service_id: params[:reservation][:service_id]
+          )
+        end
+      else
+        flash[:danger] = "Please select a service first"
+        redirect_to new_admin_reservation_path
+      end
     end
 
     def update
@@ -103,6 +132,12 @@ ActiveAdmin.register Reservation do
   filter :updated_at
 
   form do |f|
+
+    #check if admin is coming from a service (if service_id params is present)
+    if params[:service_id]
+      service = Service.find(params[:service_id])
+      restaurant = service.restaurant
+    end
     if User.exists_and_has_names? params
       user = User.find(params[:user_id])
       for_user = user.first_name + ' ' + user.last_name
@@ -112,16 +147,20 @@ ActiveAdmin.register Reservation do
     f.inputs "New reservation #{for_user}" do
       f.input :nb_people
       f.input :time, :as => :just_datetime_picker
-      if f.object.new_record?
-        f.input :restaurant, required: true
+      if f.object.new_record? 
+        if params[:service_id]
+          f.input :service_id, input_html: {value: service.id, hidden: true}, label: false
+        else
+          f.input :restaurant, required: true
+        end
         unless params[:user_id].present?
           f.input :user
         end
       end
       #f.input :service_id
-      f.input :discount, :as => :select, 
-              :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
-              ['25%', 0.25], ['30%', 0.30]]
+      #f.input :discount, :as => :select, 
+       #       :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
+        #      ['25%', 0.25], ['30%', 0.30]]
       f.input :user_contribution
       f.input :booking_name
       if !f.object.new_record?

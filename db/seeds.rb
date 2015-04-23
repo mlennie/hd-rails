@@ -192,7 +192,11 @@ unless Restaurant.any?
       gender: 'Male'
     )
     r.update(user_id: u.id)
-=begin
+
+    #delete services so doesn' interfere with the services with reservations 
+    #(next) and then add services for year again at end
+    r.services.destroy_all
+
     #make a reservation for every day of the week for current restaruant
     7.times do |day_index|
 
@@ -293,7 +297,6 @@ unless Restaurant.any?
     r.reservations.create!(reservation_day_params)
 
     puts 'created services and reservations for ' + Restaurant.find(r.id).name
-=end
 
     #create menu for restaurant with menu items
     #setup params
@@ -317,6 +320,9 @@ unless Restaurant.any?
   end
 
   puts 'created owners, services and menus for restaurants'
+
+  #add back services for year
+  Restaurant.add_services_for_one_year_for_all_restaurants
 end
 
 

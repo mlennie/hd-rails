@@ -177,15 +177,17 @@ ActiveAdmin.register Reservation do
         end
       end
       #f.input :service_id
-      #f.input :discount, :as => :select, 
-       #       :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
-        #      ['25%', 0.25], ['30%', 0.30]]
+      unless f.object.new_record? 
+        f.input :discount, :as => :select, 
+              :collection => [['0%',0.0], ['10%', 0.10], ['15%', 0.15], ['20%', 0.20],
+              ['25%', 0.25], ['30%', 0.30]]
+      end
       f.input :user_contribution
       f.input :booking_name
       if !f.object.new_record?
         f.input :bill_amount
         f.input :status, :as => :select, 
-                :collection => ['validated', 'absent', 'cancelled']
+                :collection => ['pending_confirmation', 'validated', 'absent', 'cancelled']
         f.input :viewed_at
         f.input :cancelled_at
         f.input :validated_at

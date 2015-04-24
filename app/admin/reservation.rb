@@ -20,56 +20,43 @@ ActiveAdmin.register Reservation do
     end
 
     def create
+      binding.pry
+      params[:reservation][:user_id] = params[:user_id]
+      params.delete(:user_id)
 
-      if params[:reservation][:service_id]
+      if params[:reservation][:user_contribution].empty?
+        params[:reservation][:user_contribution] = "0" 
+      end
 
-        if params[:reservation][:user_contribution].empty?
-          params[:reservation][:user_contribution] = "0" 
-        end
+      #get reservation time
+      date_array = params[:reservation][:time_date].split('-')
+      year = date_array[0]
+      month = date_array[1]
+      day = date_array[2]
+      hour = params[:reservation][:time_time_hour]
+      minutes = params[:reservation][:time_time_minute]
+      reservation_time = Time.zone.local(year,month,day,hour,minutes)
 
-        #get service and check that there are still availabilities 
-        #and discounts available
-        service = Service.find(params[:reservation][:service_id])
+      #get service and check that there are still availabilities 
+      #and discounts available
+      params[:reservation][:time] = reservation_time
+      service = Service.get_service params
+      params[:reservation].delete(:time)
 
-        #check if admin chose proper time and warn if didn't
-        start_time = service.start_time
-        end_time = service.last_booking_time
-        date_array = params[:reservation][:time_date].split('-')
-        year = date_array[0]
-        month = date_array[1]
-        day = date_array[2]
-        hour = params[:reservation][:time_time_hour]
-        minutes = params[:reservation][:time_time_minute]
-        reservation_time = Time.zone.local(year,month,day,hour,minutes)
-
-        #check if admin chose proper time and warn if didn't
-        if reservation_time > start_time && reservation_time < end_time
-          params[:reservation][:restaurant_id] = service.restaurant.id
-
-          if service && service.current_discount > 0
-            #set discount from service's current discount
-            #unless user uses their euros (user_contribution is not 0)
-            
-            if params[:reservation][:user_contribution] == "0" 
-              params[:reservation][:discount] = service.current_discount
-            end
-            super
-          else
-            flash[:danger] = "Could not create reservation. The service selected " +
-                        "does not have anymore availabilities and/or discounts left"
-            redirect_to new_admin_reservation_path(
-              service_id: params[:reservation][:service_id]
-            )
-          end
+      if service && service.current_discount > 0
+        params[:reservation][:service_id] = service.id
+        #set discount from service's current discount
+        #unless user uses their euros (user_contribution is not 0)
+        
+        if params[:reservation][:user_contribution] == "0" 
+          params[:reservation][:discount] = service.current_discount
         else
-          flash[:danger] = "date and time must be within service date and time"
-          redirect_to new_admin_reservation_path(
-            service_id: params[:reservation][:service_id]
-          )
+          params[:reservation][:discount] = 0.0
         end
+        super
       else
-        flash[:danger] = "Please select a service first"
-        redirect_to new_admin_reservation_path
+        flash[:danger] = "Could not find service with availabilities during selected times"
+        redirect_to new_admin_user_reservation_path(User.find(params[:reservation][:user_id]))
       end
     end
 
@@ -152,12 +139,7 @@ ActiveAdmin.register Reservation do
 
   form do |f|
 
-    #check if admin is coming from a service (if service_id params is present)
-    if params[:service_id]
-      service = Service.find(params[:service_id])
-      restaurant = service.restaurant
-    end
-    if User.exists_and_has_names? params
+   if User.exists_and_has_names? params
       user = User.find(params[:user_id])
       for_user = user.first_name + ' ' + user.last_name
     else
@@ -166,12 +148,8 @@ ActiveAdmin.register Reservation do
     f.inputs "New reservation #{for_user}" do
       f.input :nb_people
       f.input :time, :as => :just_datetime_picker
-      if f.object.new_record? 
-        if params[:service_id]
-          f.input :service_id, input_html: {value: service.id, hidden: true}, label: false
-        else
-          f.input :restaurant, required: true
-        end
+      if f.object.new_record?
+        f.input :restaurant, required: true
         unless params[:user_id].present?
           f.input :user
         end

@@ -113,7 +113,7 @@ class Service < ActiveRecord::Base
     restaurant = Restaurant.find(params[:reservation][:restaurant_id].to_i)
     
     #get service based on times
-    service = restaurant.services.where(
+    service = restaurant.services.get_unarchived.where(
       "start_time <= :time AND last_booking_time >= :time",
       { time: params[:reservation][:time] }
     ).first

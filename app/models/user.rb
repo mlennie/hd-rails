@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     roles.include? Role.superadmin
   end
 
+  def check_contribution contribution
+    self.wallet.balance >= contribution
+  end
+
   def is_owner?
     self.roles.where(name: 'owner').any?
   end

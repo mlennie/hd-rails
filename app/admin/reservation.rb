@@ -20,12 +20,17 @@ ActiveAdmin.register Reservation do
     end
 
     def create
-      binding.pry
       params[:reservation][:user_id] = params[:user_id]
       params.delete(:user_id)
 
       if params[:reservation][:user_contribution].empty?
         params[:reservation][:user_contribution] = "0" 
+      else
+        #make sure user has enough money to spend this amount
+        unless User.find(params[:reservation][:user_id]).check_contribution(params[:reservation][:user_contribution].to_f)
+          flash[:danger] = "User does not have enough to spend this amount."
+          return redirect_to new_admin_user_reservation_path(User.find(params[:reservation][:user_id]))
+        end
       end
 
       #get reservation time

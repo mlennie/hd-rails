@@ -34,8 +34,7 @@ unless AdminUser.any? || User.any?
   puts 'created unconfirmed user'
 end
 
-unless Restaurant.any?
-
+unless ServiceTemplate.any?
   #SERVICE TEMPLATES
 
   #create a service template
@@ -77,6 +76,9 @@ unless Restaurant.any?
   end
 
   puts 'created master service template'
+end
+
+unless Restaurant.any?
 
   #
   #cuisines
@@ -321,8 +323,9 @@ unless Restaurant.any?
 
   puts 'created owners, services and menus for restaurants'
 
-  #add back services for year
-  Restaurant.add_services_for_one_year_for_all_restaurants
 end
+
+#add back services for year
+Restaurant.add_services_for_one_year_for_all_restaurants
 
 

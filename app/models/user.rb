@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   has_one :referral_transaction, as: :itemable
   has_one :preferences
 
+  attr_accessor :restaurant
+
 
   def is_superadmin?
     roles.include? Role.superadmin
@@ -39,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def is_owner?
-    self.roles.where(name: 'owner').any?
+    self.restaurants.any?
   end
 
   def full_name

@@ -9,7 +9,24 @@ ActiveAdmin.register User do
     end
 
     def create
-      user = User.new permitted_params[:user]
+    
+      #make owner and don't send confirmation email if a 
+      #restaurant was selected
+      if restaurant_id = params[:user][:restaurant]
+
+        #delete restaurant param so does not interfere later
+        params[:user].delete(:restaurant)
+
+        #build new user
+        user = User.new permitted_params[:user]
+        restaurant = Restaurant.find(restaurant_id)
+        user.restaurants << restaurant
+        user.confirmed_at = Time.new
+        user.skip_confirmation!
+      else #user is not an owner since no restaurant was selected
+        user = User.new permitted_params[:user]
+      end
+
       if user.save
 
         #MIXPANEL: add registration event
@@ -112,6 +129,8 @@ ActiveAdmin.register User do
       f.input :last_name
       f.input :first_name
       f.input :email
+      f.input :restaurant, as: :select, collection: Restaurant.get_unarchived.where(user_id: nil),
+              label: "Restaurant (select to make user owner and not send confirmation email)"
       f.input :password
       f.input :password_confirmation
       f.input :phone

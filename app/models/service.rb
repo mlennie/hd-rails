@@ -11,6 +11,8 @@ class Service < ActiveRecord::Base
   just_define_datetime_picker :start_time
   just_define_datetime_picker :last_booking_time
 
+  after_create :update_current_discount
+
   
   def self.future_with_availabilities
     self.today_or_future.where(
@@ -120,6 +122,37 @@ class Service < ActiveRecord::Base
 
     #update service params
     return service
+  end
+
+  def update_current_discount
+    service = self
+    #get spots already taken
+    availabilities = service.availabilities
+    spots_taken = service.reservations.get_unarchived.not_cancelled.count
+
+    #get percentage availabilites
+    number_of_ten_available = service.nb_10
+    number_of_fifteen_available = service.nb_15
+    number_of_twenty_available = service.nb_20
+    number_of_twenty_five_available = service.nb_25
+
+    #get new current discount
+    #return 0 if no spots left
+    if spots_taken >= availabilities 
+      discount = 0
+    #start highest to lowest percentages 
+    #to see which percentage is still available 
+    elsif spots_taken < number_of_twenty_five_available
+      discount = 0.25
+    elsif spots_taken < number_of_twenty_available
+      discount = 0.20
+    elsif spots_taken < number_of_fifteen_available
+      discount = 0.15
+    else
+      discount = 0.10
+    end
+    
+    service.update(current_discount: discount)
   end
 
   def service_params

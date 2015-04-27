@@ -270,7 +270,7 @@ class Reservation < ActiveRecord::Base
       elsif spots_taken < number_of_twenty_available
         discount = 0.20
       elsif spots_taken < number_of_fifteen_available
-        disccount = 0.15
+        discount = 0.15
       else
         discount = 0.10
       end

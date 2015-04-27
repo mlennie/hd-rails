@@ -333,8 +333,8 @@ Restaurant.add_services_for_one_year_for_all_restaurants
 reservations = Reservation.get_unarchived.where(status: nil)
 reservations.all.each do |reservation|
   reservation.validated! if reservation.transactions.any?
-  puts "validated all reservations with transactions that didn't have a status"
 end
+puts "validated all reservations with transactions that didn't have a status"
 
 
 

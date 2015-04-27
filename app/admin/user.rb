@@ -41,7 +41,7 @@ ActiveAdmin.register User do
         })
 
         #flash notice and redirect
-        flash[:success] = "You have successfully created this user"
+        flash[:notice] = "You have successfully created this user"
         redirect_to admin_user_path user
       else
         flash[:danger] = "Zut!! User could not be saved! Please make sure email is not already used and that all required fields are filled"

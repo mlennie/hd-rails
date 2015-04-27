@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   after_create :create_new_preferences
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable,
-         :validatable, :confirmable, :lockable
+         :validatable, :confirmable #, :lockable
 
   validates_presence_of :last_name, :first_name, :email, :gender
   validates_inclusion_of :gender, in: ["Male", "Female"]

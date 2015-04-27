@@ -248,33 +248,35 @@ class Reservation < ActiveRecord::Base
   #or when one is cancelled
   def update_current_discount_to_service
     service = self.service
-    #get spots already taken
-    availabilities = service.availabilities
-    spots_taken = service.reservations.get_unarchived.not_cancelled.count
+    if service
+      #get spots already taken
+      availabilities = service.availabilities
+      spots_taken = service.reservations.get_unarchived.not_cancelled.count
 
-    #get percentage availabilites
-    number_of_ten_available = service.nb_10
-    number_of_fifteen_available = service.nb_15
-    number_of_twenty_available = service.nb_20
-    number_of_twenty_five_available = service.nb_25
+      #get percentage availabilites
+      number_of_ten_available = service.nb_10
+      number_of_fifteen_available = service.nb_15
+      number_of_twenty_available = service.nb_20
+      number_of_twenty_five_available = service.nb_25
 
-    #get new current discount
-    #return 0 if no spots left
-    if spots_taken >= availabilities 
-      discount = 0
-    #start highest to lowest percentages 
-    #to see which percentage is still available 
-    elsif spots_taken < number_of_twenty_five_available
-      discount = 0.25
-    elsif spots_taken < number_of_twenty_available
-      discount = 0.20
-    elsif spots_taken < number_of_fifteen_available
-      disccount = 0.15
-    else
-      discount = 0.10
+      #get new current discount
+      #return 0 if no spots left
+      if spots_taken >= availabilities 
+        discount = 0
+      #start highest to lowest percentages 
+      #to see which percentage is still available 
+      elsif spots_taken < number_of_twenty_five_available
+        discount = 0.25
+      elsif spots_taken < number_of_twenty_available
+        discount = 0.20
+      elsif spots_taken < number_of_fifteen_available
+        disccount = 0.15
+      else
+        discount = 0.10
+      end
+      
+      service.update(current_discount: discount)
     end
-    
-    service.update(current_discount: discount)
   end
 
   #send email to restaurant 1 hour 45 minutes after reservation starts

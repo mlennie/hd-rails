@@ -328,4 +328,14 @@ end
 #add back services for year
 Restaurant.add_services_for_one_year_for_all_restaurants
 
+# mark production reservations with transactions as validated since they were
+#not all updated before
+reservations = Reservation.get_unarchived.where(status: nil)
+reservations.all.each do |reservation|
+  reservation.validated! if reservation.transactions.any?
+  puts "validated all reservations with transactions that didn't have a status"
+end
+
+
+
 

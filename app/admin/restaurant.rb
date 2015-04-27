@@ -74,6 +74,12 @@ ActiveAdmin.register Restaurant do
       end
       cuisines.join(', ')
     end
+    column :owner do |restaurant|
+      owner = restaurant.user
+      if owner
+        link_to owner.full_name, admin_user_path(owner)
+      end 
+    end
     column :img_url
     column :owner_name
     column :responsable_name

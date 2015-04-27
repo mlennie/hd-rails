@@ -88,6 +88,15 @@ ActiveAdmin.register User do
       end
     end
     column :email
+    column :owner do |user|
+      user.restaurants.any? ? 'Yes' : 'No'
+    end
+    column :restaurant do |user|
+      restaurant = user.restaurants.get_unarchived.first
+      if restaurant
+        link_to restaurant.name, admin_restaurant_path(restaurant.id)
+      end 
+    end
     column :phone
     column :birth_date
     column :gender

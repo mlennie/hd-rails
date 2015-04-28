@@ -66,7 +66,7 @@ ActiveAdmin.register Invoice do
       else 
         restaurant_id = params[:restaurant_id] 
         restaurant = Restaurant.find(restaurant_id)
-        start_date = restaurant.get_invoice_start_date.to_date
+        start_date = restaurant.get_invoice_start_date
         f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
         end_date_array = restaurant.get_invoice_end_date_array
         f.input :end_date, as: :select, collection: end_date_array

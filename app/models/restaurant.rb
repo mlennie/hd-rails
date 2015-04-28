@@ -57,9 +57,10 @@ class Restaurant < ActiveRecord::Base
       #loop through months adding each one to array and then going back 
       #another month until reaching starting month
       current_date = last_month_end_date
-      while current_date.month >= start_date.month
-        date_array << current_date.end_of_month
-        current_date = current_date - 1.month
+      while current_date >= start_date
+        date_array << current_date.end_of_month.to_date
+        current_date -= 1.month 
+        current_date = current_date.end_of_month
       end
       return date_array
     end

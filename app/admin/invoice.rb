@@ -1,6 +1,7 @@
 ActiveAdmin.register Invoice do
   permit_params :previous_balance, :additional_balance, :hd_percent, :due_date,
-  							:date_paid, :confirmation, :total_amount_paid, :restaurant_id
+  							:date_paid, :confirmation, :total_amount_paid, :restaurant_id,
+                :start_date, :end_date
 
   belongs_to :restaurant, optional: true
 
@@ -11,9 +12,14 @@ ActiveAdmin.register Invoice do
 
     def create
 
-      if params[:invoice][:restaurant_id] || params[:restaurant_id]
+      if params[:invoice][:restaurant_id].present? || params[:restaurant_id].present?
         restaurant_id = params[:invoice][:restaurant_id] || params[:restaurant_id]
         if params[:invoice][:start_date] && params[:invoice][:end_date]
+
+        else
+          flash[:notice] = "Please select an end date"
+          redirect_to new_admin_restaurant_invoice_path restaurant_id
+        end
       else
         flash[:danger] = "Please select a restaurant"
         redirect_to new_admin_invoice_path
@@ -55,12 +61,15 @@ ActiveAdmin.register Invoice do
 
   form do |f|
     f.inputs "Invoice Details" do
-      unless params[:restaurant_id]
+      unless params[:restaurant_id] 
         f.input :restaurant
-      end
-      if params[:restaurant_id]
-        restaurant = Restaurant.find(params[:restaurant_id])
-        start_date = restaurant.get_invoice_start_date
+      else 
+        restaurant_id = params[:restaurant_id] 
+        restaurant = Restaurant.find(restaurant_id)
+        start_date = restaurant.get_invoice_start_date.to_date
+        f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
+        end_date_array = restaurant.get_invoice_end_date_array
+        f.input :end_date, as: :select, collection: end_date_array
       end
     end
     f.actions

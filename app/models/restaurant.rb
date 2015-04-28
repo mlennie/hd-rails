@@ -29,6 +29,17 @@ class Restaurant < ActiveRecord::Base
     Wallet.create_for_concernable self
   end
 
+  #get invoice start date for when creating invoices
+  def get_invoice_start_date
+    #check if has invoices already or not
+    if self.invoices.get_unarchived.any?
+
+    else
+      #if doesn't have invoices yet, get created at date
+      return self.created_at
+    end
+  end
+
   def full_address
     street + ', ' + city + ', ' + zipcode
   end

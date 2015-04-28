@@ -9,6 +9,17 @@ ActiveAdmin.register Invoice do
       Invoice.get_unarchived
     end
 
+    def create
+
+      if params[:invoice][:restaurant_id] || params[:restaurant_id]
+        restaurant_id = params[:invoice][:restaurant_id] || params[:restaurant_id]
+        if params[:invoice][:start_date] && params[:invoice][:end_date]
+      else
+        flash[:danger] = "Please select a restaurant"
+        redirect_to new_admin_invoice_path
+      end
+    end
+
     def destroy
       r = Invoice.find(params[:id])
       r.archive
@@ -44,14 +55,13 @@ ActiveAdmin.register Invoice do
 
   form do |f|
     f.inputs "Invoice Details" do
-      f.input :previous_balance
-			f.input :additional_balance
-			f.input :hd_percent
-			f.input :due_date
-			f.input :date_paid
-			f.input :confirmation
-			f.input :total_amount_paid
-			f.input :restaurant_id
+      unless params[:restaurant_id]
+        f.input :restaurant
+      end
+      if params[:restaurant_id]
+        restaurant = Restaurant.find(params[:restaurant_id])
+        start_date = restaurant.get_invoice_start_date
+      end
     end
     f.actions
  end

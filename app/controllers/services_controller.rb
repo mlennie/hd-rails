@@ -4,8 +4,13 @@ class ServicesController < ApplicationController
 	def index
 		if user_signed_in?
 			if (restaurant = Restaurant.find(params[:restaurant_id]))
-				services = restaurant.services.get_unarchived.future_with_availabilities
-				render json: services, status: 200
+				#if this is for an owner, don't get more than needed
+				if restaurant.user == current_user
+					services = restaurant.services.get_unarchived.future_with_availabilities.first(30)
+				else
+					services = restaurant.services.get_unarchived.future_with_availabilities
+				end
+				render json: services
 			else
 				head 422
 			end

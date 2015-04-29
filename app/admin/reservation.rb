@@ -20,8 +20,13 @@ ActiveAdmin.register Reservation do
     end
 
     def create
-      params[:reservation][:user_id] = params[:user_id]
-      params.delete(:user_id)
+      #if created reservation through a user (if params[:user_id] present)
+      #then move it within reservation param (like if admin when to new 
+      #reservation page directly and selected a user)
+      if params[:user_id]
+        params[:reservation][:user_id] = params[:user_id]
+        params.delete(:user_id)
+      end
 
       if params[:reservation][:user_contribution].empty?
         params[:reservation][:user_contribution] = "0" 

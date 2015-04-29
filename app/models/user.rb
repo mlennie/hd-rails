@@ -37,7 +37,19 @@ class User < ActiveRecord::Base
   end
 
   def check_contribution contribution
-    self.wallet.balance >= contribution
+    #check if user has money
+    if self.wallet.balance.present?
+      #check if user's money is greater or equal 
+      #to contribution
+      self.wallet.balance >= contribution
+    else
+      if contribution == 0.0
+        return true
+      else
+        return false
+      end
+    end
+
   end
 
   def is_owner?

@@ -109,7 +109,9 @@ class Restaurant < ActiveRecord::Base
 
   def self.use_template_to_create_services_for_12_months params
     original_date = params[:date]
-    12.times do |index|
+    #12 months made too many services so I changed the amount to 3 below
+    #to change back to twelve months, change 3 to 12
+    3.times do |index|
       date = original_date + index.months
       params[:date] = date
       params[:whole_month] = true

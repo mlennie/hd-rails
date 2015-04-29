@@ -138,8 +138,10 @@ ActiveAdmin.register User do
       f.input :last_name
       f.input :first_name
       f.input :email
-      f.input :restaurant, as: :select, collection: Restaurant.get_unarchived.where(user_id: nil),
+      if f.object.new_record? 
+        f.input :restaurant, as: :select, collection: Restaurant.get_unarchived.where(user_id: nil),
               label: "Restaurant (select to make user owner and not send confirmation email)"
+      end
       f.input :password
       f.input :password_confirmation
       f.input :phone

@@ -1,0 +1,35 @@
+//add inline styling so can use in email also (wouldn't work if I used haml's :css )
+%div(style="background-color: #fff; width: 700px; min-height: 600px; margin: 30px;")
+	%div
+		%img(src="https://res.cloudinary.com/happydining/image/upload/c_scale,h_100,w_167/v1430398691/Screen_Shot_2015-04-30_at_2.56.30_PM_idm9ik.png" style="margin: 20px;")
+		%div(style="background-color: #4984CB; float: right; width: 200px; height: 40px; margin: 20px; padding: 10px 20px;")
+			%h1(style="text-transform: uppercase; color: #000; text-align: center;") Facture
+	%div
+		%div(style=" float: right; margin-right: 80px;")
+			- address = invoice[:business_address]
+			%strong A l'intention du gérant.
+			%p= address[:company]
+			%p= address[:street]
+			%p= address[:zipcode]
+			%p= address[:city]
+		%div(style="margin: 20px;")
+			%strong SAS Happy Dining
+			%p 106 Boulevard Pereire
+			%p 75017, PARIS
+			%p Tél : 06-25-94-09-95
+			%p hello@happydining.fr
+			%p Nom du contact : Maxime Nouchi
+	%div(style="background-color: #4984CB; width: 200px; height: 40px; padding: 20px; margin: 20px;")
+		%p 
+			Date : 
+			= Time.new.to_date
+		%p
+			Période : 
+			= invoice[:start_date]
+			= "-"
+			= invoice[:end_date]
+		%p
+			N° client : 
+			= invoice[:client_number] 
+
+		

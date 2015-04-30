@@ -94,7 +94,8 @@ class Restaurant < ActiveRecord::Base
     invoice[:start_date] = params[:start_date].to_date
     invoice[:end_date] = params[:end_date].to_date
     invoice[:business_address] = restaurant.billing_address
-    binding.pry
+    invoice[:client_number] = "A000" + restaurant.id.to_s
+    return invoice
   end
 
   def full_address

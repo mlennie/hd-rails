@@ -45,7 +45,13 @@ unless Restaurant.all.any?
     zipcode: '75017',
     city: 'Paris', 
     street: '223 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Grand Bistro",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    created_at: Time.new - 4.months
   )
 
   Restaurant.create(
@@ -55,7 +61,12 @@ unless Restaurant.all.any?
     zipcode: '75017',
     city: 'Paris', 
     street: '623 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Grand Bistro",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France"
   )
 
   Restaurant.create(
@@ -65,7 +76,12 @@ unless Restaurant.all.any?
     zipcode: '75017',
     city: 'Paris', 
     street: '823 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Haute Couture",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France"
   )
 
   Restaurant.create(
@@ -75,7 +91,12 @@ unless Restaurant.all.any?
     zipcode: '75008',
     city: 'Paris', 
     street: '7723 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Brasserie Lip",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France"
   )
 
   Restaurant.create(
@@ -85,7 +106,12 @@ unless Restaurant.all.any?
     zipcode: '75008',
     city: 'Paris', 
     street: '1823 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Fouquet",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France"
   )
 
   puts 'created restaurants'

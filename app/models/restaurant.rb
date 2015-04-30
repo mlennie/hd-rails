@@ -25,6 +25,16 @@ class Restaurant < ActiveRecord::Base
     end
   end
 
+  def billing_address
+    return {
+      company: billing_company,
+      street: billing_street,
+      city: billing_city,
+      zipcode: billing_zipcode,
+      country: billing_country
+    }
+  end
+
   def create_new_wallet
     Wallet.create_for_concernable self
   end
@@ -56,7 +66,7 @@ class Restaurant < ActiveRecord::Base
   def get_invoice_end_date_array
     if self.created_at > Time.new - 1.month
       return ["Restaurant is less than one month old. Cannot create invoice"]
-    elsif 
+    else
       date_array = []
       start_date = self.get_invoice_start_date
       #get date of last day of last month
@@ -75,8 +85,15 @@ class Restaurant < ActiveRecord::Base
 
   #calculate information for invoice
   def calculate_information_for_invoice params
-    start_date = params[:start_date].to_date
-    end_date = params[:end_date].to_date
+
+    #get restaurant
+    restaurant = Restaurant.find(params[:restaurant_id])
+
+    #create invoice object
+    invoice = {} 
+    invoice[:start_date] = params[:start_date].to_date
+    invoice[:end_date] = params[:end_date].to_date
+    invoice[:business_address] = restaurant.billing_address
     binding.pry
   end
 

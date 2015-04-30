@@ -84,7 +84,7 @@ class Restaurant < ActiveRecord::Base
   end
 
   #calculate information for invoice
-  def calculate_information_for_invoice params
+  def self.calculate_information_for_invoice params
 
     #get restaurant
     restaurant = Restaurant.find(params[:restaurant_id])

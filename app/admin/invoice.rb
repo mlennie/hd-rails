@@ -76,8 +76,8 @@ ActiveAdmin.register Invoice do
         f.input :end_date, as: :select, collection: end_date_array
       else
         #3. Calculate invoice information and show invoice
-        restaurant = Restaurant.find(params[:restaurant_id])
-        invoice = restaurant.calculate_information_for_invoice params
+        invoice = Restaurant.calculate_information_for_invoice params
+        render partial: "invoice", locals: { invoice: invoice, f: f }
       end
     end
     f.actions

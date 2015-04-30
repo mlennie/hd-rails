@@ -15,7 +15,9 @@ ActiveAdmin.register Invoice do
       if params[:invoice][:restaurant_id].present? || params[:restaurant_id].present?
         restaurant_id = params[:invoice][:restaurant_id] || params[:restaurant_id]
         if params[:invoice][:start_date] && params[:invoice][:end_date]
-
+          date_params = Restaurant.get_date_params params
+          flash[:notice] = "Please review invoice."
+          redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
         else
           flash[:notice] = "Please select an end date"
           redirect_to new_admin_restaurant_invoice_path restaurant_id
@@ -61,15 +63,21 @@ ActiveAdmin.register Invoice do
 
   form do |f|
     f.inputs "Invoice Details" do
-      unless params[:restaurant_id] 
+      #1.first make sure a restaurant is selected
+      if !params[:restaurant_id] 
         f.input :restaurant
-      else 
+      elsif !params[:start_date] || !params[:end_date]
+        #2.get start and end dates 
         restaurant_id = params[:restaurant_id] 
         restaurant = Restaurant.find(restaurant_id)
         start_date = restaurant.get_invoice_start_date
         f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
         end_date_array = restaurant.get_invoice_end_date_array
         f.input :end_date, as: :select, collection: end_date_array
+      else
+        #3. Calculate invoice information and show invoice
+        restaurant = Restaurant.find(params[:restaurant_id])
+        invoice = restaurant.calculate_information_for_invoice params
       end
     end
     f.actions

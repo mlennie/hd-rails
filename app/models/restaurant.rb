@@ -45,6 +45,13 @@ class Restaurant < ActiveRecord::Base
     end
   end
 
+  #get date params for second step of invoice creation
+  def self.get_date_params params
+    start_date = params[:invoice][:start_date]
+    end_date = params[:invoice][:end_date]
+    return { start_date: start_date, end_date: end_date }
+  end
+
   #get invoice end date array for when creating invoices
   def get_invoice_end_date_array
     if self.created_at > Time.new - 1.month
@@ -66,7 +73,22 @@ class Restaurant < ActiveRecord::Base
     end
   end
 
+  #calculate information for invoice
+  def calculate_information_for_invoice params
+    start_date = params[:start_date].to_date
+    end_date = params[:end_date].to_date
+    binding.pry
+  end
+
   def full_address
     street + ', ' + city + ', ' + zipcode
   end
 end
+
+
+
+
+
+
+
+

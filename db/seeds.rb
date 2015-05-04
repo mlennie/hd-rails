@@ -336,6 +336,28 @@ reservations.all.each do |reservation|
 end
 puts "validated all reservations with transactions that didn't have a status"
 
+#GEOCODE restaurants
+puts "geocoding restaurants"
+Restaurant.all.each do |restaurant|
+  unless restaurant.latitude.present?
+    restaurant.geocode
+    restaurant.reverse_geocode
+    restaurant.save
+  end
+end
+
+puts "geocoded restaurants"
+
+
+
+
+
+
+
+
+
+
+
 
 
 

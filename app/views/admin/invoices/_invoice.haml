@@ -19,7 +19,7 @@
 			%p Tél : 06-25-94-09-95
 			%p hello@happydining.fr
 			%p Nom du contact : Maxime Nouchi
-	%div(style="background-color: #4984CB; width: 200px; height: 40px; padding: 20px; margin: 20px;")
+	%div(style="background-color: #4984CB; width: 200px; padding: 20px; margin: 20px;")
 		%p 
 			Date : 
 			= Time.new.to_date
@@ -31,5 +31,19 @@
 		%p
 			N° client : 
 			= invoice[:client_number] 
+		%p 
+			N° Facture : 
+			= invoice[:facture_number]
+	%div
+		%h3(style="margin-left: 20px;") 
+			%strong Objet : Commission Clients Happy Dining
+	%div(style="margin-left: 20px;")
+		%table
+			%tr
+				%th
+					%p(style="color: red;") Montant net à payer
+			%tr
+				%th
+					
 
 		

@@ -95,6 +95,7 @@ class Restaurant < ActiveRecord::Base
     invoice[:end_date] = params[:end_date].to_date
     invoice[:business_address] = restaurant.billing_address
     invoice[:client_number] = "A000" + restaurant.id.to_s
+    invoice[:facture_number] = "A" + restaurant.id.to_s + '-' + (restaurant.invoices.get_unarchived.count + 1).to_s
     return invoice
   end
 

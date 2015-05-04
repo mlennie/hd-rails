@@ -16,6 +16,7 @@ Bundler.require(*Rails.groups)
 
 module Hdrails
   class Application < Rails::Application
+    config.time_zone = "Paris"
      config.middleware.use Rack::Cors do
       allow do
         origins "*"

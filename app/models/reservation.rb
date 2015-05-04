@@ -281,10 +281,8 @@ class Reservation < ActiveRecord::Base
 
   #send email to restaurant 1 hour 45 minutes after reservation starts
   def send_delayed_validation_email
-    #paris time is one hour past UTC time(which rails uses)
-    paris_time = self.time - 1.hour
     #get delayed time
-    delayed_time = paris_time + 1.hour + 45.minutes
+    delayed_time = self.time + 1.hour + 45.minutes
     #get info for emails
     booking_name = self.booking_name
     email = self.restaurant.principle_email

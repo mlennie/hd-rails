@@ -1,7 +1,7 @@
 //add inline styling so can use in email also (wouldn't work if I used haml's :css )
 
 / header -------------------------------------------------------------
-%div(style="background-color: #fff; width: 700px; min-height: 600px; margin: 30px;")
+%div(style="background-color: #fff; width: 700px; min-height: 600px; margin: 30px; border: 1px solid #000;")
 	%div
 		%img(src="https://res.cloudinary.com/happydining/image/upload/c_scale,h_100,w_167/v1430398691/Screen_Shot_2015-04-30_at_2.56.30_PM_idm9ik.png" style="margin: 20px;")
 		%div(style="background-color: #4984CB; float: right; width: 200px; height: 40px; margin: 20px; padding: 10px 20px;")
@@ -67,6 +67,7 @@
 
 	/ reservations table ------------------------------------------------
 	%div
+		%br
 		%table(style="border: 1px solid #000; margin: 20px; width: 650px;")
 			%h3(style="text-align: center; font-weight: bold;")
 				Détail des sommes facturée
@@ -92,7 +93,7 @@
 						= (reservation.bill_amount.to_f * invoice[:percentage].to_f).round(2).to_s.gsub(/\./, ',') + "€"
 
 	/ summary table -----------------------------------------------------
-	%div(style="height: 200px;")
+	%div(style="height: 100px;")
 		%table(style="float: right; width: 220px; border: 1px solid #000; margin-right: 30px; text-align: right;")
 			%tr
 				%th TotalHT
@@ -107,8 +108,30 @@
 				%td
 					= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
 
+	/ balance -----------------------------------------------------------
+	%div(style="margin-left: 20px;")
+		%strong 
+			Votre Balance au 
+			= invoice[:end_date].strftime("%d/%m/%Y")
+			= ":"
+			= invoice[:final_balance].round(2).to_s.gsub(/\./, ',') + "€"
+		%strong(style="display:block")
+			En votreaimablerèglement,
+		%strong
+			Cordialement,
+		%br
+		%br
+		%div(style="text-align: center;")
+			%p N° Siret 803 974 450 000 14 RCS Paris
+			%p Code APE 6202A - N° TVA Intracom. FR 298 039 744 50
+		%br
+		%br
 
-
+	%div(style="margin-left: 20px; margin-bottom: 20px; height: 100px;") 
+		%p Conditions de paiement : paiement à réception de facture
+		%p Aucun escompte consenti pour règlement anticipé
+		%p Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de l'application 
+		%p aux sommes restant dues d'un taux d'intérêt légal en vigueur au moment de l'incident.
 
 
 

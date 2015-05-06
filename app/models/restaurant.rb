@@ -97,6 +97,10 @@ class Restaurant < ActiveRecord::Base
       bill_total += reservation.bill_amount
     end
 
+    #get end of month balance
+    transaction = reservations.last.transactions.get_unarchived.where(concernable_type: "Restaurant").first
+    final_balance = transaction.final_balance
+
     #create invoice object
     invoice = {} 
     invoice[:start_date] = params[:start_date].to_date
@@ -109,6 +113,8 @@ class Restaurant < ActiveRecord::Base
     invoice[:percentage] = percentage
     invoice[:formatted_percentage] = (percentage * 100).round.to_s + "%"
     invoice[:reservations] = reservations
+    invoice[:final_balance] = final_balance
+    invoice[:restaurant_id] = restaurant.id
 
     return invoice
   end

@@ -337,6 +337,8 @@ end
 puts "validated all reservations with transactions that didn't have a status"
 
 #GEOCODE restaurants
+#run following command if need to geocode all
+#rake geocode:all CLASS=Restaurant SLEEP=0.25 BATCH=100
 puts "geocoding restaurants"
 Restaurant.all.each do |restaurant|
   unless restaurant.latitude.present?

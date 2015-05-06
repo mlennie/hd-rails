@@ -51,6 +51,7 @@ unless Restaurant.all.any?
     billing_city: "Paris",
     billing_zipcode: "90210",
     billing_country: "France",
+    commission_percentage: 0.09,
     created_at: Time.new - 4.months
   )
 
@@ -66,7 +67,8 @@ unless Restaurant.all.any?
     billing_street: "123 fun street",
     billing_city: "Paris",
     billing_zipcode: "90210",
-    billing_country: "France"
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   Restaurant.create(
@@ -81,7 +83,8 @@ unless Restaurant.all.any?
     billing_street: "123 fun street",
     billing_city: "Paris",
     billing_zipcode: "90210",
-    billing_country: "France"
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   Restaurant.create(
@@ -96,7 +99,8 @@ unless Restaurant.all.any?
     billing_street: "123 fun street",
     billing_city: "Paris",
     billing_zipcode: "90210",
-    billing_country: "France"
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   Restaurant.create(
@@ -111,7 +115,8 @@ unless Restaurant.all.any?
     billing_street: "123 fun street",
     billing_city: "Paris",
     billing_zipcode: "90210",
-    billing_country: "France"
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   puts 'created restaurants'

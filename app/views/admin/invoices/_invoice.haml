@@ -38,12 +38,52 @@
 		%h3(style="margin-left: 20px;") 
 			%strong Objet : Commission Clients Happy Dining
 	%div(style="margin-left: 20px;")
-		%table
+		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 600px;")
 			%tr
 				%th
 					%p(style="color: red;") Montant net à payer
+				%td
+				%td
+				%td
+					%p(style="color: red;")= invoice[:total_owed].round(2).to_s + "€"
+			%tr
+				%td
+				%td
+					= invoice[:pre_tax_owed].round(2).to_s + "€"
+					%strong(style="margin-left: 20px;") HT
+				%td
+					%p(style="text-align: right;") 
+						= invoice[:total_owed].round(2).to_s + "€"
+				%th
+					%strong(style="text-align: left;") TTC
+	%div
+		%table(style="border: 1px solid #000;")
+			%th
+				%h3(style="text-align: center; font-weight: bold;")
+					Détail des sommes facturée
 			%tr
 				%th
+					Nom
+				%th
+					Date
+				%th
+					Montant Addition
+				%td
+					Commission Happy Dining : 
+					= invoice[:percentage]
+
+
+
+
+
+
+
+
+
+
+
+
+
 					
 
 		

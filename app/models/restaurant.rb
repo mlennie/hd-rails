@@ -91,6 +91,12 @@ class Restaurant < ActiveRecord::Base
     percentage = restaurant.commission_percentage
     reservations = Reservation.get_for_invoice params
 
+    #get total from all bills
+    bill_total = 0
+    reservations.all.each do |reservation|
+      bill_total += reservation.bill_amount
+    end
+
     #create invoice object
     invoice = {} 
     invoice[:start_date] = params[:start_date].to_date
@@ -98,9 +104,10 @@ class Restaurant < ActiveRecord::Base
     invoice[:business_address] = restaurant.billing_address
     invoice[:client_number] = "A000" + restaurant.id.to_s
     invoice[:facture_number] = "A" + restaurant.id.to_s + '-' + (restaurant.invoices.get_unarchived.count + 1).to_s
-    invoice[:pre_tax_owed] = 100 #sum of all reservation bill amounts * percentage for this restaurant + tax
-    invoice[:total_owed] =  invoice[:pre_tax_owed] * 1.2 #pre_tax_owed times 20%
-    invoice[:percentage] = (percentage * 100).round.to_s + "%"
+    invoice[:pre_tax_owed] = bill_total * percentage
+    invoice[:total_owed] =  invoice[:pre_tax_owed] * 1.2 
+    invoice[:percentage] = percentage
+    invoice[:formatted_percentage] = (percentage * 100).round.to_s + "%"
     invoice[:reservations] = reservations
 
     return invoice

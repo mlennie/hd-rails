@@ -188,13 +188,13 @@ class Reservation < ActiveRecord::Base
     reservations = restaurant.reservations.get_unarchived.where("time >= :start_date AND time <= :end_date",
                                                 {start_date: start_date, end_date: end_date})
     #get reservations with transactions
-    reservations_ids = []
+    reservation_ids = []
     reservations.all.each do |reservation|
       if reservation.transactions.any? 
         reservation_ids << reservation.id
       end
     end
-    return reservations.where(id: reservations_ids)
+    return reservations.where(id: reservation_ids)
   end
 
   private

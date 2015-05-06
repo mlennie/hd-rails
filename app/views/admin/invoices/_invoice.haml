@@ -1,9 +1,13 @@
 //add inline styling so can use in email also (wouldn't work if I used haml's :css )
+
+/ header -------------------------------------------------------------
 %div(style="background-color: #fff; width: 700px; min-height: 600px; margin: 30px;")
 	%div
 		%img(src="https://res.cloudinary.com/happydining/image/upload/c_scale,h_100,w_167/v1430398691/Screen_Shot_2015-04-30_at_2.56.30_PM_idm9ik.png" style="margin: 20px;")
 		%div(style="background-color: #4984CB; float: right; width: 200px; height: 40px; margin: 20px; padding: 10px 20px;")
 			%h1(style="text-transform: uppercase; color: #000; text-align: center;") Facture
+
+	/ restaurant business address -------------------------------------- 
 	%div
 		%div(style=" float: right; margin-right: 80px;")
 			- address = invoice[:business_address]
@@ -19,6 +23,8 @@
 			%p Tél : 06-25-94-09-95
 			%p hello@happydining.fr
 			%p Nom du contact : Maxime Nouchi
+
+	/ dates and client numbers -----------------------------------------
 	%div(style="background-color: #4984CB; width: 200px; padding: 20px; margin: 20px;")
 		%p 
 			Date : 
@@ -34,30 +40,34 @@
 		%p 
 			N° Facture : 
 			= invoice[:facture_number]
+
+	/ total amount summary table ---------------------------------------
 	%div
 		%h3(style="margin-left: 20px;") 
 			%strong Objet : Commission Clients Happy Dining
 	%div(style="margin-left: 20px;")
-		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 600px;")
+		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 650px;")
 			%tr
 				%th
 					%p(style="color: red;") Montant net à payer
 				%td
 				%td
 				%td
-					%p(style="color: red;")= invoice[:total_owed].round(2).to_s + "€"
+					%p(style="color: red;")= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
 			%tr
 				%td
 				%td
-					= invoice[:pre_tax_owed].round(2).to_s + "€"
+					= invoice[:pre_tax_owed].round(2).to_s.gsub(/\./, ',') + "€"
 					%strong(style="margin-left: 20px;") HT
 				%td
 					%p(style="text-align: right;") 
-						= invoice[:total_owed].round(2).to_s + "€"
+						= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
 				%th
 					%strong(style="text-align: left;") TTC
+
+	/ reservations table ------------------------------------------------
 	%div
-		%table(style="border: 1px solid #000;")
+		%table(style="border: 1px solid #000; margin: 20px; width: 650px;")
 			%h3(style="text-align: center; font-weight: bold;")
 				Détail des sommes facturée
 			%tr(style="background-color: #4984CB;")
@@ -67,17 +77,36 @@
 					Date
 				%th
 					Montant Addition
-				%td
+				%td(style="text-align: right;")
 					Commission Happy Dining : 
-					= invoice[:percentage]
+					= invoice[:formatted_percentage]
 			- invoice[:reservations].all.each do |reservation|
 				%tr
 					%td
-						reservation.booking_name
+						= reservation.booking_name
 					%td
-						reservation.time
+						= reservation.time.strftime("%d/%m/%Y")
 					%td
-						reservation.bill_amount
+						= reservation.bill_amount.to_f.round(2).to_s.gsub(/\./, ',')  + "€"
+					%td(style="text-align: right;")
+						= (reservation.bill_amount.to_f * invoice[:percentage].to_f).round(2).to_s.gsub(/\./, ',') + "€"
+
+	/ summary table -----------------------------------------------------
+	%div(style="height: 200px;")
+		%table(style="float: right; width: 220px; border: 1px solid #000; margin-right: 30px; text-align: right;")
+			%tr
+				%th TotalHT
+				%td 
+					= invoice[:pre_tax_owed].round(2).to_s.gsub(/\./, ',') + "€"
+			%tr
+				%th T.V.A 20%
+				%td 
+					= (invoice[:pre_tax_owed] * 0.2).round(2).to_s.gsub(/\./, ',') + "€"
+			%tr
+				%th Total TTC
+				%td
+					= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
+
 
 
 

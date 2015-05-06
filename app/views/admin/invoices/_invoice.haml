@@ -58,10 +58,9 @@
 					%strong(style="text-align: left;") TTC
 	%div
 		%table(style="border: 1px solid #000;")
-			%th
-				%h3(style="text-align: center; font-weight: bold;")
-					Détail des sommes facturée
-			%tr
+			%h3(style="text-align: center; font-weight: bold;")
+				Détail des sommes facturée
+			%tr(style="background-color: #4984CB;")
 				%th
 					Nom
 				%th
@@ -71,6 +70,15 @@
 				%td
 					Commission Happy Dining : 
 					= invoice[:percentage]
+			- invoice[:reservations].all.each do |reservation|
+				%tr
+					%td
+						reservation.booking_name
+					%td
+						reservation.time
+					%td
+						reservation.bill_amount
+
 
 
 

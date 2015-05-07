@@ -5,8 +5,8 @@ class Invoice < ActiveRecord::Base
   belongs_to :restaurant
   belongs_to :invoice_transaction, class_name: :transaction
 
-  def self.build_invoice invoice_data
-  	return Invoice.new({
+  def self.make_new invoice_data
+  	invoice = Invoice.new({
       start_date: invoice_data[:start_date],
       end_date: invoice_data[:end_date],
       restaurant_id: invoice_data[:restaurant_id],
@@ -16,6 +16,8 @@ class Invoice < ActiveRecord::Base
       total_owed: invoice_data[:total_owed],
       final_balance: invoice_data[:final_balance]
     })
+
+    return invoice
   end
 
   def send_email params

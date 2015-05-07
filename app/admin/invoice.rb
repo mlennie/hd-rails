@@ -37,7 +37,7 @@ ActiveAdmin.register Invoice do
         invoice_data = Restaurant.calculate_information_for_invoice params
 
         #build invoice
-        invoice = Invoice.build_invoice invoice_data
+        invoice = Invoice.make_new invoice_data
 
         #save invoice and archive all invoices for restaurant that have not been paid
         if (invoice.save! && invoice.restaurant.archive_unpaid_invoices(invoice))

@@ -17,4 +17,15 @@ class AdminMailer < ActionMailer::Base
   	@email = 'admin@happydining.fr'
   	mail to: @email, subject: "Reservation Validation Email Sent"
   end
+
+  def invoice_email invoice
+    params = {}
+    params[:start_date] = invoice.start_date
+    params[:end_date] = invoice.end_date
+    params[:restaurant_id] = invoice.restaurant_id
+    restaurant_name = Restaurant.find(invoice.restaurant_id).name
+    @invoice = Restaurant.calculate_information_for_invoice params
+    @email = 'admin@happydining.fr'
+    mail to: @email, subject: "Test Facture Email for #{restaurant_name}"
+  end
 end

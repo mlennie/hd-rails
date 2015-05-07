@@ -103,7 +103,14 @@ unless Restaurant.any?
     city: 'Paris', 
     country: 'France',
     street: '223 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Grand Bistro",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    commission_percentage: 0.09,
+    created_at: Time.new - 4.months
   )
 
   #add cuisines
@@ -118,7 +125,13 @@ unless Restaurant.any?
     city: 'Paris', 
     country: 'France',
     street: '623 main street',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Grand Bistro",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   #add cuisines
@@ -133,7 +146,15 @@ unless Restaurant.any?
     city: 'Paris', 
     country: 'France',
     street: 'Champ de Mars, 5 Avenue Anatole',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    street: '823 main street',
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Haute Couture",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   #add cuisines
@@ -148,7 +169,15 @@ unless Restaurant.any?
     city: 'Paris', 
     country: 'France',
     street: ' 102 Boulevard du Montparnasse',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    street: '7723 main street',
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Brasserie Lip",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   #add cuisines
@@ -163,7 +192,15 @@ unless Restaurant.any?
     city: 'Paris', 
     country: 'France',
     street: '99 avenue des Champs-Elysées',
-    principle_email: "fake@restaurant.com"
+    principle_email: "fake@restaurant.com",
+    street: '1823 main street',
+    principle_email: "fake@restaurant.com",
+    billing_company: "Association Fouquet",
+    billing_street: "123 fun street",
+    billing_city: "Paris",
+    billing_zipcode: "90210",
+    billing_country: "France",
+    commission_percentage: 0.09
   )
 
   #add cuisines

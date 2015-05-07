@@ -293,6 +293,25 @@ class Reservation < ActiveRecord::Base
     end
   end
 
+  #get reservations for invoice
+  def self.get_for_invoice params
+    restaurant = Restaurant.find(params[:restaurant_id])
+    start_date = params[:start_date] || params[:invoice][:start_date]
+    end_date = params[:end_date] || params[:invoice][:end_date]
+
+    #get reservations during specified restaurant for specified time
+    reservations = restaurant.reservations.get_unarchived.where("time >= :start_date AND time <= :end_date",
+                                                {start_date: start_date.to_date, end_date: end_date.to_date})
+    #get reservations with transactions
+    reservation_ids = []
+    reservations.all.each do |reservation|
+      if reservation.transactions.any? 
+        reservation_ids << reservation.id
+      end
+    end
+    return reservations.where(id: reservation_ids)
+  end
+
   private
 
   def generate_confirmation

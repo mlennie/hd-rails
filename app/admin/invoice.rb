@@ -68,9 +68,14 @@ ActiveAdmin.register Invoice do
 
     def destroy
       r = Invoice.find(params[:id])
-      r.archive
-      flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_invoices_path
+      if !r.paid? 
+        r.archive
+        flash[:notice] = "You have successfully archived this resource"
+        redirect_to admin_invoices_path
+      else
+        flash[:danger] = "Cannot delete. This invoice has already been paid."
+        redirect_to admin_invoices_path
+      end
     end
   end
 
@@ -118,24 +123,28 @@ ActiveAdmin.register Invoice do
 
   form do |f|
     f.inputs "Invoice Details" do
-      #1.first make sure a restaurant is selected
-      if !params[:restaurant_id] 
-        f.input :restaurant
-      elsif !params[:start_date] || !params[:end_date]
-        #2.get start and end dates 
-        restaurant_id = params[:restaurant_id] 
-        restaurant = Restaurant.find(restaurant_id)
-        start_date = restaurant.get_invoice_start_date
-        f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
-        end_date_array = restaurant.get_invoice_end_date_array
-        f.input :end_date, as: :select, collection: end_date_array
-      else
-        #3. Calculate invoice information and show invoice
-        invoice = Restaurant.calculate_information_for_invoice params
-        f.input :start, label: false, input_html: { value: invoice[:start_date], hidden: true }
-        f.input :end, label: false, input_html: { value: invoice[:end_date], hidden: true }
-        f.input :complete, label: false, input_html: { value: true, hidden: true }
-        render partial: "invoice", locals: { invoice: invoice, f: f }
+      if f.object.new_record? 
+        #1.first make sure a restaurant is selected
+        if !params[:restaurant_id] 
+          f.input :restaurant
+        elsif !params[:start_date] || !params[:end_date]
+          #2.get start and end dates 
+          restaurant_id = params[:restaurant_id] 
+          restaurant = Restaurant.find(restaurant_id)
+          start_date = restaurant.get_invoice_start_date
+          f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
+          end_date_array = restaurant.get_invoice_end_date_array
+          f.input :end_date, as: :select, collection: end_date_array
+        else
+          #3. Calculate invoice information and show invoice
+          invoice = Restaurant.calculate_information_for_invoice params
+          f.input :start, label: false, input_html: { value: invoice[:start_date], hidden: true }
+          f.input :end, label: false, input_html: { value: invoice[:end_date], hidden: true }
+          f.input :complete, label: false, input_html: { value: true, hidden: true }
+          render partial: "invoice", locals: { invoice: invoice, f: f }
+        end
+      else #not new (editing)
+        f.input :paid
       end
     end
     f.actions

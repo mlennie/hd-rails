@@ -52,15 +52,21 @@ class Restaurant < ActiveRecord::Base
         #check if last invoice was paid
         if past_invoices.last.paid?
           #start invoice from start of month after paid invoice
-          return (past_invoices.last.end_date.at_beginning_of_month + 1.month).to_date
+          start_date = (past_invoices.last.end_date.at_beginning_of_month + 1.month).to_date
         else 
           #not paid so start invoice from start of month after previously 
           #paid invoice (start building invoices as if last invoice, which 
           #wasn't paid, did not exist) (last unpaid invoice will be archived 
           #if this new invoice is created )
           last_paid_invoice = past_invoices.where(paid: true).last
-          return (last_paid_invoice.end_date.at_beginning_of_month + 1.month).to_date
+          start_date = (last_paid_invoice.end_date.at_beginning_of_month + 1.month).to_date
         end
+        #make sure there is at least a full month for the invoice
+          if start_date >= Time.new.at_beginning_of_month.to_date 
+            return "It has not been at least one month since the last paid invoice was sent"
+          else
+            return start_date
+          end
       else
         #if doesn't have any paid invoices yet, get created at date
         return self.created_at.to_date

@@ -15,6 +15,20 @@ ActiveAdmin.register Invoice do
     end
 
     def create
+      #check if request is to send email and send email if so.
+      #could not figure out how to make an active admin seperate action (batch action)
+      #so that's why I'm unpleasently putting it in the create action
+      if params[:email]
+        invoice = Invoice.find(params[:invoice_id])
+        if invoice.send_email params
+          flash[:notice] = "Email has been sent!"
+          redirect_to admin_invoice_path(invoice)
+        else
+          flash[:danger] = "Oops could not send email"
+          redirect_to admin_invoice_path(invoice)
+        end
+        return true
+      end
 
       #check if invoice is at final step or else go through invoice build steps
       if params[:invoice][:complete]
@@ -23,16 +37,7 @@ ActiveAdmin.register Invoice do
         invoice_data = Restaurant.calculate_information_for_invoice params
 
         #build invoice
-        invoice = Invoice.new({
-          start_date: invoice_data[:start_date],
-          end_date: invoice_data[:end_date],
-          restaurant_id: invoice_data[:restaurant_id],
-          facture_number: invoice_data[:facture_number],
-          commission_percentage: invoice_data[:percentage],
-          pre_tax_owed: invoice_data[:pre_tax_owed],
-          total_owed: invoice_data[:total_owed],
-          final_balance: invoice_data[:final_balance]
-        })
+        invoice = Invoice.build_invoice invoice_data
 
         if invoice.save!
           flash[:notice] = "You have successfully created this invoice"
@@ -65,6 +70,13 @@ ActiveAdmin.register Invoice do
       r.archive
       flash[:success] = "You have successfully archived this resource"
       redirect_to admin_invoices_path
+    end
+  end
+
+  sidebar "Email Invoice", only: [:show, :edit] do
+    ul do
+      li link_to "Send test email to admin",    admin_invoices_path(invoice_id: invoice.id, email: "test"), method: "post"
+      li link_to "Send invoice to restaurant",    admin_invoices_path(invoice_id: invoice.id, email: "restaurant"), method: "post"
     end
   end
 

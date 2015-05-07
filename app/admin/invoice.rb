@@ -145,12 +145,10 @@ ActiveAdmin.register Invoice do
           #2.get start and end dates 
           restaurant_id = params[:restaurant_id] 
           restaurant = Restaurant.find(restaurant_id)
-          unless restaurant.commission_percentage
-            start_date = restaurant.get_invoice_start_date
-            f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
-            end_date_array = restaurant.get_invoice_end_date_array
-            f.input :end_date, as: :select, collection: end_date_array
-          end
+          start_date = restaurant.get_invoice_start_date
+          f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
+          end_date_array = restaurant.get_invoice_end_date_array
+          f.input :end_date, as: :select, collection: end_date_array
         else
           #3. Calculate invoice information and show invoice
           invoice = Restaurant.calculate_information_for_invoice params

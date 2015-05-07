@@ -10,7 +10,9 @@ ActiveAdmin.register Restaurant do
                 :description, :img_url, :owner_name, :responsable_name, 
                 :communications_name, :server_one_name, :server_two_name, 
                 :restaurant_phone, :responsable_phone, :principle_email, 
-                :second_email
+                :second_email, :billing_company, :billing_street, 
+                :billing_zipcode, :billing_city, :billing_country,
+                :commission_percentage
 
   controller do
     def scoped_collection
@@ -47,7 +49,12 @@ ActiveAdmin.register Restaurant do
         '0€'
       end
     end
-    column :description
+    column :billing_company
+    column :billing_street
+    column :billing_zipcode
+    column :billing_city
+    column :billing_country
+    column :commission_percentage
     column :img_url
     column :owner_name
     column :responsable_name
@@ -85,7 +92,12 @@ ActiveAdmin.register Restaurant do
 
   filter :name
   filter :img_url
-  filter :description
+  filter :billing_company
+  filter :billing_street
+  filter :billing_zipcode
+  filter :billing_city
+  filter :billing_country
+  filter :commission_percentage
   filter :cuisine
   filter :owner_name
   filter :responsable_name
@@ -126,6 +138,12 @@ ActiveAdmin.register Restaurant do
       f.input :img_url
       f.input :description
       f.input :cuisine
+      f.input :billing_company
+      f.input :billing_street
+      f.input :billing_zipcode
+      f.input :billing_city
+      f.input :billing_country
+      f.input :commission_percentage, label: "Commission Percentage (eg: for 9% please enter 0.09)"
       f.input :owner_name
       f.input :responsable_name
       f.input :communications_name

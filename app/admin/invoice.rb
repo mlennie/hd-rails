@@ -51,19 +51,26 @@ ActiveAdmin.register Invoice do
         #start invoice creation steps
         if params[:invoice][:restaurant_id].present? || params[:restaurant_id].present?
           restaurant_id = params[:invoice][:restaurant_id] || params[:restaurant_id]
-          if params[:invoice][:start_date] && params[:invoice][:end_date]
-            #make sure restaurant had reservations during these times
-            reservations = Reservation.get_for_invoice(params)
-            if reservations.any?
-              date_params = Restaurant.get_date_params params
-              flash[:notice] = "Please review and submit invoice."
-              redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
+          restaurant = Restaurant.find(restaurant_id)
+          #make sure restaurant has commission_percentage set
+          if restaurant.commission_percentage
+            if params[:invoice][:start_date] && params[:invoice][:end_date]
+              #make sure restaurant had reservations during these times
+              reservations = Reservation.get_for_invoice(params)
+              if reservations.any?
+                date_params = Restaurant.get_date_params params
+                flash[:notice] = "Please review and submit invoice."
+                redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
+              else
+                flash[:warning] = "No reservations were made during these times. Please select a later date."
+                redirect_to new_admin_restaurant_invoice_path restaurant_id
+              end
             else
-              flash[:warning] = "No reservations were made during these times. Please select a later date."
+              flash[:notice] = "Please select an end date"
               redirect_to new_admin_restaurant_invoice_path restaurant_id
             end
           else
-            flash[:notice] = "Please select an end date"
+            flash[:warning] = "Please add commission_percentage to this restaurant"
             redirect_to new_admin_restaurant_invoice_path restaurant_id
           end
         else

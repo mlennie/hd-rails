@@ -45,11 +45,24 @@ class Restaurant < ActiveRecord::Base
     if self.created_at > Time.new - 1.month
       return "Restaurant is less than one month old. Cannot create invoice"
     else  
-      #check if has invoices already or not
-      if self.invoices.get_unarchived.any?
-
+      #get older invoices
+      past_invoices = self.invoices.get_unarchived
+      #check if has past paid invoices
+      if past_invoices.where(paid: true).any?
+        #check if last invoice was paid
+        if past_invoices.last.paid?
+          #start invoice from start of month after paid invoice
+          return (past_invoices.last.end_date.at_beginning_of_month + 1.month).to_date
+        else 
+          #not paid so start invoice from start of month after previously 
+          #paid invoice (start building invoices as if last invoice, which 
+          #wasn't paid, did not exist) (last unpaid invoice will be archived 
+          #if this new invoice is created )
+          last_paid_invoice = past_invoices.where(paid: true).last
+          return (last_paid_invoice.end_date.at_beginning_of_month + 1.month).to_date
+        end
       else
-        #if doesn't have invoices yet, get created at date
+        #if doesn't have any paid invoices yet, get created at date
         return self.created_at.to_date
       end
     end
@@ -81,6 +94,14 @@ class Restaurant < ActiveRecord::Base
       end
       return date_array
     end
+  end
+
+  #archive all unpaid invoices
+  def archive_unpaid_invoices new_invoice
+    self.invoices.get_unarchived.where(paid: false).all.each do |invoice|
+      invoice.archive unless new_invoice == invoice
+    end
+    return true
   end
 
   #calculate information for invoice

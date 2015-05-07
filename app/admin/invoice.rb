@@ -39,7 +39,8 @@ ActiveAdmin.register Invoice do
         #build invoice
         invoice = Invoice.build_invoice invoice_data
 
-        if invoice.save!
+        #save invoice and archive all invoices for restaurant that have not been paid
+        if (invoice.save! && invoice.restaurant.archive_unpaid_invoices(invoice))
           flash[:notice] = "You have successfully created this invoice"
           redirect_to admin_invoice_path(invoice)
         else

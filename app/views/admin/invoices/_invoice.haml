@@ -31,9 +31,9 @@
 			= Time.new.to_date
 		%p
 			Période : 
-			= invoice[:start_date]
+			= invoice[:start_date].strftime("%d/%m/%Y")
 			= "-"
-			= invoice[:end_date]
+			= invoice[:end_date].strftime("%d/%m/%Y")
 		%p
 			N° client : 
 			= invoice[:client_number] 

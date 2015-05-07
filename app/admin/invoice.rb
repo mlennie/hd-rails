@@ -1,7 +1,7 @@
 ActiveAdmin.register Invoice do
   permit_params :previous_balance, :additional_balance, :hd_percent, :due_date,
   							:date_paid, :confirmation, :total_amount_paid, :restaurant_id,
-                :start_date, :end_date
+                :start_date, :end_date, :paid
 
   belongs_to :restaurant, optional: true
 
@@ -52,9 +52,16 @@ ActiveAdmin.register Invoice do
         if params[:invoice][:restaurant_id].present? || params[:restaurant_id].present?
           restaurant_id = params[:invoice][:restaurant_id] || params[:restaurant_id]
           if params[:invoice][:start_date] && params[:invoice][:end_date]
-            date_params = Restaurant.get_date_params params
-            flash[:notice] = "Please review and submit invoice."
-            redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
+            #make sure restaurant had reservations during these times
+            reservations = Reservation.get_for_invoice(params)
+            if reservations.any?
+              date_params = Restaurant.get_date_params params
+              flash[:notice] = "Please review and submit invoice."
+              redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
+            else
+              flash[:warning] = "No reservations were made during these times. Please select a later date."
+              redirect_to new_admin_restaurant_invoice_path restaurant_id
+            end
           else
             flash[:notice] = "Please select an end date"
             redirect_to new_admin_restaurant_invoice_path restaurant_id
@@ -99,27 +106,27 @@ ActiveAdmin.register Invoice do
   index do
     selectable_column
     id_column
-    column :previous_balance
-    column :additional_balance
-    column :hd_percent
-    column :due_date
-    column :date_paid
-    column :confirmation
-    column :total_amount_paid
+    column :paid
+    column :pre_tax_owed
+    column :total_owed
+    column :final_balance
+    column :commission_percentage
     column :restaurant_id
+    column :start_date
+    column :end_date
     column :created_at
     actions
  end
 
-  filter :previous_balance
-	filter :additional_balance
-	filter :hd_percent
-	filter :due_date
-	filter :date_paid
-	filter :confirmation
-	filter :total_amount_paid
-	filter :restaurant_id
-	filter :created_at
+  filter :paid
+  filter :pre_tax_owed
+  filter :total_owed
+  filter :final_balance
+  filter :commission_percentage
+  filter :restaurant_id
+  filter :start_date
+  filter :end_date
+  filter :created_at
 
   form do |f|
     f.inputs "Invoice Details" do

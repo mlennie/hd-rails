@@ -70,7 +70,6 @@ ActiveAdmin.register Restaurant do
         '0€'
       end
     end
-<<<<<<< HEAD
     column 'Cuisines' do |r|
       cuisines = r.cuisines.map do |c|
         c.name
@@ -83,14 +82,12 @@ ActiveAdmin.register Restaurant do
         link_to owner.full_name, admin_user_path(owner)
       end 
     end
-=======
     column :billing_company
     column :billing_street
     column :billing_zipcode
     column :billing_city
     column :billing_country
     column :commission_percentage
->>>>>>> master
     column :img_url
     column :owner_name
     column :responsable_name
@@ -179,18 +176,14 @@ ActiveAdmin.register Restaurant do
 
   filter :name
   filter :img_url
-<<<<<<< HEAD
   filter :description
   filter :cuisines
-=======
   filter :billing_company
   filter :billing_street
   filter :billing_zipcode
   filter :billing_city
   filter :billing_country
   filter :commission_percentage
-  filter :cuisine
->>>>>>> master
   filter :owner_name
   filter :responsable_name
   filter :communications_name
@@ -229,17 +222,13 @@ ActiveAdmin.register Restaurant do
       f.input :name
       f.input :img_url
       f.input :description
-<<<<<<< HEAD
       f.input :cuisines, as: :select, collection: Cuisine.get_unarchived, multiple: true
-=======
-      f.input :cuisine
       f.input :billing_company
       f.input :billing_street
       f.input :billing_zipcode
       f.input :billing_city
       f.input :billing_country
       f.input :commission_percentage, label: "Commission Percentage (eg: for 9% please enter 0.09)"
->>>>>>> master
       f.input :owner_name
       f.input :responsable_name
       f.input :communications_name

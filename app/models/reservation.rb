@@ -22,7 +22,7 @@ class Reservation < ActiveRecord::Base
   just_define_datetime_picker :time
 
   validates_presence_of :nb_people, :time, :restaurant_id, :user_id, 
-                        :discount, :user_contribution, :booking_name, :phone
+                        :discount, :user_contribution, :booking_name
 
   def add_confirmation
     confirmation = generate_confirmation

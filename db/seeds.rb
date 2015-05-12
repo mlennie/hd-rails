@@ -264,7 +264,6 @@ unless Restaurant.any?
       s1 = r.services.create!(one_to_three_service)
       s2 = r.services.create!(five_to_ten_service)
 
-
       #RESERVATIONS
       #add reservations
       reservation_night_params = {

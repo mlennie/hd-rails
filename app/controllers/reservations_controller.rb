@@ -41,10 +41,8 @@ class ReservationsController < ApplicationController
         end
       else
         render json: { errors: 
-                        {
-                          discount: service.current_discount
-                        } 
-                      }, status: 422
+                       { discount: service.current_discount } 
+                     }, status: 422
       end
     else
       head 401
@@ -71,7 +69,7 @@ class ReservationsController < ApplicationController
       params.require(:reservation).permit(
         :nb_people, :time, :status, :restaurant_id, 
         :user_id, :service_id, :discount, :user_contribution,
-        :booking_name, :status
+        :booking_name, :status, :phone
       )
     end
 end

@@ -41,7 +41,7 @@ class UserMailer < ActionMailer::Base
     @reservation = reservation 
     @time = @reservation.time.strftime("%d/%m/%Y, à %H:%M")
     @restaurant = @reservation.restaurant
-    mail to: @email, subject: "Félicitations, Vous avez été crédités par Happy Dining."
+    mail to: @email, subject: "Félicitations, Vous avez été crédité par Happy Dining."
   end
 
   def confirmation_reminder user

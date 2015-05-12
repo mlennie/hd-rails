@@ -7,6 +7,7 @@ class AdminMailer < ActionMailer::Base
   	@user = reservation.user
   	@restaurant = reservation.restaurant
     @user_contribution = @reservation.user_contribution
+    @phone = reservation.phone
   	@email = 'admin@happydining.fr'
   	mail to: @email, subject: "Nouvelle réservation"
   end

@@ -4,7 +4,7 @@ ActiveAdmin.register Reservation do
                 :restaurant_id, :restaurant, :user_id, :service_id, :bill_amount,
                 :user_balance, :restaurant_balance, :discount,
                 :user_contribution, :booking_name, :time_date, :time_time_hour,
-                :time_time_minute
+                :time_time_minute, :phone
 
   belongs_to :restaurant, optional: true
   belongs_to :user, optional: true
@@ -101,6 +101,7 @@ ActiveAdmin.register Reservation do
     id_column
     column :confirmation
     column :nb_people
+    column :phone
     column :time
     column :status
     column :viewed_at
@@ -126,6 +127,7 @@ ActiveAdmin.register Reservation do
 
   filter :confirmation
   filter :nb_people
+  filter :phone
   filter :time
   filter :status
   filter :viewed_at
@@ -157,6 +159,7 @@ ActiveAdmin.register Reservation do
     end
     f.inputs "New reservation #{for_user}" do
       f.input :nb_people
+      f.input :phone
       f.input :time, :as => :just_datetime_picker
       if f.object.new_record?
         f.input :restaurant, required: true

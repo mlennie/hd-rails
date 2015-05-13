@@ -113,7 +113,7 @@ ActiveAdmin.register ServiceTemplate do
     if params[:id]
       panel "Services" do 
         render partial: "service_template_select", locals: { id: params[:id] }
-        days = %w(Monday Tuesday Wedesday Thursday Friday Saturday Sunday)
+        days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
 
         days.each do |day|
 

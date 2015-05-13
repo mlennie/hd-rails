@@ -44,35 +44,32 @@ unless ServiceTemplate.any?
   })
 
   #add services to service template
-  day_array = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
+  day_array = %w(Monday Tuesday Wednesday Thursday Friday Saturday)
   day_array.each do |day|
 
     #SERVICES
 
-    #1 to 3 pm service
-    one_to_three_service = {
+    #12 to 2:30 pm service
+    twelve_to_two_thirty_service = {
       availabilities: 99,
-      start_time: Time.zone.now.midnight + 13.hours,
-      last_booking_time: Time.zone.now.midnight + 15.hours,
+      start_time: Time.zone.now.midnight + 12.hours,
+      last_booking_time: Time.zone.now.midnight + 14.hours + 30.minutes,
       nb_10: 99,
-      nb_20: 2,
-      nb_25: 1,
       template_day: day
     }
 
-    #5 to 10 pm service
-    five_to_ten_service = {
+    #7 to 10:30 pm service
+    seven_to_ten_thirty_service = {
       availabilities: 99,
-      start_time: Time.zone.now.midnight + 17.hours,
-      last_booking_time: Time.zone.now.midnight + 22.hours,
+      start_time: Time.zone.now.midnight + 19.hours,
+      last_booking_time: Time.zone.now.midnight + 22.hours + 30.minutes,
       nb_10: 99,
-      nb_15: 1,
       template_day: day
     }
 
     #create services
-    service_template.services.create(one_to_three_service)
-    service_template.services.create(five_to_ten_service)
+    service_template.services.create(twelve_to_two_thirty_service)
+    service_template.services.create(seven_to_ten_thirty_service)
   end
 
   puts 'created master service template'

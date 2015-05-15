@@ -1,1 +1,5 @@
-= render partial: "admin/invoices/invoice", locals: { invoice: @invoice}
+%p Bonjour, votre facture Happy Dining ci-jointe.
+%p Veuillez nous adresser un règlement par chèque au 106 Boulevard Pereire 75017 Paris ou par virement (Rib ci-joint)
+= render partial: "admin/invoices/invoice", locals: { invoice: @invoice }
+%br
+%img(src="https://res.cloudinary.com/happydining/image/upload/v1431675210/HD_rib_wcm8dr.png")

@@ -12,7 +12,8 @@ ActiveAdmin.register User do
     
       #make owner and don't send confirmation email if a 
       #restaurant was selected
-      if restaurant_id = params[:user][:restaurant]
+      if params[:user][:restaurant].present?
+        restaurant_id = params[:user][:restaurant]
 
         #delete restaurant param so does not interfere later
         params[:user].delete(:restaurant)

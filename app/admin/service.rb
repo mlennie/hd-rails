@@ -54,7 +54,9 @@ ActiveAdmin.register Service do
         service.nb_20 = params[:service][:nb_20].to_i
         service.nb_25 = params[:service][:nb_25].to_i
 
-        if service.last_booking_time > (service.start_time + 30.minutes)
+        if service.last_booking_time.present? && 
+           service.start_time.present? &&
+           service.last_booking_time > (service.start_time + 30.minutes)
           if service.save!
             flash[:notice] = "Nice! you successfully added a new service to this template. Way to go!! High Five ;)"
             redirect_to edit_admin_service_template_path params[:service][:service_template_id]

@@ -16,6 +16,9 @@ ActiveAdmin.register ServiceTemplate do
 
     def destroy
       r = ServiceTemplate.find(params[:id])
+      r.services.all.each do |service|
+        service.archive
+      end
       r.archive
       flash[:success] = "You have successfully archived this resource"
       redirect_to admin_service_templates_path

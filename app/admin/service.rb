@@ -54,12 +54,17 @@ ActiveAdmin.register Service do
         service.nb_20 = params[:service][:nb_20].to_i
         service.nb_25 = params[:service][:nb_25].to_i
 
-        if service.save!
-          flash[:notice] = "Nice! you successfully added a new service to this template. Way to go!! High Five ;)"
-          redirect_to edit_admin_service_template_path params[:service][:service_template_id]
+        if service.last_booking_time > (service.start_time + 30.minutes)
+          if service.save!
+            flash[:notice] = "Nice! you successfully added a new service to this template. Way to go!! High Five ;)"
+            redirect_to edit_admin_service_template_path params[:service][:service_template_id]
+          else
+            flash[:danger] = "Ooh looks like something bad happened and our whole univers as we know it just collapsed. opps :( Please try again soon."
+            redirect_to new_admin_service_path(service, day: params[:service][:template_day], service_template_id: params[:service][:service_template_id])
+          end
         else
-          flash[:danger] = "Ooh looks like something bad happened and our whole univers as we know it just collapsed. opps :( Please try again soon."
-          redirect_to new_admin_service_path(service, params[:service][:service_template_id])
+          flash[:danger] = "Oops last booking time must be at least 30 minutes after start time!"
+          redirect_to new_admin_service_path(service, day: params[:service][:template_day], service_template_id: params[:service][:service_template_id])
         end
       else
         params[:service][:restaurant_id] = params[:restaurant_id]

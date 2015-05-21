@@ -79,6 +79,39 @@ class Restaurant < ActiveRecord::Base
     Restaurant.use_template_to_create_services_for_12_months params
   end
 
+  #filter restaruants by params that user searches for from ember side search form
+  def self.filter_restaurants_by_search_params params
+
+    #get dates
+    dateArray = params[:date].split("-")
+    year = dateArray[0].to_i
+    month = dateArray[1].to_i
+    day = dateArray[2].to_i
+
+    #get times
+    timeArray = params[:time].split(":")
+    hour = timeArray[0].to_i
+    min = timeArray[1].to_i
+
+    #format requested time
+    requested_time = Time.new(year,month,day,hour,min)
+    
+    #filter restaurants by their services that contain requested time
+    restaurants = Restaurant.where(id: params[:ids])
+    restaurant_ids = []
+    restaurants.all.each do |restaurant|
+
+      #check if there's a service that matches requested time
+      services = restaurant.services.get_unarchived.future_with_availabilities
+      service = services.where(
+                      "start_time <= :time AND last_booking_time >= :time",
+                      { time: requested_time }
+                    ).first
+      restaurant_ids << restaurant.id if service.present?
+    end
+    return restaurant_ids
+  end
+
   #format time to be string eg. "2015-04-15" from time object (eg.Time.new)
   def self.turn_time_to_date_string time
     timeString = time.to_s     

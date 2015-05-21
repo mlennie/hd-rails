@@ -12,7 +12,8 @@ class ServicesController < ApplicationController
 				end
 				render json: services
 			else
-				head 422
+				services = Service.get_unarchived.future_with_availabilities
+				render json: services
 			end
 		else
 			head 401

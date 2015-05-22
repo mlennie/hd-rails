@@ -16,12 +16,24 @@ ActiveAdmin.register ServiceTemplate do
 
     def destroy
       r = ServiceTemplate.find(params[:id])
-      r.services.all.each do |service|
-        service.archive
+      #check to make sure its not a master that is used for automation. 
+      #there must be at least one master used for automation
+      unless r.restaurant_id.blank? && r.use_for_automation
+        r.services.all.each do |service|
+          service.archive
+        end
+        r.archive
+        flash[:success] = "You have successfully archived this resource"
+        redirect_to admin_service_templates_path
+      else
+        flash[:danger] = "Skynet protocol has overriden this request. " + 
+                         "There must always be one master template that " +
+                         "is used for service creation automation. " +
+                         "Please edit another master template to be used for " +
+                         "automation, and then you can delete this template. " +
+                         "Hail SKYNET"
+        redirect_to admin_service_template_path r
       end
-      r.archive
-      flash[:success] = "You have successfully archived this resource"
-      redirect_to admin_service_templates_path
     end
 
     def create
@@ -40,6 +52,22 @@ ActiveAdmin.register ServiceTemplate do
       use_for_automation = params[:service_template][:use_for_automation]
 
       service_template = ServiceTemplate.find(service_template_id)
+
+      #add check: if template is master automation template, dont allow it to 
+      #connect to a restaurant (because then there would be no more master 
+      #automation templates left)
+      if service_template.restaurant_id.nil? &&
+         service_template.use_for_automation  &&
+         restaurant_id.present?
+         flash[:danger] = "Skynet protocol has overriden this request. " + 
+                         "There must always be one master template that " +
+                         "is used for service creation automation. " +
+                         "Please edit another master template to be used for " +
+                         "automation, and then you can make this not a master template. " +
+                         "Hail SKYNET"
+         redirect_to edit_admin_service_template_path service_template.id
+         return true
+      end
 
       ServiceTemplate.add_services_from_template(service_template, other_template_id)
 
@@ -108,7 +136,10 @@ ActiveAdmin.register ServiceTemplate do
         f.input :restaurant, label: "Restaurant (leave blank if this is a Master Template)"
       end
       unless params[:id] && ServiceTemplate.get_unarchived.find(params[:id]).restaurant_id.nil?
-        f.input :use_for_automation, label: "Use for automating service creation?"
+        f.input :use_for_automation, 
+                label: "Use for automating service creation? If this is a master template, " +
+                       "this will REMOVE the other master template from being used to automate " +
+                       "service creation."
       end
     end
     f.actions

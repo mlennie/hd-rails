@@ -358,6 +358,8 @@ unless Restaurant.any?
 
 end
 
+##UPDATES TO EXISTING DATA BELOW##
+
 #add back services for year
 Restaurant.add_services_for_one_year_for_all_restaurants
 
@@ -380,8 +382,18 @@ Restaurant.all.each do |restaurant|
     restaurant.save
   end
 end
-
 puts "geocoded restaurants"
+
+#update emails for restaurants. Add principle emails to emails
+puts "updating emails"
+Restaurant.all.each do |restaurant|
+  if restaurant.emails.empty? && restaurant.principle_email.present?
+    restaurant.emails = restaurant.principle_email
+    restaurant.save
+  end
+end
+puts "updated emails"
+
 
 
 

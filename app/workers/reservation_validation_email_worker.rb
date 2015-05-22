@@ -6,7 +6,9 @@ class ReservationValidationEmailWorker
     emails = Restaurant.find_by(name: restaurant_name).emails
     #split emails into array
     emailArray = emails.split(' ')
-    emails.each do |email|
+    #send to admin also
+    emailArray << ENV["ADMIN_EMAIL"]
+    emailArray.each do |email|
       RestaurantMailer.reservation_validation(booking_name, email).deliver
     end
     AdminMailer.validation_email_sent(booking_name, restaurant_name).deliver

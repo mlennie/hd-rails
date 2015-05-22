@@ -76,6 +76,7 @@ ActiveAdmin.register Restaurant do
       end
       cuisines.join(', ')
     end
+    column :emails
     column :owner do |restaurant|
       owner = restaurant.user
       if owner
@@ -96,7 +97,6 @@ ActiveAdmin.register Restaurant do
     column :server_two_name
     column :restaurant_phone
     column :responsable_phone
-    column :emails
     column :street
     column :district
     column :city

@@ -1,21 +1,19 @@
 class RestaurantMailer < ActionMailer::Base
   default from: 'Happy Dining <admin@happydining.fr>'
 
-  def new_reservation reservation
+  def new_reservation reservation, email
   	@reservation = reservation
   	@time = reservation.time.strftime("%d/%m/%Y, à %H:%M") 
   	@user = reservation.user
     @phone = reservation.phone
     @user_contribution = @reservation.user_contribution
   	@restaurant = reservation.restaurant
-  	@email = @restaurant.principle_email
-  	mail to: @email, subject: "Nouvelle réservation de la part de Happy Dining"
+  	mail to: email, subject: "Nouvelle réservation de la part de Happy Dining"
   end
 
   def reservation_validation(booking_name, email)
     @booking_name = booking_name
-    @email = email
-    mail to: @email, subject: "montant de l'addition"
+    mail to: email, subject: "montant de l'addition"
   end
 
   def invoice_email invoice, email

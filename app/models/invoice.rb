@@ -30,10 +30,13 @@ class Invoice < ActiveRecord::Base
       end
   	elsif params[:email] == "restaurant"
       #get restaurant emails
+      invoice = Invoice.find(params[:invoice_id])
       emails = Restaurant.find(invoice.restaurant_id).emails
       #split emails into array
       emailArray = emails.split(' ')
-      emails.each do |email|
+      #send to admin also
+      emailArray << ENV["ADMIN_EMAIL"]
+      emailArray.each do |email|
         #send invoice email to restaurant
         RestaurantMailer.invoice_email(self, email).deliver 
       end

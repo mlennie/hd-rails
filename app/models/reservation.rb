@@ -242,7 +242,9 @@ class Reservation < ActiveRecord::Base
       emails = self.restaurant.emails
       #split emails into array
       emailArray = emails.split(' ')
-      emails.each do |email|
+      #send to admin also
+      emailArray << ENV["ADMIN_EMAIL"]
+      emailArray.each do |email|
         RestaurantMailer.new_reservation(self, email).deliver 
       end
       #send new reservation email to admin

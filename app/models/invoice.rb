@@ -29,11 +29,13 @@ class Invoice < ActiveRecord::Base
       	return false
       end
   	elsif params[:email] == "restaurant"
-  		#send invoice email to restaurant
-      if RestaurantMailer.invoice_email(self).deliver 
-      	return true
-      else
-      	return false
+      #get restaurant emails
+      emails = Restaurant.find(invoice.restaurant_id).emails
+      #split emails into array
+      emailArray = emails.split(' ')
+      emails.each do |email|
+        #send invoice email to restaurant
+        RestaurantMailer.invoice_email(self, email).deliver 
       end
   	else
   		return false

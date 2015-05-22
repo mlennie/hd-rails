@@ -237,8 +237,14 @@ class Reservation < ActiveRecord::Base
     if self.time > Time.now - 10.minutes
       #send new reservation email to user
       UserMailer.new_reservation(self).deliver 
-      #send new reservation email to restaurant
-      RestaurantMailer.new_reservation(self).deliver 
+      #send new reservation email to restaurant to each of their emails
+      #get restaurant emails
+      emails = self.restaurant.emails
+      #split emails into array
+      emailArray = emails.split(' ')
+      emails.each do |email|
+        RestaurantMailer.new_reservation(self, email).deliver 
+      end
       #send new reservation email to admin
       AdminMailer.new_reservation(self).deliver
     end

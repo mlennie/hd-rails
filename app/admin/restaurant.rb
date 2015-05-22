@@ -96,8 +96,7 @@ ActiveAdmin.register Restaurant do
     column :server_two_name
     column :restaurant_phone
     column :responsable_phone
-    column :principle_email
-    column :second_email
+    column :emails
     column :street
     column :district
     column :city
@@ -141,8 +140,7 @@ ActiveAdmin.register Restaurant do
       row :server_two_name
       row :restaurant_phone
       row :responsable_phone
-      row :principle_email
-      row :second_email
+      row :emails
       row :street
       row :district
       row :city
@@ -236,8 +234,7 @@ ActiveAdmin.register Restaurant do
       f.input :server_two_name
       f.input :restaurant_phone
       f.input :responsable_phone
-      f.input :principle_email
-      f.input :second_email
+      f.input :emails
       f.input :street
       f.input :district
       f.input :city

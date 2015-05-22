@@ -291,11 +291,10 @@ class Reservation < ActiveRecord::Base
     delayed_time = self.time + 1.hour + 45.minutes
     #get info for emails
     booking_name = self.booking_name
-    email = self.restaurant.principle_email
     restaurant_name = self.restaurant.name
     #send delayed emails
     if delayed_time > Time.now
-      ReservationValidationEmailWorker.perform_at(delayed_time, booking_name, email, restaurant_name )
+      ReservationValidationEmailWorker.perform_at(delayed_time, booking_name, restaurant_name )
     end
   end
 

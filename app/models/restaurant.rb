@@ -31,7 +31,7 @@ class Restaurant < ActiveRecord::Base
   #add services after creation
   after_create :add_services_for_one_year_from_automation_template
 
-  validates_presence_of :name, :principle_email
+  validates_presence_of :name, :emails
 
   def to_s
     unless name.blank? 

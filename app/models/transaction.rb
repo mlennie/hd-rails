@@ -7,7 +7,42 @@ class Transaction < ActiveRecord::Base
   has_many :related_transactions
 
   enum kind: [ :reservation, :payment, :withdrawal, :referral, :promotion, 
-               :adjustment ]
+               :adjustment, :restaurant_balance_payment ]
+
+  def self.create_restaurant_balance_payment_transaction params
+    #start active record transaction so that if something goes wrong
+    #database rollsback to before
+    ActiveRecord::Base.transaction do 
+      #build new transaction
+      transaction = Transaction.new
+
+      #set transaction amount
+      transaction.amount = params[:amount]
+
+      #set amount positive 
+      #IMPORTANT NOTE: if happy dining is paying, then amount is negative 
+      #(restaurant will negate in balance)
+      #if restaurant paying, the amount is positive 
+      #(restaurant will gain in balance)
+      transaction.amount_positive = params[:positive]
+
+      #set transaction kind
+      transaction.kind = "restaurant_balance_payment"
+
+      #add concernable to transaction (if admin signed in, add admin, else 
+      #add restaurant)
+      transaction.concernable = params[:restaurant]
+
+      #set transaction itemable: invoice (if amount is positive)
+      transaction.itemable = params[:invoice]
+
+      #set original_balance
+      original_balance = transaction.original_balance = get_original_balance params[:restaurant]
+
+      #set final_balance
+      transaction.final_balance = original_balance + amount
+    end
+  end
   
   def self.create_promotional_transaction user, promotion
     ActiveRecord::Base.transaction do 

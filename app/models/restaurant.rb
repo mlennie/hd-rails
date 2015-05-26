@@ -461,9 +461,7 @@ class Restaurant < ActiveRecord::Base
     end
 
     #get end of month balance
-    final_balance = Invoice.get_final_balance restaurant
-    transaction = reservations.last.transactions.get_unarchived.where(concernable_type: "Restaurant").first
-    final_balance = transaction.final_balance
+    final_balance = Invoice.get_final_balance reservations.last
 
     #create invoice object
     invoice = {} 

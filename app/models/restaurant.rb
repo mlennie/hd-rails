@@ -478,6 +478,8 @@ class Restaurant < ActiveRecord::Base
     invoice[:reservations] = reservations
     invoice[:final_balance] = final_balance
     invoice[:restaurant_id] = restaurant.id
+    #combine commission plus balance totals
+    invoice[:combined_total] = invoice[:total_owed] + invoice[:final_balance].abs
 
     return invoice
   end

@@ -47,24 +47,50 @@
 			%strong Objet : Commission Clients Happy Dining
 	%div(style="margin-left: 20px;")
 		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 650px;")
-			%tr
-				%th
-					%p(style="color: red;") Montant net à payer
-				%td
-				%td
-				%td
-					%p(style="color: red;")= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
-			%tr
-				%td
-				%td
-					= invoice[:pre_tax_owed].round(2).to_s.gsub(/\./, ',') + "€"
-					%strong(style="margin-left: 20px;") HT
-				%td
-					%p(style="text-align: right;") 
-						= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
-				%th
-					%strong(style="text-align: left;") TTC
-
+			/ check if this is a commission_only invoice and style accordingly if so
+			- if invoice[:total_owed] == false
+				%tr
+					%th
+						%p(style="color: red;") Montant net à payer
+					%td
+					%td
+					%td
+						%p(style="color: red;")= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
+				%tr
+					%td
+					%td
+						= invoice[:pre_tax_owed].round(2).to_s.gsub(/\./, ',') + "€"
+						%strong(style="margin-left: 20px;") HT
+					%td
+						%p(style="text-align: right;") 
+							= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
+					%th
+						%strong(style="text-align: left;") TTC
+			- else 
+				%tr
+					%th
+						%p(style="color: red;") Montant net à payer
+					%td
+					%td
+						%p(style="color: red; text-align: right;")= invoice[:combined_total].round(2).to_s.gsub(/\./, ',') + "€"
+				%tr
+					%th
+						%strong Commission Happy
+					%td
+						= invoice[:pre_tax_owed].round(2).to_s.gsub(/\./, ',') + "€"
+						%strong(style="margin-left: 20px;") HT
+					%td
+						%p(style="text-align: right;") 
+							= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
+					%th
+						%strong(style="text-align: left;") TTC
+				%tr
+					%td
+						Régulation balance
+					%td
+					%td
+						%p(style="text-align: right;") 
+							= invoice[:final_balance].abs.round(2).to_s.gsub(/\./, ',') + "€"
 	/ reservations table ------------------------------------------------
 	%div
 		%br
@@ -116,7 +142,7 @@
 			= ":"
 			= invoice[:final_balance].round(2).to_s.gsub(/\./, ',') + "€"
 		%strong(style="display:block")
-			En votreaimablerèglement,
+			En votre aimable règlement,
 		%strong
 			Cordialement,
 		%br

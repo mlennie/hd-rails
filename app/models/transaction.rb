@@ -40,8 +40,19 @@ class Transaction < ActiveRecord::Base
       original_balance = transaction.original_balance = get_original_balance params[:restaurant]
 
       #set final_balance
-      transaction.final_balance = original_balance + amount
+      if params[:positive]
+        transaction.final_balance = original_balance + params[:amount]
+      else
+        transaction.final_balance = original_balance - params[:amount]
+      end
     end
+
+    #update restaurant wallet balance
+    params[:concernable].wallet.update(balance: transaction.final_balance)
+
+    #save transaction
+    transaction.save
+    return transaction
   end
   
   def self.create_promotional_transaction user, promotion

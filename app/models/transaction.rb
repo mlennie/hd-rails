@@ -9,7 +9,10 @@ class Transaction < ActiveRecord::Base
   enum kind: [ :reservation, :payment, :withdrawal, :referral, :promotion, 
                :adjustment, :restaurant_balance_payment ]
 
+  attr_accessor :who_is_paying
+
   def self.create_restaurant_balance_payment_transaction params
+    
     #start active record transaction so that if something goes wrong
     #database rollsback to before
     ActiveRecord::Base.transaction do 
@@ -34,7 +37,7 @@ class Transaction < ActiveRecord::Base
       transaction.concernable = params[:restaurant]
 
       #set transaction itemable: invoice (if amount is positive)
-      transaction.itemable = params[:invoice]
+      transaction.itemable = params[:invoice] if params[:invoice]
 
       #set original_balance
       original_balance = transaction.original_balance = get_original_balance params[:restaurant]
@@ -45,14 +48,13 @@ class Transaction < ActiveRecord::Base
       else
         transaction.final_balance = original_balance - params[:amount]
       end
+
+      #update restaurant wallet balance
+      params[:restaurant].wallet.update(balance: transaction.final_balance)
+
+      #save transaction
+      transaction.save
     end
-
-    #update restaurant wallet balance
-    params[:concernable].wallet.update(balance: transaction.final_balance)
-
-    #save transaction
-    transaction.save
-    return transaction
   end
   
   def self.create_promotional_transaction user, promotion
@@ -229,6 +231,15 @@ class Transaction < ActiveRecord::Base
       #save transaction
       transaction.save
     end
+  end
+
+  def self.setup_balance_payment_params params
+    transaction_params = {}
+    transaction_params[:restaurant] = Restaurant.find(params[:transaction][:concernable_id])
+    transaction_params[:amount] = params[:transaction][:amount].to_f
+    #set amount to positive if restaurant is paying 
+    transaction_params[:positive] = params[:transaction][:who_is_paying] == "restaurant"
+    return transaction_params
   end
 
   private

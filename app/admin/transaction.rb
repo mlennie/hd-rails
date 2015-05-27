@@ -120,6 +120,9 @@ ActiveAdmin.register Transaction do
   form do |f|
     f.inputs "New transaction" do
       #1st step make admin choose transaction_kind
+      #if transaction kind is chosen then move to step 2 (entering amounts and reasons or who is paying)
+      #kind is either adjustment or "restaurant balance payment"
+      #type is User or Restaurant
       if params[:kind] == "Adjustment"
         f.input :amount, required: true
         f.input :reason, required: true

@@ -20,6 +20,11 @@ ActiveAdmin.register Transaction do
     end
 
     def create
+      
+      #move user_id if came through transaction params
+      if params[:transaction][:user_id]
+        params[:user_id] = params[:transaction][:user_id] 
+      end
 
       #concernable id is restaurant id. 
       #Active admin couldn't make nested routes for both users and restaurants
@@ -119,12 +124,12 @@ ActiveAdmin.register Transaction do
         f.input :amount, required: true
         f.input :reason, required: true
         if params[:type] == "Restaurant"
-          f.input :concernable_id, input_html: { value: params[:id]  }, label: false
+          f.input :concernable_id, input_html: { value: params[:id], hidden: true  }, label: false
         else
-          f.input :user_id, input_html: { value: params[:id]  }, label: false
+          f.input :user_id, input_html: { value: params[:id], hidden: true  }, label: false
         end
-        f.input :concernable_type, input_html: { value: params[:type]  }, label: false
-        f.input :kind, as: :string, input_html: { value: params[:kind]  }, label: false
+        f.input :concernable_type, input_html: { value: params[:type], hidden: true  }, label: false
+        f.input :kind, as: :string, input_html: { value: params[:kind], hidden: true  }, label: false
         
       elsif params[:kind] == "Restaurant Balance Payment"
         f.input :amount, required: true

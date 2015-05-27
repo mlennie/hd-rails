@@ -11,7 +11,8 @@ class Transaction < ActiveRecord::Base
 
   attr_accessor :who_is_paying
 
-  def self.create_restaurant_balance_payment_transaction params
+  # create a restaurant balance payment transaction
+  def self.create_balance_payment_transaction params
     
     #start active record transaction so that if something goes wrong
     #database rollsback to before

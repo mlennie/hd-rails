@@ -20,38 +20,43 @@ ActiveAdmin.register Transaction do
     end
 
     def create
+
       #concernable id is restaurant id. 
       #Active admin couldn't make nested routes for both users and restaurants
       #check that admin came to this page through a user or restaurant first
       if params[:user_id] || params[:transaction][:concernable_id]
+
+        #get concernable variables for redirect
+        if params[:user_id].present?
+          id = params[:user_id]
+          type = "User"
+        else
+          id = params[:transaction][:concernable_id]
+          type = "Restaurant"
+        end
+
         #check to see if admin has entered amount yet or not and if not
         #ask admin to enter amount
         if params[:transaction][:amount]
           if params[:transaction][:kind] == "Adjustment"
 
-            #get concernable variables for redirect
-            if params[:user_id].present?
-              id = params[:user_id]
-              type = "User"
-            else
-              id = params[:transaction][:concernable_id]
-              type = "Restaurant"
-            end
-
             #create transaction
-            if Transaction.create_adjustable_transaction params, current_admin_user.id
+            if Transaction.create_adjustable_transaction(params, current_admin_user.id)
               flash[:notice] = "Transaction Added"
               redirect_to admin_transactions_path(id: id, type: type)
             else
-              flash[:danger] = "Transaction Could not be added. Please make sure reason is filled out so we know you're not just sending yourself money :)"
+              flash[:danger] = "Transaction Could not be added. " +
+              "Please make sure reason is filled out so we know you're not " +
+              "just sending yourself money :)"
               redirect_to :back
             end
-          # use "who is paying" presence to check if it is a balance payment
+          # use "who is paying" presence to check if it is a 
+          #restaurant balance payment
           elsif params[:transaction][:who_is_paying] 
             transaction_params = Transaction.setup_balance_payment_params params
-            if Transaction.create_restaurant_balance_payment_transaction(transaction_params)
+            if Transaction.create_balance_payment_transaction(transaction_params)
               flash[:notice] = "Transaction Added"
-              redirect_to admin_transactions_path(id: params[:transaction][:concernable_id], type: "Restaurant")
+              redirect_to admin_transactions_path(id: id, type: "Restaurant")
             else
               flash[:danger] = "Transaction Could not be added. There was an error"
               redirect_to :back
@@ -62,10 +67,11 @@ ActiveAdmin.register Transaction do
           end
         else 
           flash[:notice] = "Please enter transaction information"
-          redirect_to new_admin_transaction_path(id: params[:transaction][:concernable_id], kind: params[:transaction][:kind])
+          redirect_to new_admin_transaction_path(id: id, kind: params[:transaction][:kind], type: type)
         end
       else
-        flash[:danger] = "Transaction Could not be added. Please make a transaction through a user or restaurant first"
+        flash[:danger] = "Transaction Could not be added. Please make a " + 
+        "transaction through a user or restaurant first"
         redirect_to :back
       end
     end
@@ -112,9 +118,14 @@ ActiveAdmin.register Transaction do
       if params[:kind] == "Adjustment"
         f.input :amount, required: true
         f.input :reason, required: true
-        if params[:id]
-          f.input :concernable_id, input_html: { value: params[:id], hidden: true  }, label: false
+        if params[:type] == "Restaurant"
+          f.input :concernable_id, input_html: { value: params[:id]  }, label: false
+        else
+          f.input :user_id, input_html: { value: params[:id]  }, label: false
         end
+        f.input :concernable_type, input_html: { value: params[:type]  }, label: false
+        f.input :kind, as: :string, input_html: { value: params[:kind]  }, label: false
+        
       elsif params[:kind] == "Restaurant Balance Payment"
         f.input :amount, required: true
         f.input :who_is_paying, label: "Who is paying?", :as => :select, 

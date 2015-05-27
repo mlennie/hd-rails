@@ -23,15 +23,20 @@ class Invoice < ActiveRecord::Base
   #get new final balance for invoice by subtracting 
   #last reservation's transaction's final balance by the last final balance of 
   #the last paid invoice
-  def self.get_final_balance reservation
-    transaction = reservation.transactions.get_unarchived.where(concernable_type: "Restaurant").first
-    restaurant = reservation.restaurant
+  def self.get_final_balance last_reservation
+    transaction = last_reservation.transactions.get_unarchived.where(concernable_type: "Restaurant").first
+    restaurant = last_reservation.restaurant
     #get last invoice that is paid
     last_paid_invoice = restaurant.invoices.get_unarchived.where(paid: true).last
-    #get final balance of last paid invoice
-    last_final_balance = last_paid_invoice.final_balance
 
-    new_final_balance = transaction.final_balance - last_final_balance 
+    #check if there is a last paid invoice
+    if last_paid_invoice
+      #get final balance of last paid invoice
+      last_final_balance = last_paid_invoice.final_balance
+      #calculate new final balance by subtracting the last paid final balance
+      #from the new final_balance
+      new_final_balance = transaction.final_balance - last_final_balance 
+    else #get last final balance from last 
   end
 
   def send_email params

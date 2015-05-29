@@ -50,7 +50,7 @@
 			/ check if this is a commission_only invoice
 			/ if so do not include balance in total amount
 			/ if it is not, included balance in total amount
-			- if invoice[:commission_only] == true
+			- if invoice[:commission_only]
 				%tr
 					%th
 						%p(style="color: red;") Montant net à payer
@@ -140,7 +140,7 @@
 	/ check if this is a commission_only invoice
 	/ if so do not include balance amount as a billing amount
 	/ if it is not, included balance as a billing amount
-	- unless invoice[:commission_only] == true
+	- unless invoice[:commission_only]
 		%div(style="margin-left: 20px; margin-right: 20px;")
 			%h3(style=" color: #000; text-align: center; font-weight: bold; background-color: #4984CB ;padding: 5px;")
 				Régulations de la balance

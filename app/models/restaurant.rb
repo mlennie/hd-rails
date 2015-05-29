@@ -485,8 +485,10 @@ class Restaurant < ActiveRecord::Base
     #commission only means that balance is not calculated in total amount 
     #set commission only to true if admin selected commission only option or
     #final balance is greater than 0
-    if params[:commission_only] == true || final_balance > 0
+    if params[:commission_only] == "1" || final_balance > 0
       invoice[:commission_only] = true
+    else
+      invoice[:commission_only] = false
     end
 
     return invoice

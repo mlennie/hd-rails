@@ -61,10 +61,15 @@ ActiveAdmin.register Invoice do
               reservations = Reservation.get_for_invoice(params)
               if reservations.any?
                 date_params = Restaurant.get_date_params params
+                date_params[:commission_only] = params[:invoice][:commission_only]
                 flash[:notice] = "Please review and submit invoice."
-                redirect_to new_admin_restaurant_invoice_path(restaurant_id, date_params)
+                redirect_to new_admin_restaurant_invoice_url(
+                  restaurant_id, 
+                  date_params
+                )
               else
-                flash[:warning] = "No reservations were made during these times. Please select a later date."
+                flash[:warning] = "No reservations were made during these times. " +
+                                  " Please select a later date."
                 redirect_to new_admin_restaurant_invoice_path restaurant_id
               end
             else
@@ -97,8 +102,8 @@ ActiveAdmin.register Invoice do
 
   sidebar "Email Invoice", only: [:show, :edit] do
     ul do
-      li link_to "Send test email to admin",    admin_invoices_path(invoice_id: invoice.id, email: "test"), method: "post"
-      li link_to "Send invoice to restaurant",    admin_invoices_path(invoice_id: invoice.id, email: "restaurant"), method: "post"
+      li link_to "Send test email to admin", admin_invoices_path(invoice_id: invoice.id, email: "test"), method: "post"
+      li link_to "Send invoice to restaurant", admin_invoices_path(invoice_id: invoice.id, email: "restaurant"), method: "post"
     end
   end
 

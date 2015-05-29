@@ -9,7 +9,6 @@ class Invoice < ActiveRecord::Base
   after_update :add_transaction_if_paid
 
   def self.make_new invoice_data
-    binding.pry
   	invoice = Invoice.new({
       start_date: invoice_data[:start_date],
       end_date: invoice_data[:end_date],

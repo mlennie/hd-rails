@@ -47,7 +47,9 @@
 			%strong Objet : Commission Clients Happy Dining
 	%div(style="margin-left: 20px;")
 		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 650px;")
-			/ check if this is a commission_only invoice and style accordingly if so
+			/ check if this is a commission_only invoice
+			/ if so do not include balance in total amount
+			/ if it is not, included balance in total amount
 			- unless invoice[:commission_only]
 				%tr
 					%th
@@ -135,15 +137,37 @@
 					= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
 
 	/ balance -----------------------------------------------------------
-	%div(style="margin-left: 20px; margin-right: 20px;")
-		%h3(style=" color: #000; text-align: center; font-weight: bold; background-color: #4984CB ;padding: 5px;")
-			Régulations de la balance
-	%div(style="height: 50px;")
-		%table(style="float: right; width: 220px; border: 1px solid #000; margin-right: 30px; text-align: right;")
-			%tr
-				%th Montant balance à réguler
-				%td 
-					= invoice[:final_balance].abs.round(2).to_s.gsub(/\./, ',') + "€"
+		/ check if this is a commission_only invoice
+		/ if so do not include balance amount as a billing amount
+		/ if it is not, included balance as a billing amount
+	- if invoice[:commission_only] 
+		%div(style="margin-left: 20px; margin-right: 20px;")
+			%h3(style=" color: #000; text-align: center; font-weight: bold; background-color: #4984CB ;padding: 5px;")
+				Régulations de la balance
+		%div(style="height: 50px;")
+			%table(style="float: right; width: 220px; border: 1px solid #000; margin-right: 30px; text-align: right;")
+				%tr
+					%th Montant balance à réguler
+					%td 
+						= invoice[:final_balance].abs.round(2).to_s.gsub(/\./, ',') + "€"
+	-else
+		%div(style="margin-left: 20px;")
+		%strong 
+			Votre Balance au 
+			= invoice[:end_date].strftime("%d/%m/%Y")
+			= ":"
+			= invoice[:final_balance].round(2).to_s.gsub(/\./, ',') + "€"
+		%strong(style="display:block")
+			En votre aimable règlement,
+		%strong
+			Cordialement,
+		%br
+		%br
+		%div(style="text-align: center;")
+			%p N° Siret 803 974 450 000 14 RCS Paris
+			%p Code APE 6202A - N° TVA Intracom. FR 298 039 744 50
+		%br
+		%br
 
 	/ thank you ----------------------------------------------------------
 	%div(style="margin-left: 20px;")

@@ -113,6 +113,7 @@ ActiveAdmin.register Invoice do
     params[:start_date] = invoice.start_date
     params[:end_date] = invoice.end_date
     params[:restaurant_id] = invoice.restaurant_id
+    params[:commission_only] = invoice.commission_only
     invoice = Restaurant.calculate_information_for_invoice params
     render partial: "invoice", locals: { invoice: invoice }
   end

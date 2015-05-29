@@ -481,6 +481,14 @@ class Restaurant < ActiveRecord::Base
     #combine commission plus balance totals
     invoice[:combined_total] = invoice[:total_owed] + invoice[:final_balance].abs
 
+    #decide whether commission only or not
+    #commission only means that balance is not calculated in total amount 
+    #set commission only to true if admin selected commission only option or
+    #final balance is greater than 0
+    if params[:commission_only] || final_balance > 0
+      invoice[:commission_only] = true
+    end
+
     return invoice
   end
 

@@ -48,7 +48,7 @@
 	%div(style="margin-left: 20px;")
 		%table(style="background-color: #f2bb53; padding: 5px; border: 1px solid #000; width: 650px;")
 			/ check if this is a commission_only invoice and style accordingly if so
-			- if invoice[:total_owed] == false
+			- unless invoice[:commission_only]
 				%tr
 					%th
 						%p(style="color: red;") Montant net à payer

@@ -9,6 +9,7 @@ class Invoice < ActiveRecord::Base
   after_update :add_transaction_if_paid
 
   def self.make_new invoice_data
+    binding.pry
   	invoice = Invoice.new({
       start_date: invoice_data[:start_date],
       end_date: invoice_data[:end_date],
@@ -17,7 +18,8 @@ class Invoice < ActiveRecord::Base
       commission_percentage: invoice_data[:percentage],
       pre_tax_owed: invoice_data[:pre_tax_owed],
       total_owed: invoice_data[:total_owed],
-      final_balance: invoice_data[:final_balance]
+      final_balance: invoice_data[:final_balance],
+      commission_only: invoice_data[:commission_only]
     })
 
     return invoice

@@ -165,6 +165,7 @@ ActiveAdmin.register Invoice do
           f.input :start, label: false, input_html: { value: invoice[:start_date], hidden: true }
           f.input :end, label: false, input_html: { value: invoice[:end_date], hidden: true }
           f.input :complete, label: false, input_html: { value: true, hidden: true }
+          f.input :commission_only, as: :string, label: false, input_html: { value: invoice[:commission_only], hidden: true }
           render partial: "invoice", locals: { invoice: invoice, f: f }
         end
       else #not new (editing)

@@ -24,6 +24,7 @@ class AdminMailer < ActionMailer::Base
     params[:start_date] = invoice.start_date
     params[:end_date] = invoice.end_date
     params[:restaurant_id] = invoice.restaurant_id
+    params[:commission_only] = invoice.commission_only
     restaurant_name = Restaurant.find(invoice.restaurant_id).name
     @invoice = Restaurant.calculate_information_for_invoice params
     @email = 'admin@happydining.fr'

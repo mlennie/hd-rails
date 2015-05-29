@@ -35,6 +35,7 @@ ActiveAdmin.register Invoice do
       if params[:invoice][:complete]
         params[:start_date] = params[:invoice][:start]
         params[:end_date] = params[:invoice][:end]
+        params[:commission_only] = params[:invoice][:commission_only]
         invoice_data = Restaurant.calculate_information_for_invoice params
 
         #build invoice
@@ -115,6 +116,7 @@ ActiveAdmin.register Invoice do
     selectable_column
     id_column
     column :paid
+    column :commission_only
     column :pre_tax_owed
     column :total_owed
     column :final_balance
@@ -127,6 +129,7 @@ ActiveAdmin.register Invoice do
  end
 
   filter :paid
+  filter :commission_only
   filter :pre_tax_owed
   filter :total_owed
   filter :final_balance
@@ -150,6 +153,7 @@ ActiveAdmin.register Invoice do
           f.input :start_date, as: :string, input_html: { value: start_date, readonly: true }
           end_date_array = restaurant.get_invoice_end_date_array
           f.input :end_date, as: :select, collection: end_date_array
+          f.input :commission_only
         else
           #3. Calculate invoice information and show invoice
           invoice = Restaurant.calculate_information_for_invoice params

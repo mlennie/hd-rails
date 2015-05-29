@@ -50,7 +50,7 @@
 			/ check if this is a commission_only invoice
 			/ if so do not include balance in total amount
 			/ if it is not, included balance in total amount
-			- unless invoice[:commission_only]
+			- if invoice[:commission_only] == true
 				%tr
 					%th
 						%p(style="color: red;") Montant net à payer
@@ -137,10 +137,10 @@
 					= invoice[:total_owed].round(2).to_s.gsub(/\./, ',') + "€"
 
 	/ balance -----------------------------------------------------------
-		/ check if this is a commission_only invoice
-		/ if so do not include balance amount as a billing amount
-		/ if it is not, included balance as a billing amount
-	- if invoice[:commission_only] 
+	/ check if this is a commission_only invoice
+	/ if so do not include balance amount as a billing amount
+	/ if it is not, included balance as a billing amount
+	- unless invoice[:commission_only] == true
 		%div(style="margin-left: 20px; margin-right: 20px;")
 			%h3(style=" color: #000; text-align: center; font-weight: bold; background-color: #4984CB ;padding: 5px;")
 				Régulations de la balance
@@ -152,22 +152,11 @@
 						= invoice[:final_balance].abs.round(2).to_s.gsub(/\./, ',') + "€"
 	-else
 		%div(style="margin-left: 20px;")
-		%strong 
-			Votre Balance au 
-			= invoice[:end_date].strftime("%d/%m/%Y")
-			= ":"
-			= invoice[:final_balance].round(2).to_s.gsub(/\./, ',') + "€"
-		%strong(style="display:block")
-			En votre aimable règlement,
-		%strong
-			Cordialement,
-		%br
-		%br
-		%div(style="text-align: center;")
-			%p N° Siret 803 974 450 000 14 RCS Paris
-			%p Code APE 6202A - N° TVA Intracom. FR 298 039 744 50
-		%br
-		%br
+			%strong(style="display:block")
+				Votre Balance au 
+				= invoice[:end_date].strftime("%d/%m/%Y")
+				= ":"
+				= invoice[:final_balance].round(2).to_s.gsub(/\./, ',') + "€"
 
 	/ thank you ----------------------------------------------------------
 	%div(style="margin-left: 20px;")

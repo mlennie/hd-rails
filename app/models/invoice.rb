@@ -61,7 +61,7 @@ class Invoice < ActiveRecord::Base
     #callback after updating. If invoice has been set to paid, create transaction
     def add_transaction_if_paid
       #don't make a transaction if there is already a transaction
-      unless self.transactions.get_unarchived.any?
+      unless self.transactions.get_unarchived.any? || self.commission_only
         if self.paid?
           transaction_params = {}
           transaction_params[:restaurant] = Restaurant.find(self.restaurant_id)
